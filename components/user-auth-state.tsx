@@ -74,12 +74,12 @@ export default function UserAuthState() {
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <Link href={"/login"}>
-          <Button disabled={isPending}>
+        <Link href={"/register"}>
+          <Button disabled={isPending} className="rounded-full px-6 shadow-md hover:shadow-lg transition-all duration-300">
             {isPending ? (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             ) : (
-              "Verify Now"
+              "Regístrate"
             )}
           </Button>
         </Link>
