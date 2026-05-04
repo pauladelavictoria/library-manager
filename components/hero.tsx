@@ -5,7 +5,7 @@ import UserAuthState from "./user-auth-state";
 import { BookOpen, ShoppingCart, Trophy, LayoutDashboard, Home } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useCart } from "@/lib/cart-context";
+import { useCart } from "@/hooks/use-cart";
 
 const navItems = [
   { name: "Libros", href: "/books", icon: BookOpen },

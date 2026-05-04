@@ -1,15 +1,10 @@
 "use client";
 
-import { useCart } from "@/lib/cart-context";
+import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-
-export const metadata = {
-  title: "Carrito | Librería",
-  description: "Carrito de compras de la librería.",
-};
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, totalPrice, totalItems } = useCart();

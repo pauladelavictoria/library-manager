@@ -5,7 +5,7 @@ import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import { Book } from "@/lib/types";
-import { useCart } from "@/lib/cart-context";
+import { useCart } from "@/hooks/use-cart";
 
 interface BookCardProps {
   book: Book;
