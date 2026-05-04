@@ -9,7 +9,7 @@ import { useCart } from "@/lib/cart-context";
 
 const navItems = [
   { name: "Libros", href: "/books", icon: BookOpen },
-  { name: "Trivia", href: "/trivial", icon: Trophy },
+  { name: "trivial", href: "/trivial", icon: Trophy },
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Carrito", href: "/cart", icon: ShoppingCart },
 ];
@@ -46,7 +46,7 @@ export default function Hero() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:scale-105 active:scale-95",
+                    "flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 scale-100 hover:scale-105 active:scale-95",
                     pathname === item.href
                       ? "bg-primary text-primary-foreground shadow-[0_0_15px_rgba(var(--primary),0.3)]"
                       : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"

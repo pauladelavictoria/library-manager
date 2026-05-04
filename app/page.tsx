@@ -62,8 +62,8 @@ export default async function Home({ searchParams,
                 <Sparkles className="ml-2 h-5 w-5 group-hover:animate-pulse" />
               </Button>
             </Link>
-            <Link href="/trivia" className="text-sm font-semibold leading-6 text-foreground hover:text-primary transition-colors flex items-center gap-2">
-              Jugar Trivia <ArrowRight className="h-4 w-4" />
+            <Link href="/trivial" className="text-sm font-semibold leading-6 text-foreground hover:text-primary transition-colors flex items-center gap-2">
+              Jugar trivial <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
