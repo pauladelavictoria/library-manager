@@ -5,18 +5,18 @@ import UserAuthState from "./user-auth-state";
 import { BookOpen, ShoppingCart, Trophy, LayoutDashboard, Home } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/lib/cart-context";
 
 const navItems = [
   { name: "Libros", href: "/books", icon: BookOpen },
   { name: "Trivia", href: "/trivial", icon: Trophy },
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Carrito", href: "/cart", icon: ShoppingCart },
-
 ];
-
 
 export default function Hero() {
   const pathname = usePathname();
+  const { totalItems } = useCart();
 
 
 
@@ -54,6 +54,11 @@ export default function Hero() {
                 >
                   <item.icon className="h-4 w-4" />
                   {item.name}
+                  {item.href === "/cart" && totalItems > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground animate-in zoom-in">
+                      {totalItems}
+                    </span>
+                  )}
                 </Link>
               ))}
             </nav>
@@ -83,6 +88,11 @@ export default function Hero() {
             >
               <item.icon className="h-3 w-3" />
               {item.name}
+              {item.href === "/cart" && totalItems > 0 && (
+                <span className="ml-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
+                  {totalItems}
+                </span>
+              )}
             </Link>
           ))}
         </div>

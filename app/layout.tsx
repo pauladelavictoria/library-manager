@@ -4,6 +4,7 @@ import "./globals.css";
 import QueryProvider from "@/components/query-provider";
 import Hero from "@/components/hero";
 import { Toaster } from "@/components/ui/sonner";
+import { CartProvider } from "@/lib/cart-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,9 +32,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <QueryProvider>
-          <Hero />
-          {children}
-          <Toaster position="top-center" duration={3000} />
+          <CartProvider>
+            <Hero />
+            {children}
+            <Toaster position="top-center" duration={3000} />
+          </CartProvider>
         </QueryProvider>
       </body>
     </html>
