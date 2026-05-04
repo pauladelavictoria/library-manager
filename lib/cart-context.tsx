@@ -2,7 +2,6 @@
 
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { Book } from "./types";
-import { toast } from "sonner";
 
 export interface CartItem extends Book {
   quantity: number;
@@ -10,6 +9,8 @@ export interface CartItem extends Book {
 
 interface CartContextType {
   cart: CartItem[];
+  lastAddedItem: CartItem | null;
+  setLastAddedItem: (item: CartItem | null) => void;
   addToCart: (book: Book) => void;
   removeFromCart: (bookId: string) => void;
   updateQuantity: (bookId: string, quantity: number) => void;
@@ -22,6 +23,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [lastAddedItem, setLastAddedItem] = useState<CartItem | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -43,16 +45,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [cart, isLoaded]);
 
   const addToCart = (book: Book) => {
+    const newItem = { ...book, quantity: 1 };
+    
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.id === book.id);
       if (existingItem) {
-        toast.success(`Añadida otra unidad de "${book.title}"`);
+        const updatedItem = { ...existingItem, quantity: existingItem.quantity + 1 };
+        setLastAddedItem(updatedItem);
         return prevCart.map((item) =>
-          item.id === book.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === book.id ? updatedItem : item
         );
       }
-      toast.success(`"${book.title}" añadido al carrito`);
-      return [...prevCart, { ...book, quantity: 1 }];
+      setLastAddedItem(newItem);
+      return [...prevCart, newItem];
     });
   };
 
@@ -84,6 +89,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     <CartContext.Provider
       value={{
         cart,
+        lastAddedItem,
+        setLastAddedItem,
         addToCart,
         removeFromCart,
         updateQuantity,

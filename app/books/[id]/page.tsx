@@ -131,7 +131,7 @@ export default async function BookDetailPage({
 
             <div className="flex flex-col sm:flex-row gap-5 mb-16">
               <AddToCartButton book={book} />
-              <Button variant="outline" size="lg" className="rounded-2xl px-10 h-20 font-black text-xl border-2 hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
+              <Button variant="outline" size="lg" className="rounded-2xl px-10 h-16 text-lg font-black shadow-xl shadow-primary/30 transition-all hover:scale-[1.02] active:scale-[0.98] flex-1 group">
                 Vista Previa
               </Button>
             </div>
