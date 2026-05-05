@@ -22,7 +22,6 @@ export default async function BooksPage({
   const search = typeof params.search === 'string' ? params.search : '';
   const category = typeof params.category === 'string' ? params.category : 'Todas';
 
-  // Construir la URL completa para llamar al endpoint de nuestra API
   const headersList = await headers();
   const host = headersList.get('host') || 'localhost:3000';
   const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
@@ -33,7 +32,6 @@ export default async function BooksPage({
   if (search) apiUrl.searchParams.set("search", search);
   if (category !== 'Todas') apiUrl.searchParams.set("category", category);
 
-  // Consumir el endpoint (se ejecuta en el servidor)
   const res = await fetch(apiUrl.toString(), { cache: 'no-store' });
   const { data: rawBooks, meta } = await res.json();
   const books: Book[] = rawBooks || [];
@@ -42,12 +40,10 @@ export default async function BooksPage({
   const limit = meta?.limit || 20;
   const currentPage = parseInt(page, 10);
 
-  // Categorias populares para el sidebar
   const categories = ["Fiction", "Fantasy", "Science", "History", "Romance", "Thriller", "Todas"];
 
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950/50">
-      {/* Hero Section */}
       <div className="bg-gradient-to-b from-primary/10 via-primary/5 to-transparent pt-24 pb-12">
         <div className="container px-4 md:px-6 mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
@@ -66,7 +62,6 @@ export default async function BooksPage({
       <div className="container mx-auto px-4 md:px-6 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
 
-          {/* Sidebar / Filters */}
           <aside className="w-full lg:w-64 shrink-0 space-y-8">
             <form className="space-y-6 bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800" action="/books" method="GET">
               <div>
@@ -111,9 +106,7 @@ export default async function BooksPage({
             </form>
           </aside>
 
-          {/* Grid de Libros */}
           <main className="flex-1">
-            {/* Toolbar superior */}
             <div className="flex items-center justify-between mb-6">
               <p className="text-sm text-slate-500 dark:text-slate-400">
                 Mostrando <span className="font-medium text-slate-900 dark:text-white">{books?.length || 0}</span> resultados de {count || 0}
@@ -141,7 +134,6 @@ export default async function BooksPage({
               </div>
             )}
 
-            {/* Paginación */}
             {count && count > limit && (
               <div className="mt-12 flex justify-center gap-2">
                 {currentPage > 1 && (

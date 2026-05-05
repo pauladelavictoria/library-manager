@@ -2,13 +2,19 @@
 
 import { useCart } from "@/hooks/use-cart";
 import { useEffect, useState } from "react";
-import { ShoppingCart, X, CheckCircle2, ArrowRight } from "lucide-react";
+import { ShoppingCart, X, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth-context";
 
 export default function CartNotification() {
+  const { user } = useAuth();
   const { lastAddedItem, setLastAddedItem } = useCart();
   const [isVisible, setIsVisible] = useState(true);
+
+  if (!user) {
+    return null;
+  }
 
   useEffect(() => {
     if (lastAddedItem) {

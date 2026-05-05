@@ -2,6 +2,8 @@
 
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { Book } from "./types";
+import { useAuth } from "./auth-context";
+import { redirect } from "next/navigation";
 
 export interface CartItem extends Book {
   quantity: number;
@@ -25,8 +27,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [lastAddedItem, setLastAddedItem] = useState<CartItem | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
+    if (!user) {
+      localStorage.removeItem("cart");
+      setCart([]);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
       try {
@@ -36,18 +47,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
     }
     setIsLoaded(true);
-  }, []);
+  }, [user]);
 
   useEffect(() => {
+    if (!user) return;
     if (isLoaded) {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
-  }, [cart, isLoaded]);
+  }, [cart, isLoaded, user]);
 
   const addToCart = (book: Book) => {
     const newItem = { ...book, quantity: 1 };
-    
+
     setCart((prevCart) => {
+      if (!user) {
+        return redirect(`/login?redirect=${encodeURIComponent('/cart')}`);
+      }
       const existingItem = prevCart.find((item) => item.id === book.id);
       if (existingItem) {
         const updatedItem = { ...existingItem, quantity: existingItem.quantity + 1 };
@@ -62,10 +77,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const removeFromCart = (bookId: string) => {
+    if (!user) return;
     setCart((prevCart) => prevCart.filter((item) => item.id !== bookId));
   };
 
   const updateQuantity = (bookId: string, quantity: number) => {
+    if (!user) return;
     if (quantity <= 0) {
       removeFromCart(bookId);
       return;
@@ -78,6 +95,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const clearCart = () => {
+    if (!user) return;
     setCart([]);
   };
 
