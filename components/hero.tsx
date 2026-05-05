@@ -24,7 +24,6 @@ export default function Hero() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-xl border-white/10 shadow-lg transition-all duration-300">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo & Home Button */}
           <div className="flex items-center gap-8">
             <Link
               href="/"
@@ -38,7 +37,6 @@ export default function Hero() {
               </span>
             </Link>
 
-            {/* Navigation Links */}
             <nav className="hidden md:flex items-center space-x-1">
 
               {navItems.map((item) => (
@@ -64,7 +62,6 @@ export default function Hero() {
             </nav>
           </div>
 
-          {/* User Auth State Section */}
           <div className="flex items-center gap-4">
             <div className="h-8 w-[1px] bg-white/10 hidden md:block mx-2" />
             <UserAuthState />
@@ -72,7 +69,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Mobile Navigation (Sub-bar if needed, but keeping it simple for now) */}
       <div className="md:hidden border-t border-white/5 bg-background/40 overflow-x-auto whitespace-nowrap hide-scrollbar">
         <div className="flex items-center p-2 space-x-1">
           {navItems.map((item) => (
