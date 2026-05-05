@@ -8,32 +8,55 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
+import { useRouter } from "next/navigation";
+import { checkout } from "./actions";
 
 export default function CartPage() {
-  const { 
-    cart, 
-    removeFromCart, 
-    updateQuantity, 
-    totalPrice, 
-    totalItems, 
-    appliedPromo, 
-    applyPromo, 
-    removePromo 
+  const {
+    cart,
+    removeFromCart,
+    updateQuantity,
+    totalPrice,
+    totalItems,
+    appliedPromo,
+    applyPromo,
+    removePromo,
+    clearCart
   } = useCart();
   const [promoInput, setPromoInput] = useState("");
   const [isApplying, setIsApplying] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const router = useRouter();
 
   const handleApplyPromo = async () => {
     if (!promoInput.trim()) return;
     setIsApplying(true);
     const result = await applyPromo(promoInput);
     setIsApplying(false);
-    
+
     if (result.success) {
       toast.success(result.message);
       setPromoInput("");
     } else {
       toast.error(result.message);
+    }
+  };
+
+  const handleCheckout = async () => {
+    setIsCheckingOut(true);
+    try {
+      const result = await checkout(cart, totalPrice, appliedPromo?.code);
+      if (result.success) {
+        toast.success("¡Pedido realizado con éxito!");
+        clearCart();
+        router.push("/dashboard");
+      } else {
+        toast.error(result.error || "Error al realizar el pedido");
+      }
+    } catch (error) {
+      toast.error("Ocurrió un error inesperado");
+    } finally {
+      setIsCheckingOut(false);
     }
   };
 
@@ -145,7 +168,6 @@ export default function CartPage() {
             </div>
           </div>
 
-          {/* Summary Sidebar */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 overflow-hidden rounded-[2.5rem] bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-1">
               <div className="bg-white dark:bg-slate-950 rounded-[2.2rem] p-8">
@@ -159,7 +181,7 @@ export default function CartPage() {
                     <span className="text-muted-foreground">Subtotal</span>
                     <span className="font-bold">€{subtotal.toFixed(2)}</span>
                   </div>
-                  
+
                   {appliedPromo && (
                     <div className="flex justify-between text-lg text-green-600 dark:text-green-400 font-medium">
                       <div className="flex items-center gap-2">
@@ -168,7 +190,7 @@ export default function CartPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         <span>-€{discount.toFixed(2)}</span>
-                        <button 
+                        <button
                           onClick={removePromo}
                           className="text-muted-foreground hover:text-destructive transition-colors"
                         >
@@ -182,7 +204,7 @@ export default function CartPage() {
                     <span className="text-muted-foreground">Envío</span>
                     <span className="text-primary font-bold bg-primary/10 px-3 py-0.5 rounded-full text-sm">Gratis</span>
                   </div>
-                  
+
                   <div className="flex justify-between text-lg">
                     <span className="text-muted-foreground">Impuestos</span>
                     <span className="font-medium">Incluidos</span>
@@ -201,8 +223,8 @@ export default function CartPage() {
                             onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
                           />
                         </div>
-                        <Button 
-                          variant="secondary" 
+                        <Button
+                          variant="secondary"
                           className="rounded-xl px-4"
                           onClick={handleApplyPromo}
                           disabled={isApplying || !promoInput.trim()}
@@ -216,9 +238,9 @@ export default function CartPage() {
                           <CheckCircle2 className="h-4 w-4" />
                           Código {appliedPromo.code} aplicado
                         </div>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
+                        <Button
+                          variant="ghost"
+                          size="sm"
                           className="h-8 text-xs hover:bg-green-100 dark:hover:bg-green-800"
                           onClick={removePromo}
                         >
@@ -240,9 +262,14 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <Button size="lg" className="w-full rounded-2xl py-8 text-xl font-black shadow-xl shadow-primary/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] group">
-                  Pagar Ahora
-                  <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover:translate-x-1" />
+                <Button 
+                  size="lg" 
+                  className="w-full rounded-2xl py-8 text-xl font-black shadow-xl shadow-primary/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] group"
+                  onClick={handleCheckout}
+                  disabled={isCheckingOut}
+                >
+                  {isCheckingOut ? "Procesando..." : "Pagar Ahora"}
+                  {!isCheckingOut && <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover:translate-x-1" />}
                 </Button>
 
                 <div className="mt-8 flex flex-col gap-4">

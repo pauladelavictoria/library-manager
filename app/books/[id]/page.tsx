@@ -67,15 +67,7 @@ export default async function BookDetailPage({
               </div>
             </div>
 
-            <div className="absolute -bottom-8 -right-4 bg-primary text-primary-foreground p-7 rounded-[2rem] shadow-2xl flex items-center gap-5 animate-in slide-in-from-bottom-8 duration-700">
-              <div className="bg-white/20 p-3 rounded-2xl shadow-inner">
-                <Star className="h-8 w-8 fill-current" />
-              </div>
-              <div>
-                <p className="text-xs opacity-80 uppercase tracking-[0.2em] font-black">Destacado</p>
-                <p className="text-2xl font-black leading-none mt-1">Nº 1 en Ventas</p>
-              </div>
-            </div>
+
           </div>
 
           <div className="flex flex-col pt-4">
@@ -131,9 +123,7 @@ export default async function BookDetailPage({
 
             <div className="flex flex-col sm:flex-row gap-5 mb-16">
               <AddToCartButton book={book} />
-              <Button variant="outline" size="lg" className="rounded-2xl px-10 h-16 text-lg font-black shadow-xl shadow-primary/30 transition-all hover:scale-[1.02] active:scale-[0.98] flex-1 group">
-                Vista Previa
-              </Button>
+
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 py-10 border-t border-slate-100 dark:border-white/5">
