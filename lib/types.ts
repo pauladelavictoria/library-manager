@@ -23,3 +23,13 @@ export interface PromoCode {
   expiry_date: string;
   created_at: string;
 }
+
+export interface Profile {
+  id: string;
+  full_name: string | null;
+  email: string | null;
+  phone: string | null;
+  avatar_url: string | null;
+  updated_at: string;
+  created_at: string;
+}
