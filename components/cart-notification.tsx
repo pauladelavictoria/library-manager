@@ -10,11 +10,8 @@ import { useAuth } from "@/lib/auth-context";
 export default function CartNotification() {
   const { user } = useAuth();
   const { lastAddedItem, setLastAddedItem } = useCart();
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
-  if (!user) {
-    return null;
-  }
 
   useEffect(() => {
     if (lastAddedItem) {
@@ -27,7 +24,8 @@ export default function CartNotification() {
     }
   }, [lastAddedItem, setLastAddedItem]);
 
-  if (!lastAddedItem && !isVisible) return null;
+  if (!lastAddedItem && !isVisible || !user) return null;
+
 
   return (
     <div className={cn(
