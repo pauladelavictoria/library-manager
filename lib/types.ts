@@ -15,3 +15,11 @@ export interface Book {
   reorder_threshold: number;
   created_at: string;
 }
+
+export interface PromoCode {
+  id: string;
+  code: string;
+  discount_amount: number;
+  expiry_date: string;
+  created_at: string;
+}

@@ -2,7 +2,6 @@
 
 import { createClient } from "@/supabase/server";
 
-//sign up with email and password
 export async function signup(formData: {
   name: string;
   email: string;
@@ -29,7 +28,6 @@ export async function signup(formData: {
   return { user: data.user, session: data.session };
 }
 
-//login with email and password
 export async function login(formData: { email: string; password: string }) {
   const supabase = await createClient();
 
@@ -45,7 +43,6 @@ export async function login(formData: { email: string; password: string }) {
   return { user: data.user, session: data.session };
 }
 
-//logout and remove user
 export async function logOut() {
   const supabase = await createClient();
   const { error } = await supabase.auth.signOut();

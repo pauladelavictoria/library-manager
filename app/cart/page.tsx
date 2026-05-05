@@ -2,12 +2,43 @@
 
 import { useCart } from "@/hooks/use-cart";
 import { Button } from "@/components/ui/button";
-import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Tag, XCircle, CheckCircle2 } from "lucide-react";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 
 export default function CartPage() {
-  const { cart, removeFromCart, updateQuantity, totalPrice, totalItems } = useCart();
+  const { 
+    cart, 
+    removeFromCart, 
+    updateQuantity, 
+    totalPrice, 
+    totalItems, 
+    appliedPromo, 
+    applyPromo, 
+    removePromo 
+  } = useCart();
+  const [promoInput, setPromoInput] = useState("");
+  const [isApplying, setIsApplying] = useState(false);
+
+  const handleApplyPromo = async () => {
+    if (!promoInput.trim()) return;
+    setIsApplying(true);
+    const result = await applyPromo(promoInput);
+    setIsApplying(false);
+    
+    if (result.success) {
+      toast.success(result.message);
+      setPromoInput("");
+    } else {
+      toast.error(result.message);
+    }
+  };
+
+  const subtotal = cart.reduce((sum, item) => sum + (item.selling_price || 0) * item.quantity, 0);
+  const discount = appliedPromo ? appliedPromo.discount_amount : 0;
 
   if (cart.length === 0) {
     return (
@@ -126,15 +157,75 @@ export default function CartPage() {
                 <div className="space-y-5 mb-10">
                   <div className="flex justify-between text-lg">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span className="font-bold">€{totalPrice.toFixed(2)}</span>
+                    <span className="font-bold">€{subtotal.toFixed(2)}</span>
                   </div>
+                  
+                  {appliedPromo && (
+                    <div className="flex justify-between text-lg text-green-600 dark:text-green-400 font-medium">
+                      <div className="flex items-center gap-2">
+                        <Tag className="h-4 w-4" />
+                        <span>Descuento ({appliedPromo.code})</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span>-€{discount.toFixed(2)}</span>
+                        <button 
+                          onClick={removePromo}
+                          className="text-muted-foreground hover:text-destructive transition-colors"
+                        >
+                          <XCircle className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="flex justify-between text-lg">
                     <span className="text-muted-foreground">Envío</span>
                     <span className="text-primary font-bold bg-primary/10 px-3 py-0.5 rounded-full text-sm">Gratis</span>
                   </div>
+                  
                   <div className="flex justify-between text-lg">
                     <span className="text-muted-foreground">Impuestos</span>
                     <span className="font-medium">Incluidos</span>
+                  </div>
+
+                  <div className="pt-4 pb-2">
+                    {!appliedPromo ? (
+                      <div className="flex gap-2">
+                        <div className="relative flex-1">
+                          <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                          <Input
+                            placeholder="Código promo"
+                            className="pl-10 rounded-xl bg-slate-100 dark:bg-slate-900 border-none focus-visible:ring-primary"
+                            value={promoInput}
+                            onChange={(e) => setPromoInput(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
+                          />
+                        </div>
+                        <Button 
+                          variant="secondary" 
+                          className="rounded-xl px-4"
+                          onClick={handleApplyPromo}
+                          disabled={isApplying || !promoInput.trim()}
+                        >
+                          {isApplying ? "..." : "Aplicar"}
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/50 rounded-2xl p-3 flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-green-700 dark:text-green-300 text-sm font-bold">
+                          <CheckCircle2 className="h-4 w-4" />
+                          Código {appliedPromo.code} aplicado
+                        </div>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-8 text-xs hover:bg-green-100 dark:hover:bg-green-800"
+                          onClick={removePromo}
+                        >
+                          Cambiar
+                        </Button>
+                      </div>
+                    )}
                   </div>
 
                   <Separator className="my-2" />

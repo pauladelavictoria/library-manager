@@ -1,9 +1,10 @@
 "use client";
 
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { Book } from "./types";
+import { Book, PromoCode } from "./types";
 import { useAuth } from "./auth-context";
 import { redirect } from "next/navigation";
+import { createClient } from "@/supabase/client";
 
 export interface CartItem extends Book {
   quantity: number;
@@ -19,6 +20,9 @@ interface CartContextType {
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
+  appliedPromo: PromoCode | null;
+  applyPromo: (code: string) => Promise<{ success: boolean; message: string }>;
+  removePromo: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -26,24 +30,36 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [lastAddedItem, setLastAddedItem] = useState<CartItem | null>(null);
+  const [appliedPromo, setAppliedPromo] = useState<PromoCode | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const { user } = useAuth();
+  const supabase = createClient();
 
   useEffect(() => {
     if (!user) {
       localStorage.removeItem("cart");
+      localStorage.removeItem("appliedPromo");
       setCart([]);
+      setAppliedPromo(null);
     }
   }, [user]);
 
   useEffect(() => {
     if (!user) return;
     const savedCart = localStorage.getItem("cart");
+    const savedPromo = localStorage.getItem("appliedPromo");
     if (savedCart) {
       try {
         setCart(JSON.parse(savedCart));
       } catch (e) {
         console.error("Failed to parse cart from localStorage", e);
+      }
+    }
+    if (savedPromo) {
+      try {
+        setAppliedPromo(JSON.parse(savedPromo));
+      } catch (e) {
+        console.error("Failed to parse promo from localStorage", e);
       }
     }
     setIsLoaded(true);
@@ -53,8 +69,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (!user) return;
     if (isLoaded) {
       localStorage.setItem("cart", JSON.stringify(cart));
+      if (appliedPromo) {
+        localStorage.setItem("appliedPromo", JSON.stringify(appliedPromo));
+      } else {
+        localStorage.removeItem("appliedPromo");
+      }
     }
-  }, [cart, isLoaded, user]);
+  }, [cart, appliedPromo, isLoaded, user]);
 
   const addToCart = (book: Book) => {
     const newItem = { ...book, quantity: 1 };
@@ -97,10 +118,40 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const clearCart = () => {
     if (!user) return;
     setCart([]);
+    setAppliedPromo(null);
+  };
+
+  const applyPromo = async (code: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("promo_codes")
+        .select("*")
+        .eq("code", code)
+        .single();
+
+      if (error || !data) {
+        return { success: false, message: "El código promocional no es válido" };
+      }
+
+      const expiryDate = new Date(data.expiry_date);
+      if (expiryDate < new Date()) {
+        return { success: false, message: "Este código promocional ha caducado" };
+      }
+
+      setAppliedPromo(data as PromoCode);
+      return { success: true, message: "Código promocional aplicado con éxito" };
+    } catch (err) {
+      return { success: false, message: "Error al aplicar el código promocional" };
+    }
+  };
+
+  const removePromo = () => {
+    setAppliedPromo(null);
   };
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = cart.reduce((sum, item) => sum + (item.selling_price || 0) * item.quantity, 0);
+  const subtotal = cart.reduce((sum, item) => sum + (item.selling_price || 0) * item.quantity, 0);
+  const totalPrice = Math.max(0, subtotal - (appliedPromo?.discount_amount || 0));
 
 
   return (
@@ -115,6 +166,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         clearCart,
         totalItems,
         totalPrice,
+        appliedPromo,
+        applyPromo,
+        removePromo,
       }}
     >
       {children}
