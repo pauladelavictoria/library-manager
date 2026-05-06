@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import PriceTag from "@/components/ui/price-tag";
 
 import { Book } from "@/lib/types";
 import { useCart } from "@/hooks/use-cart";
@@ -49,22 +50,7 @@ export function BookCard({ book }: BookCardProps) {
         <p className="text-sm text-muted-foreground mb-4">{authorName}</p>
         
         <div className="mt-auto flex items-center justify-between">
-          <div className="flex flex-col">
-            {appliedPromo && originalPrice > 0 ? (
-              <>
-                <span className="text-xs text-slate-400 line-through font-medium">
-                  €{originalPrice.toFixed(2)}
-                </span>
-                <span className="text-xl font-black text-green-600 dark:text-green-400">
-                  €{discountedPrice.toFixed(2)}
-                </span>
-              </>
-            ) : (
-              <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
-                {originalPrice > 0 ? `€${originalPrice.toFixed(2)}` : 'N/A'}
-              </span>
-            )}
-          </div>
+          <PriceTag price={originalPrice} size="lg" showDiscountBadge />
           <Button 
             size="icon" 
             className="rounded-full h-10 w-10 shadow-md shadow-primary/20 hover:scale-105 transition-transform" 

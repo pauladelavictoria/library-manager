@@ -35,25 +35,27 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const supabase = createClient();
 
   useEffect(() => {
-    if (!user) {
+    // We only clear the cart on logout, but we could keep the promo
+    if (!user && isLoaded) {
       localStorage.removeItem("cart");
-      localStorage.removeItem("appliedPromo");
       setCart([]);
-      setAppliedPromo(null);
+      // We keep the promo if the user wants to keep seeing discounts
     }
-  }, [user]);
+  }, [user, isLoaded]);
 
   useEffect(() => {
-    if (!user) return;
+    // Load data regardless of user status
     const savedCart = localStorage.getItem("cart");
     const savedPromo = localStorage.getItem("appliedPromo");
-    if (savedCart) {
+    
+    if (savedCart && user) { // Cart still requires user for now
       try {
         setCart(JSON.parse(savedCart));
       } catch (e) {
         console.error("Failed to parse cart from localStorage", e);
       }
     }
+    
     if (savedPromo) {
       try {
         setAppliedPromo(JSON.parse(savedPromo));
@@ -71,21 +73,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const promoCode = searchParams.get("promo");
     if (promoCode && isLoaded && (!appliedPromo || appliedPromo.code !== promoCode)) {
-      applyPromo(promoCode).then(res => {
-        if (res.success) {
-          const params = new URLSearchParams(searchParams.toString());
-          params.delete("promo");
-          const newUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname;
-          router.replace(newUrl, { scroll: false });
-        }
-      });
+      applyPromo(promoCode);
     }
   }, [searchParams, isLoaded, appliedPromo, pathname, router]);
 
   useEffect(() => {
-    if (!user) return;
     if (isLoaded) {
-      localStorage.setItem("cart", JSON.stringify(cart));
+      if (user) {
+        localStorage.setItem("cart", JSON.stringify(cart));
+      }
+      
       if (appliedPromo) {
         localStorage.setItem("appliedPromo", JSON.stringify(appliedPromo));
       } else {
@@ -95,23 +92,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [cart, appliedPromo, isLoaded, user]);
 
   const addToCart = (book: Book) => {
-    const newItem = { ...book, quantity: 1 };
+    if (!user) {
+      return router.push(`/login?redirect=${encodeURIComponent('/cart')}`);
+    }
 
-    setCart((prevCart) => {
-      if (!user) {
-        return redirect(`/login?redirect=${encodeURIComponent('/cart')}`);
-      }
-      const existingItem = prevCart.find((item) => item.id === book.id);
-      if (existingItem) {
-        const updatedItem = { ...existingItem, quantity: existingItem.quantity + 1 };
-        notify({ type: 'cart', title: 'Añadido al carrito', message: '', data: updatedItem });
-        return prevCart.map((item) =>
-          item.id === book.id ? updatedItem : item
-        );
-      }
+    const existingItem = cart.find((item) => item.id === book.id);
+    if (existingItem) {
+      const updatedItem = { ...existingItem, quantity: existingItem.quantity + 1 };
+      setCart((prevCart) =>
+        prevCart.map((item) => (item.id === book.id ? updatedItem : item))
+      );
+      notify({ type: 'cart', title: 'Añadido al carrito', message: '', data: updatedItem });
+    } else {
+      const newItem = { ...book, quantity: 1 };
+      setCart((prevCart) => [...prevCart, newItem]);
       notify({ type: 'cart', title: 'Añadido al carrito', message: '', data: newItem });
-      return [...prevCart, newItem];
-    });
+    }
   };
 
   const removeFromCart = (bookId: string) => {
@@ -143,7 +139,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const { data, error } = await supabase
         .from("promo_codes")
         .select("*")
-        .eq("code", code)
+        .ilike("code", code)
         .single();
 
       if (error || !data) {

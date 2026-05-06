@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 import { checkout } from "./actions";
+import PriceTag from "@/components/ui/price-tag";
 
 export default function CartPage() {
   const {
@@ -146,10 +147,12 @@ export default function CartPage() {
                     </div>
 
                     <div className="text-right">
-                      <p className="text-xs text-muted-foreground mb-0.5 font-medium uppercase tracking-wider">Subtotal</p>
-                      <p className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
-                        €{(item.selling_price || 0) * item.quantity}
-                      </p>
+                      <p className="text-xs text-muted-foreground mb-1 font-medium uppercase tracking-wider">Subtotal</p>
+                      <PriceTag 
+                        price={(item.selling_price || 0) * item.quantity} 
+                        size="lg" 
+                        className="items-end"
+                      />
                     </div>
                   </div>
                 </div>
@@ -217,7 +220,7 @@ export default function CartPage() {
                             placeholder="Código promo"
                             className="pl-10 rounded-xl bg-slate-100 dark:bg-slate-900 border-none focus-visible:ring-primary"
                             value={promoInput}
-                            onChange={(e) => setPromoInput(e.target.value)}
+                            onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
                             onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
                           />
                         </div>

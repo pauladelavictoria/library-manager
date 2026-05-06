@@ -9,11 +9,15 @@ interface PriceDisplayProps {
   book: Book;
 }
 
+import PriceTag from "@/components/ui/price-tag";
+
+interface PriceDisplayProps {
+  book: Book;
+}
+
 export default function PriceDisplay({ book }: PriceDisplayProps) {
   const { appliedPromo } = useCart();
   const originalPrice = book.selling_price || 0;
-  const discountAmount = appliedPromo ? (originalPrice * (appliedPromo.discount_amount / 100)) : 0;
-  const finalPrice = Math.max(0, originalPrice - discountAmount);
 
   return (
     <div className="flex flex-col gap-4">
@@ -22,16 +26,7 @@ export default function PriceDisplay({ book }: PriceDisplayProps) {
           <p className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-black mb-2 opacity-60">
             {appliedPromo ? "Precio con Descuento" : "Precio Especial"}
           </p>
-          <div className="flex flex-col">
-            {appliedPromo && (
-              <p className="text-xl font-bold text-muted-foreground line-through opacity-50 leading-none mb-1">
-                €{originalPrice.toFixed(2)}
-              </p>
-            )}
-            <p className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60 leading-none">
-              €{finalPrice.toFixed(2)}
-            </p>
-          </div>
+          <PriceTag price={originalPrice} size="xl" />
         </div>
         <div className="h-16 w-px bg-slate-200 dark:bg-white/10" />
         <div>

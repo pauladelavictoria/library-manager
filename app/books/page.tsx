@@ -24,6 +24,8 @@ export default async function BooksPage({
   const search = typeof params.search === 'string' ? params.search : '';
   const category = typeof params.category === 'string' ? params.category : 'Todas';
 
+  const promo = typeof params.promo === 'string' ? params.promo : '';
+
   const headersList = await headers();
   const host = headersList.get('host') || 'localhost:3000';
   const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
@@ -69,19 +71,7 @@ export default async function BooksPage({
 
           <aside className="w-full lg:w-64 shrink-0 space-y-8">
             <form className="space-y-6 bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800" action="/books" method="GET">
-              <div>
-                <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-slate-500">Buscar</h3>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    name="search"
-                    defaultValue={search}
-                    placeholder="Título del libro..."
-                    className="pl-9 bg-slate-50 dark:bg-slate-800 border-none"
-                  />
-                </div>
-              </div>
-
+              {promo && <input type="hidden" name="promo" value={promo} />}
               <div>
                 <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-slate-500">Categorías</h3>
                 <div className="space-y-2">
@@ -102,9 +92,9 @@ export default async function BooksPage({
 
               <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex gap-2">
                 <Button type="submit" className="w-full">Aplicar Filtros</Button>
-                {(search || category) && (
+                {(search || category !== 'Todas') && (
                   <Button variant="outline" asChild size="icon" title="Limpiar Filtros">
-                    <Link href="/books"><FilterX className="h-4 w-4" /></Link>
+                    <Link href={`/books${promo ? `?promo=${promo}` : ''}`}><FilterX className="h-4 w-4" /></Link>
                   </Button>
                 )}
               </div>
@@ -134,7 +124,7 @@ export default async function BooksPage({
                   Intenta cambiar los filtros o realizar una búsqueda diferente.
                 </p>
                 <Button asChild variant="outline">
-                  <Link href="/books">Limpiar Filtros</Link>
+                  <Link href={`/books${promo ? `?promo=${promo}` : ''}`}>Limpiar Filtros</Link>
                 </Button>
               </div>
             )}
@@ -143,12 +133,12 @@ export default async function BooksPage({
               <div className="mt-12 flex justify-center gap-2">
                 {currentPage > 1 && (
                   <Button variant="outline" asChild>
-                    <Link href={`/books?page=${currentPage - 1}${search ? `&search=${search}` : ''}${category ? `&category=${category}` : ''}`}>Anterior</Link>
+                    <Link href={`/books?page=${currentPage - 1}${search ? `&search=${search}` : ''}${category !== 'Todas' ? `&category=${category}` : ''}${promo ? `&promo=${promo}` : ''}`}>Anterior</Link>
                   </Button>
                 )}
                 {(currentPage * limit) < count && (
                   <Button variant="outline" asChild>
-                    <Link href={`/books?page=${currentPage + 1}${search ? `&search=${search}` : ''}${category ? `&category=${category}` : ''}`}>Siguiente</Link>
+                    <Link href={`/books?page=${currentPage + 1}${search ? `&search=${search}` : ''}${category !== 'Todas' ? `&category=${category}` : ''}${promo ? `&promo=${promo}` : ''}`}>Siguiente</Link>
                   </Button>
                 )}
               </div>
