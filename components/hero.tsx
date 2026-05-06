@@ -2,27 +2,25 @@
 
 import Link from "next/link";
 import UserAuthState from "./user-auth-state";
-import { BookOpen, ShoppingCart, Trophy, LayoutDashboard } from "lucide-react";
+import { BookOpen, ShoppingCart, Trophy, LayoutDashboard, Package2 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/hooks/use-cart";
 import { useAuth } from "@/lib/auth-context";
 
 
-
 export default function Hero() {
   const pathname = usePathname();
   const { totalItems } = useCart();
-  const { user } = useAuth();
-
+  const { user, profile } = useAuth();
 
   const navItems = [
     { name: "Libros", href: "/books", icon: BookOpen },
     { name: "Trivial", href: "/trivial", icon: Trophy },
     user && { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    user && profile?.is_admin && { name: "Gestión", href: "/admin/inventory", icon: Package2 },
     user && { name: "Carrito", href: "/cart", icon: ShoppingCart },
   ].filter(Boolean) as { name: string; href: string; icon: any }[];
-
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-xl border-white/10 shadow-lg transition-all duration-300">

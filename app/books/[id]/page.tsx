@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Book } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import AddToCartButton from "./add-to-cart-button";
+import PriceDisplay from "./price-display";
 
 export default async function BookDetailPage({
   params,
@@ -88,33 +89,9 @@ export default async function BookDetailPage({
               </p>
             </div>
 
-            <div className="flex items-center gap-10 mb-12 bg-slate-50 dark:bg-slate-900/50 p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/5 shadow-inner">
-              <div>
-                <p className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-black mb-2 opacity-60">Precio Especial</p>
-                <p className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
-                  €{book.selling_price || 'N/A'}
-                </p>
-              </div>
-              <div className="h-16 w-px bg-slate-200 dark:bg-white/10" />
-              <div>
-                <p className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-black mb-2 opacity-60">Disponibilidad</p>
-                <div className="flex items-center gap-2">
-                  <div className={cn(
-                    "h-3 w-3 rounded-full animate-pulse shadow-[0_0_10px_rgba(var(--color),0.5)]",
-                    book.stock_quantity > 0 ? "bg-green-500 [--color:34,197,94]" : "bg-destructive [--color:239,68,68]"
-                  )} />
-                  <p className={cn(
-                    "text-xl font-black tracking-tight",
-                    book.stock_quantity > 0 ? "text-green-500/80" : "text-destructive/80"
-                  )}>
-                    {book.stock_quantity > 0 ? "Disponible" : "Agotado"}
-                  </p>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1 font-medium">{book.stock_quantity} unidades restantes</p>
-              </div>
-            </div>
+            <PriceDisplay book={book} />
 
-            <div className="prose dark:prose-invert max-w-none mb-12">
+            <div className="prose dark:prose-invert max-w-none mb-12 mt-12">
               <h3 className="text-sm uppercase tracking-widest font-black text-foreground/40 mb-4">Sinopsis</h3>
               <p className="text-xl text-muted-foreground leading-relaxed font-medium">
                 {book.description || "Este libro no cuenta con una descripción detallada en este momento. Sin embargo, es una de las obras más buscadas de su categoría."}
