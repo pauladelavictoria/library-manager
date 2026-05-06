@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Tag, XCircle, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
+import { useNotification } from "@/lib/notification-context";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
@@ -26,6 +26,7 @@ export default function CartPage() {
   const [promoInput, setPromoInput] = useState("");
   const [isApplying, setIsApplying] = useState(false);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const { notify } = useNotification();
   const router = useRouter();
 
   const handleApplyPromo = async () => {
@@ -44,14 +45,14 @@ export default function CartPage() {
     try {
       const result = await checkout(cart, totalPrice, appliedPromo?.code);
       if (result.success) {
-        toast.success("¡Pedido realizado con éxito!");
+        notify({ type: 'success', title: 'Pedido realizado', message: '¡Tu pedido se ha procesado con éxito!' });
         clearCart();
         router.push("/dashboard");
       } else {
-        toast.error(result.error || "Error al realizar el pedido");
+        notify({ type: 'error', title: 'Error en pedido', message: result.error || "No pudimos procesar tu pedido." });
       }
     } catch (error) {
-      toast.error("Ocurrió un error inesperado");
+      notify({ type: 'error', title: 'Error inesperado', message: 'Ocurrió un error al procesar el pago.' });
     } finally {
       setIsCheckingOut(false);
     }

@@ -3,6 +3,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { Book, PromoCode } from "./types";
 import { useAuth } from "./auth-context";
+import { useNotification } from "./notification-context";
 import { redirect } from "next/navigation";
 import { createClient } from "@/supabase/client";
 
@@ -12,8 +13,6 @@ export interface CartItem extends Book {
 
 interface CartContextType {
   cart: CartItem[];
-  lastAddedItem: CartItem | null;
-  setLastAddedItem: (item: CartItem | null) => void;
   addToCart: (book: Book) => void;
   removeFromCart: (bookId: string) => void;
   updateQuantity: (bookId: string, quantity: number) => void;
@@ -21,8 +20,6 @@ interface CartContextType {
   totalItems: number;
   totalPrice: number;
   appliedPromo: PromoCode | null;
-  lastPromoStatus: { success: boolean; message: string; code?: string } | null;
-  setLastPromoStatus: (status: { success: boolean; message: string; code?: string } | null) => void;
   applyPromo: (code: string) => Promise<{ success: boolean; message: string }>;
   removePromo: () => void;
 }
@@ -31,11 +28,10 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [lastAddedItem, setLastAddedItem] = useState<CartItem | null>(null);
   const [appliedPromo, setAppliedPromo] = useState<PromoCode | null>(null);
-  const [lastPromoStatus, setLastPromoStatus] = useState<{ success: boolean; message: string; code?: string } | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const { user } = useAuth();
+  const { notify } = useNotification();
   const supabase = createClient();
 
   useEffect(() => {
@@ -90,12 +86,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const existingItem = prevCart.find((item) => item.id === book.id);
       if (existingItem) {
         const updatedItem = { ...existingItem, quantity: existingItem.quantity + 1 };
-        setLastAddedItem(updatedItem);
+        notify({ type: 'cart', title: 'Añadido al carrito', message: '', data: updatedItem });
         return prevCart.map((item) =>
           item.id === book.id ? updatedItem : item
         );
       }
-      setLastAddedItem(newItem);
+      notify({ type: 'cart', title: 'Añadido al carrito', message: '', data: newItem });
       return [...prevCart, newItem];
     });
   };
@@ -142,12 +138,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
 
       setAppliedPromo(data as PromoCode);
-      const successMsg = `¡Código ${data.code} aplicado! Disfruta de un ${data.discount_amount}% de descuento.`;
-      setLastPromoStatus({ success: true, message: successMsg, code: data.code });
+      const successMsg = `Has aplicado el código ${data.code} con un ${data.discount_amount}% de descuento.`;
+      notify({ type: 'success', title: 'Cupón aplicado', message: successMsg, data: data });
       return { success: true, message: successMsg };
     } catch (err) {
       const errorMsg = "No pudimos validar ese código. Inténtalo de nuevo.";
-      setLastPromoStatus({ success: false, message: errorMsg });
+      notify({ type: 'error', title: 'Error en cupón', message: errorMsg });
       return { success: false, message: errorMsg };
     }
   };
@@ -166,8 +162,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     <CartContext.Provider
       value={{
         cart,
-        lastAddedItem,
-        setLastAddedItem,
         addToCart,
         removeFromCart,
         updateQuantity,
@@ -175,8 +169,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         totalItems,
         totalPrice,
         appliedPromo,
-        lastPromoStatus,
-        setLastPromoStatus,
         applyPromo,
         removePromo,
       }}

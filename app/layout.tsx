@@ -5,8 +5,8 @@ import QueryProvider from "@/components/query-provider";
 import Hero from "@/components/hero";
 import { Toaster } from "@/components/ui/sonner";
 import { CartProvider } from "@/lib/cart-context";
-import CartNotification from "@/components/cart-notification";
-import PromoNotification from "@/components/promo-notification";
+import { NotificationProvider } from "@/lib/notification-context";
+import GlobalNotification from "@/components/global-notification";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,13 +34,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <QueryProvider>
-          <CartProvider>
-            <Hero />
-            {children}
-            <CartNotification />
-            <PromoNotification />
-            <Toaster position="top-center" duration={3000} />
-          </CartProvider>
+          <NotificationProvider>
+            <CartProvider>
+              <Hero />
+              {children}
+              <GlobalNotification />
+            </CartProvider>
+          </NotificationProvider>
         </QueryProvider>
       </body>
     </html>

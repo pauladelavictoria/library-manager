@@ -20,7 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PasswordInput } from "@/components/ui/password-input";
-import { toast } from "sonner";
+import { useNotification } from "@/lib/notification-context";
 
 const loginSchema = z.object({
   email: z
@@ -37,6 +37,7 @@ export default function LoginForm() {
   const [isPending, startTransition] = useTransition();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { notify } = useNotification();
   const queryClient = useQueryClient();
   const redirectTo = searchParams.get("redirect") || "/";
 
@@ -53,13 +54,13 @@ export default function LoginForm() {
       const response = await login(values);
 
       if (response.error) {
-        toast.error("Something went wrong with your creditials!");
+        notify({ type: 'error', title: 'Error de acceso', message: 'Algo salió mal con tus credenciales.' });
         return;
       }
 
       queryClient.invalidateQueries({ queryKey: ["user"] }); //invalidate the user
       router.push(redirectTo);
-      toast.success("Welcome Back!");
+      notify({ type: 'success', title: '¡Bienvenido!', message: 'Has iniciado sesión correctamente.' });
     });
   }
 

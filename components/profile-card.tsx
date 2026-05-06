@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
+import { useNotification } from "@/lib/notification-context";
 import { updateProfile } from "@/app/(dashboard)/dashboard/actions";
 import { Profile } from "@/lib/types";
 import { User } from "@supabase/supabase-js";
@@ -19,6 +19,7 @@ interface ProfileCardProps {
 export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isPending, setIsPending] = useState(false);
+  const { notify } = useNotification();
   const [formData, setFormData] = useState({
     full_name: initialProfile?.full_name || "",
     phone: initialProfile?.phone || "",
@@ -30,10 +31,10 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
     setIsPending(false);
 
     if (result.success) {
-      toast.success("Perfil actualizado con éxito");
+      notify({ type: 'success', title: 'Perfil actualizado', message: 'Tus datos se han guardado correctamente.' });
       setIsEditing(false);
     } else {
-      toast.error(result.error || "Error al actualizar el perfil");
+      notify({ type: 'error', title: 'Error', message: result.error || 'No se pudo actualizar el perfil.' });
     }
   };
 

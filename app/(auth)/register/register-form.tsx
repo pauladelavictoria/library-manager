@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PasswordInput } from "@/components/ui/password-input";
-import { toast } from "sonner";
+import { useNotification } from "@/lib/notification-context";
 import { useRouter } from "next/navigation";
 
 const signupSchema = z.object({
@@ -51,6 +51,7 @@ const signupSchema = z.object({
 export default function RegisterForm() {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const { notify } = useNotification();
 
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
@@ -67,13 +68,11 @@ export default function RegisterForm() {
       const response = await signup(values);
 
       if (response.error) {
-        toast.error(
-          "Something went wrong with your credintials! try again later."
-        );
+        notify({ type: 'error', title: 'Error de registro', message: 'Algo salió mal. Por favor, inténtalo de nuevo más tarde.' });
         return;
       }
 
-      toast.success("Just a step away! check your inbox for activation link.");
+      notify({ type: 'success', title: '¡Ya casi está!', message: 'Revisa tu bandeja de entrada para activar tu cuenta.' });
       router.push("/");
     });
   }

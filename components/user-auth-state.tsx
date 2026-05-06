@@ -17,22 +17,23 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { logOut } from "@/app/(auth)/actions";
 import { Icons } from "@/components/ui/icons"; // Import spinner icon
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useNotification } from "@/lib/notification-context";
 
 export default function UserAuthState() {
   const { user } = useAuth();
   const [isPending, startTransision] = useTransition();
+  const { notify } = useNotification();
   const queryClient = useQueryClient();
 
   async function removeUser() {
     startTransision(async () => {
       const response = await logOut();
       if (response?.error) {
-        toast.error("Oops Something went wrong!");
+        notify({ type: 'error', title: 'Error', message: '¡Ups! Algo salió mal al cerrar sesión.' });
         return;
       }
       queryClient.invalidateQueries({ queryKey: ["user"] });
-      toast.success("you're Logged Out!");
+      notify({ type: 'info', title: 'Sesión cerrada', message: 'Has cerrado sesión correctamente. ¡Vuelve pronto!' });
     });
   }
 

@@ -1,0 +1,129 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { 
+  ShoppingCart, 
+  X, 
+  ArrowRight, 
+  CheckCircle2, 
+  AlertCircle, 
+  Info, 
+  Tag 
+} from "lucide-react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { useNotification } from "@/lib/notification-context";
+import { useAuth } from "@/lib/auth-context";
+
+export default function GlobalNotification() {
+  const { user } = useAuth();
+  const { notification, closeNotification } = useNotification();
+  const [isVisible, setIsVisible] = useState(false);
+  const [activeNotification, setActiveNotification] = useState(notification);
+
+  useEffect(() => {
+    if (notification) {
+      setActiveNotification(notification);
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  }, [notification]);
+
+  if (!activeNotification || !user) return null;
+
+  const { type, title, message, data } = activeNotification;
+
+  const icons = {
+    success: <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />,
+    error: <AlertCircle className="h-6 w-6 text-red-600 dark:text-red-400" />,
+    info: <Info className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
+    cart: <ShoppingCart className="h-6 w-6 text-primary" />,
+  };
+
+  const bgColors = {
+    success: "border-green-200 dark:border-green-800",
+    error: "border-red-200 dark:border-red-800",
+    info: "border-blue-200 dark:border-blue-800",
+    cart: "border-slate-200 dark:border-white/10",
+  };
+
+  const tagColors = {
+    success: "text-green-600 dark:text-green-400",
+    error: "text-red-600 dark:text-red-400",
+    info: "text-blue-600 dark:text-blue-400",
+    cart: "text-primary",
+  };
+
+  return (
+    <div className={cn(
+      "fixed bottom-6 right-6 z-[100] w-full max-w-sm transition-all duration-500 ease-out",
+      isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-12 opacity-0 scale-95 pointer-events-none"
+    )}>
+      <div className={cn(
+        "relative overflow-hidden rounded-[2rem] bg-white/90 dark:bg-slate-900/90 border p-6 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)]",
+        bgColors[type] || bgColors.info
+      )}>
+        <div className="flex gap-4">
+          {/* Icon Area */}
+          <div className="relative shrink-0">
+            {type === 'cart' && data?.cover_url ? (
+              <div className="w-16 h-20 rounded-xl overflow-hidden shadow-md ring-1 ring-black/5">
+                <img src={data.cover_url} alt={data.title} className="w-full h-full object-cover" />
+              </div>
+            ) : (
+              <div className={cn(
+                "w-12 h-12 rounded-2xl flex items-center justify-center",
+                type === 'success' ? "bg-green-100 dark:bg-green-900/30" :
+                type === 'error' ? "bg-red-100 dark:bg-red-900/30" :
+                type === 'info' ? "bg-blue-100 dark:bg-blue-900/30" :
+                "bg-primary/10"
+              )}>
+                {icons[type] || icons.info}
+              </div>
+            )}
+          </div>
+
+          {/* Content Area */}
+          <div className="flex-1 min-w-0">
+            <div className="flex justify-between items-start mb-1">
+              <h4 className={cn(
+                "text-xs font-black uppercase tracking-widest",
+                tagColors[type] || tagColors.info
+              )}>
+                {title}
+              </h4>
+              <button
+                onClick={closeNotification}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <h3 className="font-bold text-slate-900 dark:text-white line-clamp-1 mb-1">
+              {type === 'cart' ? data?.title : (activeNotification.title === 'Cupón aplicado' ? `¡Código ${data?.code || ''}!` : message)}
+            </h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium mb-4">
+              {type === 'cart' 
+                ? (data?.quantity === 1 ? 'Nuevo ejemplar añadido' : `Ahora tienes ${data?.quantity} unidades`)
+                : (activeNotification.title === 'Cupón aplicado' ? message : '')}
+              {type !== 'cart' && activeNotification.title !== 'Cupón aplicado' && message}
+            </p>
+
+            {/* Actions */}
+            {(type === 'cart' || (type === 'success' && activeNotification.title === 'Cupón aplicado')) && (
+              <div className="flex gap-3">
+                <Link href="/cart" className="flex-1" onClick={closeNotification}>
+                  <button className="w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-black shadow-lg shadow-primary/30 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
+                    Ver Carrito
+                    <ArrowRight className="h-3 w-3" />
+                  </button>
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
