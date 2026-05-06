@@ -73,7 +73,7 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
             value={searchParams.get("category") || "all"}
             onValueChange={(v) => handleFilterChange("category", v)}
           >
-            <SelectTrigger className="rounded-xl border-slate-200 dark:border-slate-800 w-full">
+            <SelectTrigger className="rounded-xl border-slate-200 dark:border-slate-800 w-full bg-white/50 dark:bg-slate-900/50">
               <SelectValue placeholder="Género" />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-slate-200 dark:border-slate-800">
@@ -90,7 +90,7 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
             value={searchParams.get("author") || "all"}
             onValueChange={(v) => handleFilterChange("author", v)}
           >
-            <SelectTrigger className="rounded-xl border-slate-200 dark:border-slate-800 w-full">
+            <SelectTrigger className="rounded-xl border-slate-200 dark:border-slate-800 w-full bg-white/50 dark:bg-slate-900/50">
               <SelectValue placeholder="Autor" />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-slate-200 dark:border-slate-800">
@@ -107,7 +107,7 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
             value={searchParams.get("publisher") || "all"}
             onValueChange={(v) => handleFilterChange("publisher", v)}
           >
-            <SelectTrigger className="rounded-xl border-slate-200 dark:border-slate-800 w-full">
+            <SelectTrigger className="rounded-xl border-slate-200 dark:border-slate-800 w-full bg-white/50 dark:bg-slate-900/50">
               <SelectValue placeholder="Editorial" />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-slate-200 dark:border-slate-800">

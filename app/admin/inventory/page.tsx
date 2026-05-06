@@ -1,6 +1,6 @@
 import { createClient } from "@/supabase/server";
 import { redirect } from "next/navigation";
-import { Package2, AlertTriangle, ArrowLeft, MoreVertical, Trophy } from "lucide-react";
+import { Package2, AlertTriangle, ArrowLeft, MoreVertical, Trophy, Tag } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -82,19 +82,35 @@ export default async function AdminInventoryPage({
     return booksMatchingOthers;
   };
 
+  const { data: allSoldItems } = await supabase.from("order_items").select("book_id");
+  const soldBooksIds = new Set((allSoldItems || []).map(item => item.book_id).filter(Boolean));
+  const soldBooks = (allBooks || []).filter(b => soldBooksIds.has(b.id));
+
   const filterOptions = {
-    authors: Array.from(new Set(getAvailableOptions('author').flatMap(b => b.authors || []))).sort(),
-    categories: Array.from(new Set(getAvailableOptions('category').flatMap(b => b.categories || []))).sort(),
-    publishers: Array.from(new Set(getAvailableOptions('publisher').map(b => b.publisher).filter(Boolean))).sort() as string[],
+    authors: Array.from(new Set(soldBooks.flatMap(b => b.authors || []))).sort(),
+    categories: Array.from(new Set(soldBooks.flatMap(b => b.categories || []))).sort(),
+    publishers: Array.from(new Set(soldBooks.map(b => b.publisher).filter(Boolean))).sort() as string[],
   };
 
-  const { data: bestSellers } = await supabase
+  let bestSellersQuery = supabase
     .from("order_items")
-    .select("title, quantity, cover_url")
-    .order("quantity", { ascending: false });
+    .select("title, quantity, cover_url, book_id, categories");
+
+  if (params.category && params.category !== "Todas") {
+    bestSellersQuery = bestSellersQuery.contains("categories", [params.category]);
+  }
+
+  const { data: bestSellers } = await bestSellersQuery;
+
+  let filteredBestSellersData = bestSellers || [];
+  if (params.author && params.author !== "Todos") {
+    const booksByAuthor = (allBooks || []).filter(b => b.authors?.includes(params.author as string));
+    const bookTitlesByAuthor = new Set(booksByAuthor.map(b => b.title));
+    filteredBestSellersData = filteredBestSellersData.filter(item => bookTitlesByAuthor.has(item.title));
+  }
 
   const salesMap: { [key: string]: { total: number, cover_url: string } } = {};
-  bestSellers?.forEach(item => {
+  filteredBestSellersData.forEach(item => {
     if (!salesMap[item.title]) salesMap[item.title] = { total: 0, cover_url: item.cover_url || "" };
     salesMap[item.title].total += item.quantity;
   });
@@ -104,13 +120,12 @@ export default async function AdminInventoryPage({
     .sort((a, b) => b.total - a.total)
     .slice(0, 5);
 
-  // Period selection for sales chart
   const period = params.period || "week";
   const daysToFetch = period === "month" ? 30 : 7;
-  
+
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - daysToFetch);
-  
+
   const { data: recentOrders } = await supabase
     .from("orders")
     .select("created_at, total_amount")
@@ -121,14 +136,13 @@ export default async function AdminInventoryPage({
   for (let i = daysToFetch - 1; i >= 0; i--) {
     const date = new Date();
     date.setDate(date.getDate() - i);
-    // For month view, use numeric day, for week use weekday
-    const label = period === "month" 
+    const label = period === "month"
       ? date.toLocaleDateString("es-ES", { day: "numeric", month: "short" })
       : date.toLocaleDateString("es-ES", { weekday: "short", day: "numeric" });
     dailyData[label] = 0;
   }
 
-  recentOrders?.forEach((order) => {
+  recentOrders?.forEach(order => {
     const date = new Date(order.created_at);
     const label = period === "month"
       ? date.toLocaleDateString("es-ES", { day: "numeric", month: "short" })
@@ -140,8 +154,48 @@ export default async function AdminInventoryPage({
 
   const salesChartData = Object.entries(dailyData).map(([date, amount]) => ({
     date,
-    amount: Number(amount.toFixed(2)),
+    amount: Number(amount.toFixed(2))
   }));
+
+  // --- Promo Code Performance Metrics ---
+  const { data: allOrders } = await supabase
+    .from("orders")
+    .select("id, promo_code, total_amount");
+  const { data: allPromoCodes } = await supabase
+    .from("promo_codes")
+    .select("*");
+  const { data: allOrderItems } = await supabase
+    .from("order_items")
+    .select("order_id, price_at_purchase, quantity");
+
+  const promoPerformance = (allPromoCodes || []).map(promo => {
+    const usages = (allOrders || []).filter(o => o.promo_code === promo.code);
+    const count = usages.length;
+
+    // Calculate original subtotal for these orders to find the discount given
+    let totalDiscount = 0;
+    let totalRevenue = 0;
+
+    usages.forEach(order => {
+      const items = (allOrderItems || []).filter(item => item.order_id === order.id);
+      const subtotal = items.reduce((sum, item) => sum + (Number(item.price_at_purchase) * item.quantity), 0);
+      const discount = subtotal - Number(order.total_amount);
+      totalDiscount += Math.max(0, discount);
+      totalRevenue += Number(order.total_amount);
+    });
+
+    return {
+      code: promo.code,
+      discount_pct: promo.discount_amount,
+      count,
+      totalDiscount,
+      totalRevenue,
+      isActive: new Date(promo.expiry_date) > new Date()
+    };
+  }).sort((a, b) => b.count - a.count);
+
+  const totalDiscountGiven = promoPerformance.reduce((sum, p) => sum + p.totalDiscount, 0);
+  const activePromosCount = (allPromoCodes || []).filter(p => new Date(p.expiry_date) > new Date()).length;
 
   const lowStockBooks = (allBooks || []).filter(book => (book.stock_quantity || 0) < 5);
   const maxSales = Math.max(...sortedBestSellers.map(s => s.total), 1);
@@ -149,8 +203,8 @@ export default async function AdminInventoryPage({
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950/50 pt-24 pb-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
               <Package2 className="h-4 w-4" />
@@ -169,17 +223,34 @@ export default async function AdminInventoryPage({
           </div>
         </div>
 
-        {/* Analytics Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <SalesChart data={salesChartData} />
-          
+
           <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm overflow-hidden">
-            <CardHeader>
-              <CardTitle className="text-xl font-bold flex items-center gap-2">
-                <Trophy className="h-5 w-5 text-yellow-500" />
-                Libros Más Vendidos
-              </CardTitle>
-              <CardDescription className="font-medium">Top 5 títulos con mayor número de ventas.</CardDescription>
+            <CardHeader className="pb-4">
+              <div className="flex flex-col gap-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="text-xl font-bold flex items-center gap-2">
+                      <Trophy className="h-5 w-5 text-yellow-500" />
+                      Libros Más Vendidos
+                    </CardTitle>
+                    <CardDescription className="font-medium">
+                      {params.category && params.category !== "Todas" ? `Top ventas en ${params.category}` :
+                        params.author && params.author !== "Todos" ? `Top ventas de ${params.author}` :
+                          "Top 5 títulos con mayor número de ventas generales."}
+                    </CardDescription>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-100/50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50 shadow-inner">
+                  <InventoryFilters
+                    authors={filterOptions.authors}
+                    categories={filterOptions.categories}
+                    publishers={filterOptions.publishers}
+                  />
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="pt-2 pb-8">
               {sortedBestSellers.length > 0 ? (
@@ -205,7 +276,7 @@ export default async function AdminInventoryPage({
               ) : (
                 <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl">
                   <Trophy className="h-12 w-12 text-slate-300 mb-3" />
-                  <p className="text-slate-500 font-medium">Aún no hay datos de ventas disponibles</p>
+                  <p className="text-slate-500 font-medium">No hay ventas registradas para este filtro</p>
                 </div>
               )}
             </CardContent>
@@ -213,7 +284,6 @@ export default async function AdminInventoryPage({
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          {/* Low Stock Alerts */}
           <Card className="lg:col-span-2 rounded-[2rem] border-red-100 dark:border-red-900/30 bg-red-50/30 dark:bg-red-900/10 shadow-xl shadow-red-500/5">
             <CardHeader className="flex flex-row items-center justify-between">
               <div className="flex items-center gap-3 text-red-600 dark:text-red-400">
@@ -278,7 +348,91 @@ export default async function AdminInventoryPage({
           </Card>
         </div>
 
-        {/* Full Inventory Table */}
+        {/* Promo Code Performance */}
+        <div className="mb-12">
+          <div className="flex items-center gap-2 mb-6">
+            <div className="h-8 w-1 bg-primary rounded-full" />
+            <h2 className="text-2xl font-bold tracking-tight">Rendimiento de Promociones</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg bg-emerald-500/5 border-emerald-500/10">
+              <CardHeader className="pb-2">
+                <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Ahorro Total Clientes</CardDescription>
+                <CardTitle className="text-3xl font-black text-emerald-600 dark:text-emerald-400">€{totalDiscountGiven.toFixed(2)}</CardTitle>
+              </CardHeader>
+            </Card>
+            <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg">
+              <CardHeader className="pb-2">
+                <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Cupones Activos</CardDescription>
+                <CardTitle className="text-3xl font-black">{activePromosCount}</CardTitle>
+              </CardHeader>
+            </Card>
+            <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg">
+              <CardHeader className="pb-2">
+                <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Pedidos con Cupón</CardDescription>
+                <CardTitle className="text-3xl font-black">{promoPerformance.reduce((sum, p) => sum + p.count, 0)}</CardTitle>
+              </CardHeader>
+            </Card>
+            <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg">
+              <CardHeader className="pb-2">
+                <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Ingresos vía Promo</CardDescription>
+                <CardTitle className="text-3xl font-black text-primary">€{promoPerformance.reduce((sum, p) => sum + p.totalRevenue, 0).toFixed(2)}</CardTitle>
+              </CardHeader>
+            </Card>
+          </div>
+
+          <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
+            <Table>
+              <TableHeader>
+                <TableRow className="hover:bg-transparent border-slate-100 dark:border-slate-800">
+                  <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Código</TableHead>
+                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Descuento</TableHead>
+                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Usos</TableHead>
+                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Total Descontado</TableHead>
+                  <TableHead className="pr-8 text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Ingresos (Neto)</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {promoPerformance.map((promo) => (
+                  <TableRow key={promo.code} className="group border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                    <TableCell className="pl-8 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                          <Tag className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <p className="font-black tracking-tight">{promo.code}</p>
+                          <div className="flex items-center gap-1.5">
+                            <div className={cn("h-1.5 w-1.5 rounded-full", promo.isActive ? "bg-emerald-500" : "bg-slate-300")} />
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                              {promo.isActive ? "Activo" : "Caducado"}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className="rounded-md font-black border-primary/20 text-primary bg-primary/5">
+                        -{promo.discount_pct}%
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <p className="font-bold text-slate-600 dark:text-slate-400">{promo.count}</p>
+                    </TableCell>
+                    <TableCell>
+                      <p className="font-bold text-red-600 dark:text-red-400/80">-€{promo.totalDiscount.toFixed(2)}</p>
+                    </TableCell>
+                    <TableCell className="pr-8 text-right">
+                      <p className="font-black text-lg tracking-tight">€{promo.totalRevenue.toFixed(2)}</p>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Card>
+        </div>
+
         <main className="w-full">
           <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
             <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-6 bg-white dark:bg-slate-900 px-8 py-8">
@@ -288,7 +442,7 @@ export default async function AdminInventoryPage({
               </div>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="p-8 border-b border-slate-100 dark:border-slate-800">
+              <div className="p-8 border-b border-slate-100 dark:border-slate-800 hidden">
                 <InventoryFilters
                   authors={filterOptions.authors}
                   categories={filterOptions.categories}

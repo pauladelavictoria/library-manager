@@ -3,8 +3,7 @@ import { createClient } from "@/supabase/server";
 import { Home, ShoppingBag, BookOpen, Calendar, Tag } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Separator } from "@/components/ui/separator";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ProfileCard } from "@/components/profile-card";
 
