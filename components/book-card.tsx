@@ -12,9 +12,13 @@ interface BookCardProps {
 }
 
 export function BookCard({ book }: BookCardProps) {
-  const { addToCart } = useCart();
+  const { addToCart, appliedPromo } = useCart();
   const authorName = book.authors && book.authors.length > 0 ? book.authors[0] : "Autor desconocido";
   const category = book.categories && book.categories.length > 0 ? book.categories[0] : "General";
+
+  const originalPrice = book.selling_price || 0;
+  const discountAmount = appliedPromo ? (originalPrice * (appliedPromo.discount_amount / 100)) : 0;
+  const discountedPrice = originalPrice - discountAmount;
 
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-2xl bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm border border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
@@ -45,9 +49,22 @@ export function BookCard({ book }: BookCardProps) {
         <p className="text-sm text-muted-foreground mb-4">{authorName}</p>
         
         <div className="mt-auto flex items-center justify-between">
-          <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
-            {book.selling_price ? `€${book.selling_price}` : 'N/A'}
-          </span>
+          <div className="flex flex-col">
+            {appliedPromo && originalPrice > 0 ? (
+              <>
+                <span className="text-xs text-slate-400 line-through font-medium">
+                  €{originalPrice.toFixed(2)}
+                </span>
+                <span className="text-xl font-black text-green-600 dark:text-green-400">
+                  €{discountedPrice.toFixed(2)}
+                </span>
+              </>
+            ) : (
+              <span className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
+                {originalPrice > 0 ? `€${originalPrice.toFixed(2)}` : 'N/A'}
+              </span>
+            )}
+          </div>
           <Button 
             size="icon" 
             className="rounded-full h-10 w-10 shadow-md shadow-primary/20 hover:scale-105 transition-transform" 

@@ -21,6 +21,8 @@ interface CartContextType {
   totalItems: number;
   totalPrice: number;
   appliedPromo: PromoCode | null;
+  lastPromoStatus: { success: boolean; message: string; code?: string } | null;
+  setLastPromoStatus: (status: { success: boolean; message: string; code?: string } | null) => void;
   applyPromo: (code: string) => Promise<{ success: boolean; message: string }>;
   removePromo: () => void;
 }
@@ -31,6 +33,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [lastAddedItem, setLastAddedItem] = useState<CartItem | null>(null);
   const [appliedPromo, setAppliedPromo] = useState<PromoCode | null>(null);
+  const [lastPromoStatus, setLastPromoStatus] = useState<{ success: boolean; message: string; code?: string } | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const { user } = useAuth();
   const supabase = createClient();
@@ -139,9 +142,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
 
       setAppliedPromo(data as PromoCode);
-      return { success: true, message: "Código promocional aplicado con éxito" };
+      const successMsg = `¡Código ${data.code} aplicado! Disfruta de un ${data.discount_amount}% de descuento.`;
+      setLastPromoStatus({ success: true, message: successMsg, code: data.code });
+      return { success: true, message: successMsg };
     } catch (err) {
-      return { success: false, message: "Error al aplicar el código promocional" };
+      const errorMsg = "No pudimos validar ese código. Inténtalo de nuevo.";
+      setLastPromoStatus({ success: false, message: errorMsg });
+      return { success: false, message: errorMsg };
     }
   };
 
@@ -151,7 +158,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = cart.reduce((sum, item) => sum + (item.selling_price || 0) * item.quantity, 0);
-  const totalPrice = Math.max(0, subtotal - (appliedPromo?.discount_amount || 0));
+  const discountAmount = appliedPromo ? (subtotal * (appliedPromo.discount_amount / 100)) : 0;
+  const totalPrice = Math.max(0, subtotal - discountAmount);
 
 
   return (
@@ -167,6 +175,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         totalItems,
         totalPrice,
         appliedPromo,
+        lastPromoStatus,
+        setLastPromoStatus,
         applyPromo,
         removePromo,
       }}

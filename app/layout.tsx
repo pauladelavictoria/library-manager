@@ -6,6 +6,7 @@ import Hero from "@/components/hero";
 import { Toaster } from "@/components/ui/sonner";
 import { CartProvider } from "@/lib/cart-context";
 import CartNotification from "@/components/cart-notification";
+import PromoNotification from "@/components/promo-notification";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,7 @@ export default function RootLayout({
             <Hero />
             {children}
             <CartNotification />
+            <PromoNotification />
             <Toaster position="top-center" duration={3000} />
           </CartProvider>
         </QueryProvider>

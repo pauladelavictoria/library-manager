@@ -35,10 +35,7 @@ export default function CartPage() {
     setIsApplying(false);
 
     if (result.success) {
-      toast.success(result.message);
       setPromoInput("");
-    } else {
-      toast.error(result.message);
     }
   };
 
@@ -61,7 +58,7 @@ export default function CartPage() {
   };
 
   const subtotal = cart.reduce((sum, item) => sum + (item.selling_price || 0) * item.quantity, 0);
-  const discount = appliedPromo ? appliedPromo.discount_amount : 0;
+  const discount = appliedPromo ? (subtotal * (appliedPromo.discount_amount / 100)) : 0;
 
   if (cart.length === 0) {
     return (

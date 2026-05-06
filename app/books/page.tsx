@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { headers } from "next/headers";
 import { Book } from "@/lib/types";
+import { PromoHandler } from "@/components/promo-handler";
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Catálogo | Librería",
@@ -44,6 +46,9 @@ export default async function BooksPage({
 
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950/50">
+      <Suspense fallback={null}>
+        <PromoHandler />
+      </Suspense>
       <div className="bg-gradient-to-b from-primary/10 via-primary/5 to-transparent pt-24 pb-12">
         <div className="container px-4 md:px-6 mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
