@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/hooks/use-cart";
 import { useAuth } from "@/lib/auth-context";
+import FuzzySearch from "./fuzzy-search";
 
 
 export default function Hero() {
@@ -64,8 +65,11 @@ export default function Hero() {
             </nav>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="h-8 w-[1px] bg-white/10 hidden md:block mx-2" />
+          <div className="flex items-center gap-6">
+            <div className="hidden lg:block">
+              <FuzzySearch />
+            </div>
+            <div className="h-8 w-[1px] bg-white/10 hidden md:block" />
             <UserAuthState />
           </div>
         </div>
