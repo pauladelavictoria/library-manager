@@ -4,7 +4,7 @@ import React, { createContext, useState, useEffect, useContext } from "react";
 import { Book, PromoCode } from "./types";
 import { useAuth } from "./auth-context";
 import { useNotification } from "./notification-context";
-import { redirect } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/supabase/client";
 
 export interface CartItem extends Book {
@@ -63,6 +63,24 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
     setIsLoaded(true);
   }, [user]);
+
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    const promoCode = searchParams.get("promo");
+    if (promoCode && isLoaded && (!appliedPromo || appliedPromo.code !== promoCode)) {
+      applyPromo(promoCode).then(res => {
+        if (res.success) {
+          const params = new URLSearchParams(searchParams.toString());
+          params.delete("promo");
+          const newUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname;
+          router.replace(newUrl, { scroll: false });
+        }
+      });
+    }
+  }, [searchParams, isLoaded, appliedPromo, pathname, router]);
 
   useEffect(() => {
     if (!user) return;
@@ -156,7 +174,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const subtotal = cart.reduce((sum, item) => sum + (item.selling_price || 0) * item.quantity, 0);
   const discountAmount = appliedPromo ? (subtotal * (appliedPromo.discount_amount / 100)) : 0;
   const totalPrice = Math.max(0, subtotal - discountAmount);
-
 
   return (
     <CartContext.Provider
