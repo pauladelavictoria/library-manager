@@ -9,6 +9,7 @@ export interface Notification {
   title: string;
   message: string;
   data?: any;
+  size?: "default" | "large";
 }
 
 interface NotificationContextType {
@@ -28,7 +29,6 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
 
   const notify = useCallback((n: Notification) => {
     setNotification(n);
-    // Auto-close after 5 seconds
     setTimeout(() => {
       setNotification((prev) => (prev === n ? null : prev));
     }, 5000);

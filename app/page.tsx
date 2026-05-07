@@ -1,32 +1,39 @@
-
-
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { BookOpen, Sparkles, ArrowRight } from "lucide-react";
 import { headers } from "next/headers";
 import { Book } from "@/lib/types";
+import { EventsCalendar } from "@/components/events-calendar";
+import { createClient } from "@/supabase/server";
 
 export const metadata = {
   title: "Home | Librería",
-  description: "Explora nuestra colección de libros.",
+  description: "Explora nuestra colección de libros y únete a nuestros eventos.",
 };
-
 
 export default async function Home({ searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  // Construir la URL completa para llamar al endpoint de nuestra API
-  const headersList = await headers();
-  const host = headersList.get('host') || 'localhost:3000';
-  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const apiUrl = new URL(`${protocol}://${host}/api/books`);
+  const supabase = await createClient();
 
-  // Consumir el endpoint (se ejecuta en el servidor)
-  const res = await fetch(apiUrl.toString(), { cache: 'no-store' });
-  const { data: rawBooks, meta } = await res.json();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  // Fetch Books
+  const { data: rawBooks, count: totalCount } = await supabase
+    .from("books")
+    .select("*", { count: "exact" })
+    .limit(10);
   const books: Book[] = rawBooks || [];
-  const count = meta?.total || 0;
+  const count = totalCount || 0;
+
+  // Fetch Events
+  const { data: events } = await supabase
+    .from("events")
+    .select("*")
+    .gte("event_date", new Date().toISOString())
+    .order("event_date", { ascending: true })
+    .limit(4);
 
   return (
     <div className="relative isolate overflow-hidden bg-background">
@@ -86,6 +93,11 @@ export default async function Home({ searchParams,
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Events Calendar Section */}
+      <div className="container mx-auto px-6 pb-24">
+        <EventsCalendar events={events} userId={user?.id} />
       </div>
     </div>
   );
