@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { InventoryFilters } from "@/components/admin/inventory-filters";
+import { CreatePromoDialog } from "@/components/admin/create-promo-dialog";
 import { SalesChart } from "@/components/admin/sales-chart";
 
 
@@ -350,9 +351,12 @@ export default async function AdminInventoryPage({
 
         {/* Promo Code Performance */}
         <div className="mb-12">
-          <div className="flex items-center gap-2 mb-6">
-            <div className="h-8 w-1 bg-primary rounded-full" />
-            <h2 className="text-2xl font-bold tracking-tight">Rendimiento de Promociones</h2>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-1 bg-primary rounded-full" />
+              <h2 className="text-2xl font-bold tracking-tight">Rendimiento de Promociones</h2>
+            </div>
+            <CreatePromoDialog />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">

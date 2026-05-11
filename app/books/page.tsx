@@ -1,7 +1,6 @@
 import { BookCard } from "@/components/book-card";
 import { Search, FilterX, BookOpen } from "lucide-react";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { headers } from "next/headers";
 import { Book } from "@/lib/types";
