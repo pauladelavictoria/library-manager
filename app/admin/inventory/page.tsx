@@ -1,16 +1,20 @@
 import { createClient } from "@/supabase/server";
 import { redirect } from "next/navigation";
-import { Package2, AlertTriangle, ArrowLeft, MoreVertical, Trophy, Tag, ChevronRight, ChevronLeft } from "lucide-react";
+import { Package2, AlertTriangle, Trophy, Tag, ChevronRight, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { InventoryFilters } from "@/components/admin/inventory-filters";
-import { CreatePromoDialog } from "@/components/admin/create-promo-dialog";
-import { SalesChart } from "@/components/admin/sales-chart";
-import { BestSellersBubbles } from "@/components/admin/best-sellers-bubbles";
+import { InventoryFilters } from "@/components/inventory-filters";
+import { CreatePromoDialog } from "@/components/create-promo-dialog";
+import { CreateEventDialog } from "@/components/create-event-dialog";
+import { SalesChart } from "@/components/sales-chart";
+import { BestSellersBubbles } from "@/components/best-sellers-bubbles";
+import { PromoActions } from "@/components/promo-actions";
+import { EventActions } from "@/components/admin/event-actions";
+import { Calendar as CalendarIcon, Users as UsersIcon, MapPin, PenTool, BookOpen, Presentation } from "lucide-react";
 
 
 export const metadata = {
@@ -170,10 +174,11 @@ export default async function AdminInventoryPage({
       totalDiscount += Math.max(0, discount);
       totalRevenue += Number(order.total_amount);
     });
-
     return {
+      id: promo.id,
       code: promo.code,
-      discount_pct: promo.discount_amount,
+      discount_amount: promo.discount_amount,
+      expiry_date: promo.expiry_date,
       count,
       totalDiscount,
       totalRevenue,
@@ -185,6 +190,25 @@ export default async function AdminInventoryPage({
   const activePromosCount = (allPromoCodes || []).filter(p => new Date(p.expiry_date) > new Date()).length;
 
   const maxSales = Math.max(...sortedBestSellers.map(s => s.total), 1);
+
+  const { data: allEvents } = await supabase
+    .from("events")
+    .select("*")
+    .order("event_date", { ascending: true });
+
+  const { data: allBookings } = await supabase
+    .from("event_bookings")
+    .select("event_id");
+
+  const eventPerformance = (allEvents || []).map(event => {
+    const attendees = (allBookings || []).filter(b => b.event_id === event.id).length;
+    const isPast = new Date(event.event_date) < new Date();
+    return {
+      ...event,
+      attendees,
+      isPast,
+    };
+  });
 
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950/50 pt-24 pb-12">
@@ -243,7 +267,9 @@ export default async function AdminInventoryPage({
               <div className="h-8 w-1 bg-primary rounded-full" />
               <h2 className="text-2xl font-bold tracking-tight">Rendimiento de Promociones</h2>
             </div>
-            <CreatePromoDialog />
+            <div className="flex gap-3">
+              <CreatePromoDialog />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -281,7 +307,8 @@ export default async function AdminInventoryPage({
                   <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Descuento</TableHead>
                   <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Usos</TableHead>
                   <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Total Descontado</TableHead>
-                  <TableHead className="pr-8 text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Ingresos (Neto)</TableHead>
+                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Ingresos (Neto)</TableHead>
+                  <TableHead className="pr-8 text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -305,7 +332,7 @@ export default async function AdminInventoryPage({
                     </TableCell>
                     <TableCell>
                       <Badge variant="outline" className="rounded-md font-black border-primary/20 text-primary bg-primary/5">
-                        -{promo.discount_pct}%
+                        -{promo.discount_amount}%
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -314,11 +341,105 @@ export default async function AdminInventoryPage({
                     <TableCell>
                       <p className="font-bold text-red-600 dark:text-red-400/80">-€{promo.totalDiscount.toFixed(2)}</p>
                     </TableCell>
-                    <TableCell className="pr-8 text-right">
+                    <TableCell className="text-center">
                       <p className="font-black text-lg tracking-tight">€{promo.totalRevenue.toFixed(2)}</p>
+                    </TableCell>
+                    <TableCell className="pr-8 text-right">
+                      <PromoActions promo={promo} />
                     </TableCell>
                   </TableRow>
                 ))}
+              </TableBody>
+            </Table>
+          </Card>
+        </div>
+
+        <div className="mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-1 bg-primary rounded-full" />
+              <h2 className="text-2xl font-bold tracking-tight">Agenda Cultural</h2>
+            </div>
+            <CreateEventDialog />
+          </div>
+
+          <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
+            <Table>
+              <TableHeader>
+                <TableRow className="hover:bg-transparent border-slate-100 dark:border-slate-800">
+                  <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Evento</TableHead>
+                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Tipo</TableHead>
+                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Fecha y Hora</TableHead>
+                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Ubicación</TableHead>
+                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Asistentes</TableHead>
+                  <TableHead className="pr-8 text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {eventPerformance.length > 0 ? (
+                  eventPerformance.map((event) => (
+                    <TableRow
+                      key={event.id}
+                      className={cn(
+                        "group border-slate-100 dark:border-slate-800 transition-colors",
+                        event.isPast
+                          ? "bg-slate-50/30 dark:bg-slate-900/10 opacity-60"
+                          : "hover:bg-slate-50/50 dark:hover:bg-slate-900/50"
+                      )}
+                    >
+                      <TableCell className="pl-8 py-4">
+                        <div className="flex items-center gap-2">
+                          <p className="font-black tracking-tight">{event.title}</p>
+                          {event.isPast && (
+                            <Badge variant="secondary" className="text-[9px] h-4 rounded-sm bg-slate-200 dark:bg-slate-800 text-slate-500 font-bold border-none px-1 uppercase tracking-tighter">
+                              Finalizado
+                            </Badge>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="rounded-md font-black border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex w-fit items-center gap-1.5 capitalize">
+                          {event.type === 'signing' && <PenTool className="h-3 w-3" />}
+                          {event.type === 'workshop' && <BookOpen className="h-3 w-3" />}
+                          {event.type === 'club' && <UsersIcon className="h-3 w-3" />}
+                          {event.type === 'presentation' && <Presentation className="h-3 w-3" />}
+                          {event.type === 'generic' && <CalendarIcon className="h-3 w-3" />}
+                          {event.type}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <p className="text-sm font-bold text-slate-600 dark:text-slate-400">
+                          {new Date(event.event_date).toLocaleString('es-ES', {
+                            day: 'numeric',
+                            month: 'short',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </p>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1.5 text-slate-500">
+                          <MapPin className="h-3 w-3" />
+                          <span className="text-xs font-medium">{event.location || "N/A"}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 font-black text-sm">
+                          {event.attendees}
+                        </div>
+                      </TableCell>
+                      <TableCell className="pr-8 text-right">
+                        <EventActions event={event} />
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6} className="h-24 text-center text-slate-500 font-medium italic">
+                      No hay eventos programados.
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </Card>

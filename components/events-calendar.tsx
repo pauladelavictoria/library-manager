@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, MapPin, Clock, ArrowRight, BookOpen, PenTool, Users, Star, Loader2, CheckCircle2 } from "lucide-react";
+import { Calendar, MapPin, Clock, BookOpen, PenTool, Users, Star, Loader2, CheckCircle2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,6 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { createClient } from "@/supabase/client";
 import { useNotification } from "@/lib/notification-context";
-import { sendBookingEmail } from "@/app/actions/events";
 
 interface Event {
   id: string;
@@ -101,23 +100,6 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
       } else {
         setBookedEventIds(prev => new Set([...prev, event.id]));
 
-        const formattedDate = new Date(event.event_date).toLocaleString("es-ES", {
-          weekday: 'long',
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-
-        // Enviar email (simulación en el servidor)
-        await sendBookingEmail({
-          email: profile?.email || "Sin email",
-          name: profile?.full_name || "Usuario",
-          eventTitle: event.title,
-          eventDate: formattedDate,
-          location: event.location
-        });
 
         notify({
           type: "success",

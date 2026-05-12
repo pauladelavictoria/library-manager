@@ -66,6 +66,7 @@ export function CreatePromoDialog() {
       }}>
         <DialogContent className="sm:max-w-[400px] border-none bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-0 overflow-hidden rounded-[2.5rem] shadow-2xl">
           <div className="p-10 text-center space-y-6">
+            <DialogTitle className="sr-only">Cupón creado con éxito</DialogTitle>
             <div className="relative mx-auto w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
               <div className="absolute inset-0 bg-emerald-500/20 rounded-full animate-ping opacity-25" />
               <CheckCircle2 className="h-12 w-12 text-emerald-500" />

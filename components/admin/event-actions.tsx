@@ -105,6 +105,7 @@ export function EventActions({ event }: EventActionsProps) {
         <DialogContent className="sm:max-w-[500px] rounded-[2.5rem] border-none shadow-2xl overflow-hidden p-0">
           {showEditSuccess ? (
             <div className="p-10 text-center space-y-6 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl">
+              <DialogTitle className="sr-only">Evento actualizado con éxito</DialogTitle>
               <div className="relative mx-auto w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
                 <CheckCircle2 className="h-10 w-10 text-emerald-500" />
               </div>
@@ -179,6 +180,7 @@ export function EventActions({ event }: EventActionsProps) {
           {showDeleteSuccess ? (
             <div className="p-10 text-center space-y-6 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl">
               <div className="relative mx-auto w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
+                <DialogTitle className="sr-only">Evento eliminado con éxito</DialogTitle>
                 <Trash2 className="h-10 w-10 text-red-500" />
               </div>
               <div className="space-y-1">
@@ -193,7 +195,7 @@ export function EventActions({ event }: EventActionsProps) {
                 <AlertTriangle className="h-10 w-10 text-red-500" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-2xl font-black">¿Cancelar evento?</h3>
+                <DialogTitle className="text-2xl font-black">¿Cancelar evento?</DialogTitle>
                 <p className="text-sm text-slate-500 font-medium leading-relaxed">
                   Estás a punto de borrar <span className="font-bold text-slate-900 dark:text-white">{event.title}</span>. Se perderán todas las reservas asociadas.
                 </p>
