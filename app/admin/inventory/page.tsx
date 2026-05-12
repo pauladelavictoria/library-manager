@@ -1,6 +1,6 @@
 import { createClient } from "@/supabase/server";
 import { redirect } from "next/navigation";
-import { Package2, AlertTriangle, ArrowLeft, MoreVertical, Trophy, Tag } from "lucide-react";
+import { Package2, AlertTriangle, ArrowLeft, MoreVertical, Trophy, Tag, ChevronRight, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { InventoryFilters } from "@/components/admin/inventory-filters";
 import { CreatePromoDialog } from "@/components/admin/create-promo-dialog";
 import { SalesChart } from "@/components/admin/sales-chart";
+import { BestSellersBubbles } from "@/components/admin/best-sellers-bubbles";
 
 
 export const metadata = {
@@ -20,10 +21,20 @@ export const metadata = {
 export default async function AdminInventoryPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; author?: string; category?: string; publisher?: string; period?: "week" | "month" }>;
+  searchParams: Promise<{
+    q?: string;
+    author?: string;
+    category?: string;
+    publisher?: string;
+    period?: "week" | "month";
+    sort?: "sales" | "stock" | "category" | "title";
+    page?: string;
+  }>;
 }) {
   const params = await searchParams;
   const supabase = await createClient();
+  const currentPage = parseInt(params.page || "1");
+  const itemsPerPage = 10;
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
@@ -38,88 +49,67 @@ export default async function AdminInventoryPage({
     redirect("/");
   }
 
-  const { data: allBooks, error } = await supabase
+  const { data: allBooksData, error: booksError } = await supabase
     .from("books")
-    .select("*")
-    .order("title", { ascending: true });
+    .select("*");
 
-  if (error) console.error("Error fetching books:", error);
+  if (booksError) console.error("Error fetching books:", booksError);
 
-  const filteredBooks = (allBooks || []).filter(book => {
+  const { data: allOrderItems } = await supabase
+    .from("order_items")
+    .select("book_id, quantity, order_id, price_at_purchase");
+
+  const salesByBook: Record<string, number> = {};
+  (allOrderItems || []).forEach(item => {
+    if (item.book_id) {
+      salesByBook[item.book_id] = (salesByBook[item.book_id] || 0) + item.quantity;
+    }
+  });
+
+  const enrichedBooks = (allBooksData || []).map(book => ({
+    ...book,
+    sold_count: salesByBook[book.id] || 0
+  }));
+
+  const filteredBooks = enrichedBooks.filter(book => {
     const matchesSearch = !params.q ||
       book.title.toLowerCase().includes(params.q.toLowerCase()) ||
       book.isbn?.toLowerCase().includes(params.q.toLowerCase());
 
-    const matchesCategory = !params.category ||
+    const matchesCategory = !params.category || params.category === "Todas" ||
       book.categories?.includes(params.category);
 
-    const matchesAuthor = !params.author ||
+    const matchesAuthor = !params.author || params.author === "Todos" ||
       book.authors?.includes(params.author);
 
-    const matchesPublisher = !params.publisher ||
+    const matchesPublisher = !params.publisher || params.publisher === "Todos" ||
       book.publisher === params.publisher;
 
     return matchesSearch && matchesCategory && matchesAuthor && matchesPublisher;
   });
 
-  const getAvailableOptions = (excludeFilter: string) => {
-    const booksMatchingOthers = (allBooks || []).filter(book => {
-      const matchesSearch = !params.q ||
-        book.title.toLowerCase().includes(params.q.toLowerCase()) ||
-        book.isbn?.toLowerCase().includes(params.q.toLowerCase());
-
-      const matchesCategory = excludeFilter === 'category' || !params.category ||
-        book.categories?.includes(params.category);
-
-      const matchesAuthor = excludeFilter === 'author' || !params.author ||
-        book.authors?.includes(params.author);
-
-      const matchesPublisher = excludeFilter === 'publisher' || !params.publisher ||
-        book.publisher === params.publisher;
-
-      return matchesSearch && matchesCategory && matchesAuthor && matchesPublisher;
-    });
-
-    return booksMatchingOthers;
-  };
-
-  const { data: allSoldItems } = await supabase.from("order_items").select("book_id");
-  const soldBooksIds = new Set((allSoldItems || []).map(item => item.book_id).filter(Boolean));
-  const soldBooks = (allBooks || []).filter(b => soldBooksIds.has(b.id));
-
-  const filterOptions = {
-    authors: Array.from(new Set(soldBooks.flatMap(b => b.authors || []))).sort(),
-    categories: Array.from(new Set(soldBooks.flatMap(b => b.categories || []))).sort(),
-    publishers: Array.from(new Set(soldBooks.map(b => b.publisher).filter(Boolean))).sort() as string[],
-  };
-
-  let bestSellersQuery = supabase
-    .from("order_items")
-    .select("title, quantity, cover_url, book_id, categories");
-
-  if (params.category && params.category !== "Todas") {
-    bestSellersQuery = bestSellersQuery.contains("categories", [params.category]);
-  }
-
-  const { data: bestSellers } = await bestSellersQuery;
-
-  let filteredBestSellersData = bestSellers || [];
-  if (params.author && params.author !== "Todos") {
-    const booksByAuthor = (allBooks || []).filter(b => b.authors?.includes(params.author as string));
-    const bookTitlesByAuthor = new Set(booksByAuthor.map(b => b.title));
-    filteredBestSellersData = filteredBestSellersData.filter(item => bookTitlesByAuthor.has(item.title));
-  }
-
-  const salesMap: { [key: string]: { total: number, cover_url: string } } = {};
-  filteredBestSellersData.forEach(item => {
-    if (!salesMap[item.title]) salesMap[item.title] = { total: 0, cover_url: item.cover_url || "" };
-    salesMap[item.title].total += item.quantity;
+  const sortBy = params.sort || "title";
+  const sortedBooks = [...filteredBooks].sort((a, b) => {
+    if (sortBy === "sales") return b.sold_count - a.sold_count;
+    if (sortBy === "stock") return (a.stock_quantity || 0) - (b.stock_quantity || 0);
+    if (sortBy === "category") return (a.categories?.[0] || "").localeCompare(b.categories?.[0] || "");
+    return a.title.localeCompare(b.title);
   });
 
-  const sortedBestSellers = Object.entries(salesMap)
-    .map(([title, data]) => ({ title, ...data }))
-    .sort((a, b) => b.total - a.total)
-    .slice(0, 5);
+  const totalItems = sortedBooks.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const paginatedBooks = sortedBooks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const filterOptions = {
+    authors: Array.from(new Set(enrichedBooks.flatMap(b => b.authors || []))).sort(),
+    categories: Array.from(new Set(enrichedBooks.flatMap(b => b.categories || []))).sort(),
+    publishers: Array.from(new Set(enrichedBooks.map(b => b.publisher).filter(Boolean))).sort() as string[],
+  };
+
+  const sortedBestSellers = [...enrichedBooks]
+    .sort((a, b) => b.sold_count - a.sold_count)
+    .slice(0, 10)
+    .map(b => ({ title: b.title, total: b.sold_count, cover_url: b.cover_url }));
 
   const period = params.period || "week";
   const daysToFetch = period === "month" ? 30 : 7;
@@ -158,22 +148,18 @@ export default async function AdminInventoryPage({
     amount: Number(amount.toFixed(2))
   }));
 
-  // --- Promo Code Performance Metrics ---
   const { data: allOrders } = await supabase
     .from("orders")
     .select("id, promo_code, total_amount");
   const { data: allPromoCodes } = await supabase
     .from("promo_codes")
     .select("*");
-  const { data: allOrderItems } = await supabase
-    .from("order_items")
-    .select("order_id, price_at_purchase, quantity");
+
 
   const promoPerformance = (allPromoCodes || []).map(promo => {
     const usages = (allOrders || []).filter(o => o.promo_code === promo.code);
     const count = usages.length;
 
-    // Calculate original subtotal for these orders to find the discount given
     let totalDiscount = 0;
     let totalRevenue = 0;
 
@@ -198,7 +184,6 @@ export default async function AdminInventoryPage({
   const totalDiscountGiven = promoPerformance.reduce((sum, p) => sum + p.totalDiscount, 0);
   const activePromosCount = (allPromoCodes || []).filter(p => new Date(p.expiry_date) > new Date()).length;
 
-  const lowStockBooks = (allBooks || []).filter(book => (book.stock_quantity || 0) < 5);
   const maxSales = Math.max(...sortedBestSellers.map(s => s.total), 1);
 
   return (
@@ -214,14 +199,7 @@ export default async function AdminInventoryPage({
             <h1 className="text-4xl font-black tracking-tight mb-2">Gestión de la Librería</h1>
             <p className="text-slate-500 dark:text-slate-400">Supervisa el rendimiento y gestiona el inventario.</p>
           </div>
-          <div className="flex gap-3">
-            <Button variant="outline" asChild className="rounded-xl">
-              <Link href="/dashboard">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Volver al Panel
-              </Link>
-            </Button>
-          </div>
+
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
@@ -244,36 +222,11 @@ export default async function AdminInventoryPage({
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-slate-100/50 dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50 shadow-inner">
-                  <InventoryFilters
-                    authors={filterOptions.authors}
-                    categories={filterOptions.categories}
-                    publishers={filterOptions.publishers}
-                  />
-                </div>
               </div>
             </CardHeader>
-            <CardContent className="pt-2 pb-8">
+            <CardContent className="pt-2 pb-8 flex flex-col justify-center min-h-[400px]">
               {sortedBestSellers.length > 0 ? (
-                <div className="space-y-6">
-                  {sortedBestSellers.map((seller, index) => (
-                    <div key={seller.title} className="space-y-2">
-                      <div className="flex justify-between items-end">
-                        <div className="flex items-center gap-3">
-                          <span className="text-xs font-black text-slate-400 w-4">#{index + 1}</span>
-                          <span className="text-sm font-bold truncate max-w-[200px] sm:max-w-[400px]">{seller.title}</span>
-                        </div>
-                        <span className="text-xs font-black text-primary uppercase tracking-wider">{seller.total} vendidos</span>
-                      </div>
-                      <div className="relative h-3 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                        <div
-                          className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary to-primary/60 rounded-full transition-all duration-1000 ease-out"
-                          style={{ width: `${(seller.total / maxSales) * 100}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <BestSellersBubbles data={sortedBestSellers} />
               ) : (
                 <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl">
                   <Trophy className="h-12 w-12 text-slate-300 mb-3" />
@@ -284,72 +237,6 @@ export default async function AdminInventoryPage({
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          <Card className="lg:col-span-2 rounded-[2rem] border-red-100 dark:border-red-900/30 bg-red-50/30 dark:bg-red-900/10 shadow-xl shadow-red-500/5">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div className="flex items-center gap-3 text-red-600 dark:text-red-400">
-                <AlertTriangle className="h-6 w-6" />
-                <div>
-                  <CardTitle className="text-xl font-bold">Alerta de Reposición</CardTitle>
-                  <CardDescription className="font-medium text-red-600/70 dark:text-red-400/70">
-                    Menos de 5 ejemplares.
-                  </CardDescription>
-                </div>
-              </div>
-              <Badge variant="destructive" className="rounded-full px-4 py-1 font-black">
-                {lowStockBooks.length} CRÍTICOS
-              </Badge>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {lowStockBooks.length > 0 ? (
-                  lowStockBooks.slice(0, 4).map((book) => (
-                    <div key={book.id} className="flex items-start gap-4 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-red-100 dark:border-red-900/50 shadow-sm">
-                      <div className="w-10 h-14 rounded-lg overflow-hidden shrink-0 shadow-inner">
-                        {book.cover_url ? (
-                          <img src={book.cover_url} alt={book.title} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px]">No img</div>
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-bold text-sm line-clamp-1">{book.title}</h4>
-                        <div className="flex items-center justify-between mt-1">
-                          <span className="text-xs font-black text-red-600">Stock: {book.stock_quantity}</span>
-                          <Button size="sm" variant="ghost" className="h-6 text-[10px] font-bold text-primary p-0">
-                            PEDIR
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="col-span-2 text-center py-8 bg-white/50 dark:bg-slate-900/50 rounded-2xl border border-dashed border-red-200 dark:border-red-800">
-                    <p className="text-sm font-bold text-slate-500">Todo el stock está al día</p>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="text-xl font-bold">Estado General</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="p-4 rounded-2xl bg-primary/5 border border-primary/10">
-                <p className="text-sm font-bold text-slate-500 mb-1 uppercase tracking-widest text-[10px]">Total Títulos</p>
-                <p className="text-3xl font-black text-primary">{allBooks?.length || 0}</p>
-              </div>
-              <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10">
-                <p className="text-sm font-bold text-slate-500 mb-1 uppercase tracking-widest text-[10px]">Stock Saludable</p>
-                <p className="text-3xl font-black text-emerald-500">{(allBooks?.length || 0) - lowStockBooks.length}</p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Promo Code Performance */}
         <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
@@ -446,7 +333,7 @@ export default async function AdminInventoryPage({
               </div>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="p-8 border-b border-slate-100 dark:border-slate-800 hidden">
+              <div className="p-8 border-b border-slate-100 dark:border-slate-800">
                 <InventoryFilters
                   authors={filterOptions.authors}
                   categories={filterOptions.categories}
@@ -457,52 +344,132 @@ export default async function AdminInventoryPage({
                 <TableHeader>
                   <TableRow className="hover:bg-transparent border-slate-100 dark:border-slate-800">
                     <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Libro</TableHead>
+                    <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Estado</TableHead>
+                    <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Ventas</TableHead>
                     <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Stock</TableHead>
                     <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Precio</TableHead>
-                    <TableHead className="pr-8 text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredBooks.map((book) => (
-                    <TableRow key={book.id} className="group hover:bg-slate-50 dark:hover:bg-slate-800/50 border-slate-50 dark:border-slate-800 transition-colors">
-                      <TableCell className="pl-8 py-6">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-16 rounded-lg overflow-hidden shrink-0 shadow-sm border border-slate-100 dark:border-slate-800">
-                            {book.cover_url ? (
-                              <img src={book.cover_url} alt={book.title} className="w-full h-full object-cover" />
-                            ) : (
-                              <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[8px]">No img</div>
+                  {paginatedBooks.map((book) => {
+                    const isLowStock = (book.stock_quantity || 0) < 5;
+                    return (
+                      <TableRow
+                        key={book.id}
+                        className={cn(
+                          "group transition-colors border-slate-50 dark:border-slate-800",
+                          isLowStock
+                            ? "bg-red-50/50 dark:bg-red-900/10 hover:bg-red-100/50 dark:hover:bg-red-900/20"
+                            : "hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                        )}
+                      >
+                        <TableCell className="pl-8 py-6">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-16 rounded-lg overflow-hidden shrink-0 shadow-sm border border-slate-100 dark:border-slate-800">
+                              {book.cover_url ? (
+                                <img src={book.cover_url} alt={book.title} className="w-full h-full object-cover" />
+                              ) : (
+                                <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[8px]">No img</div>
+                              )}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="font-bold text-base line-clamp-1 group-hover:text-primary transition-colors">{book.title}</p>
+                              <p className="text-sm text-slate-400 truncate max-w-[200px]">{book.isbn}</p>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          {isLowStock ? (
+                            <Badge variant="destructive" className="rounded-lg px-2.5 py-1 font-black text-[10px] tracking-wider animate-pulse shadow-sm">
+                              CRÍTICO
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline" className="rounded-lg px-2.5 py-1 font-bold text-[10px] tracking-wider text-emerald-600 border-emerald-500/20 bg-emerald-500/10">
+                              SALUDABLE
+                            </Badge>
+                          )}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <div className="inline-flex flex-col items-center">
+                            <span className="text-xl font-black text-slate-900 dark:text-white">{book.sold_count}</span>
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">unidades</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <span className={cn(
+                              "font-black text-xl",
+                              isLowStock ? "text-red-600" : "text-slate-700 dark:text-slate-300"
+                            )}>
+                              {book.stock_quantity}
+                            </span>
+                            {isLowStock && <AlertTriangle className="h-4 w-4 text-red-500" />}
+                          </div>
+                        </TableCell>
+                        <TableCell className="font-bold text-base text-slate-600 dark:text-slate-400">
+                          €{book.selling_price || '0.00'}
+                        </TableCell>
+                        <TableCell className="pr-8 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            {isLowStock && (
+                              <Button size="sm" className="h-8 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold text-[10px] px-3 shadow-sm">
+                                REPOSICIÓN
+                              </Button>
                             )}
+
                           </div>
-                          <div className="min-w-0">
-                            <p className="font-bold text-base line-clamp-1 group-hover:text-primary transition-colors">{book.title}</p>
-                            <p className="text-sm text-slate-400 truncate max-w-[200px]">{book.isbn}</p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <span className={cn(
-                            "font-black text-lg",
-                            (book.stock_quantity || 0) < 5 ? "text-red-600" : "text-slate-700 dark:text-slate-300"
-                          )}>
-                            {book.stock_quantity}
-                          </span>
-                          {(book.stock_quantity || 0) < 5 && <AlertTriangle className="h-4 w-4 text-red-500" />}
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-bold text-base text-slate-600 dark:text-slate-400">
-                        €{book.selling_price || '0.00'}
-                      </TableCell>
-                      <TableCell className="pr-8 text-right">
-                        <Button variant="ghost" size="icon" className="rounded-xl h-10 w-10 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-                          <MoreVertical className="h-5 w-5" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
+
+              <div className="p-8 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <p className="text-sm font-medium text-slate-500">
+                  Mostrando <span className="font-bold text-slate-900 dark:text-white">{(currentPage - 1) * itemsPerPage + 1}</span> a <span className="font-bold text-slate-900 dark:text-white">{Math.min(currentPage * itemsPerPage, totalItems)}</span> de <span className="font-bold text-slate-900 dark:text-white">{totalItems}</span> libros
+                </p>
+                <div className="flex items-center gap-2">
+                  <Link
+                    href={`?${new URLSearchParams({ ...params, page: (currentPage - 1).toString() }).toString()}`}
+                    className={cn(
+                      "p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 transition-colors shadow-sm",
+                      currentPage === 1 && "pointer-events-none opacity-50"
+                    )}
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </Link>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                      const pageNum = i + 1;
+                      return (
+                        <Link
+                          key={pageNum}
+                          href={`?${new URLSearchParams({ ...params, page: pageNum.toString() }).toString()}`}
+                          className={cn(
+                            "w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm transition-all",
+                            currentPage === pageNum
+                              ? "bg-primary text-white shadow-lg shadow-primary/30"
+                              : "hover:bg-slate-200 dark:hover:bg-slate-800"
+                          )}
+                        >
+                          {pageNum}
+                        </Link>
+                      );
+                    })}
+                    {totalPages > 5 && <span className="px-2">...</span>}
+                  </div>
+                  <Link
+                    href={`?${new URLSearchParams({ ...params, page: (currentPage + 1).toString() }).toString()}`}
+                    className={cn(
+                      "p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 transition-colors shadow-sm",
+                      currentPage === totalPages && "pointer-events-none opacity-50"
+                    )}
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                  </Link>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </main>

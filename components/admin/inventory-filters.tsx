@@ -44,21 +44,28 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
     router.push(`?${createQueryString("q", debouncedSearch)}`, { scroll: false });
   }, [debouncedSearch, createQueryString, router]);
 
-  const handleFilterChange = (name: string, value: string) => {
-    router.push(`?${createQueryString(name, value === "all" ? "" : value)}`, { scroll: false });
-  };
-
   const clearFilters = () => {
     router.push("?", { scroll: false });
     setSearchTerm("");
   };
 
-  const hasFilters = searchParams.get("q") || searchParams.get("author") || searchParams.get("category") || searchParams.get("publisher");
+  const hasFilters = searchParams.get("q") || searchParams.get("author") || searchParams.get("category") || searchParams.get("publisher") || searchParams.get("sort");
+
+  const handleFilterChange = (name: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value && value !== "all") {
+      params.set(name, value);
+    } else {
+      params.delete(name);
+    }
+    params.delete("page");
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-4">
-        <div className="relative w-full sm:w-[300px]">
+        <div className="relative w-full sm:w-[250px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Título o ISBN..."
@@ -68,7 +75,23 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
           />
         </div>
 
-        <div className="w-[180px]">
+        <div className="w-[150px]">
+          <Select
+            value={searchParams.get("sort") || "title"}
+            onValueChange={(v) => handleFilterChange("sort", v)}
+          >
+            <SelectTrigger className="rounded-xl border-primary/20 bg-primary/5 text-primary font-bold w-full">
+              <SelectValue placeholder="Ordenar" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl border-slate-200 dark:border-slate-800">
+              <SelectItem value="title">Título (A-Z)</SelectItem>
+              <SelectItem value="sales">Más Vendidos</SelectItem>
+              <SelectItem value="stock">Reponer Primero</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="w-[160px]">
           <Select
             value={searchParams.get("category") || "all"}
             onValueChange={(v) => handleFilterChange("category", v)}
@@ -85,7 +108,7 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
           </Select>
         </div>
 
-        <div className="w-[180px]">
+        <div className="w-[160px]">
           <Select
             value={searchParams.get("author") || "all"}
             onValueChange={(v) => handleFilterChange("author", v)}
@@ -97,23 +120,6 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
               <SelectItem value="all">Autores</SelectItem>
               {authors.map((a) => (
                 <SelectItem key={a} value={a}>{a}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="w-[180px]">
-          <Select
-            value={searchParams.get("publisher") || "all"}
-            onValueChange={(v) => handleFilterChange("publisher", v)}
-          >
-            <SelectTrigger className="rounded-xl border-slate-200 dark:border-slate-800 w-full bg-white/50 dark:bg-slate-900/50">
-              <SelectValue placeholder="Editorial" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl border-slate-200 dark:border-slate-800">
-              <SelectItem value="all">Editoriales</SelectItem>
-              {publishers.map((p) => (
-                <SelectItem key={p} value={p}>{p}</SelectItem>
               ))}
             </SelectContent>
           </Select>
