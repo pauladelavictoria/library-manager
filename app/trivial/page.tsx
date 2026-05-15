@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Trophy, HelpCircle, RotateCcw, LogIn, UserPlus, Star, CheckCircle2, XCircle, Loader2, Timer, AlertCircle } from "lucide-react";
+import { Trophy, HelpCircle, RotateCcw, Star, CheckCircle2, XCircle, Loader2, Timer, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -241,16 +241,21 @@ export default function QuizPage() {
               </div>
 
               <div className="grid grid-cols-2 gap-4 text-left">
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                <div className={cn(
+                  "p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800",
+                  !user && "col-span-2"
+                )}>
                   <Timer className="h-5 w-5 text-primary mb-2" />
                   <p className="text-xs font-black uppercase tracking-widest text-slate-400">Tiempo</p>
-                  <p className="font-bold">15 segundos por pregunta </p>
+                  <p className="font-bold">15 segundos por pregunta</p>
                 </div>
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-                  <AlertCircle className="h-5 w-5 text-red-500 mb-2" />
-                  <p className="text-xs font-black uppercase tracking-widest text-slate-400">Límite</p>
-                  <p className="font-bold">10 partidas cada día</p>
-                </div>
+                {user && (
+                  <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                    <AlertCircle className="h-5 w-5 text-red-500 mb-2" />
+                    <p className="text-xs font-black uppercase tracking-widest text-slate-400">Límite</p>
+                    <p className="font-bold text-xs">10 partidas cada día</p>
+                  </div>
+                )}
               </div>
 
               {user && (
@@ -269,9 +274,28 @@ export default function QuizPage() {
                 <Button onClick={startGame} className="h-16 rounded-2xl bg-primary text-white text-xl font-black shadow-xl shadow-primary/20 hover:scale-105 transition-all">
                   ¡Empezar a Jugar!
                 </Button>
-                {!user && (
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest px-8">
-                    Juega como invitado o inicia sesión para guardar tu récord
+
+                {!user ? (
+                  <div className="mt-4 p-6 rounded-[2rem] bg-amber-500/5 border border-amber-500/10 space-y-4">
+                    <div className="flex items-center gap-3 justify-center text-amber-600 dark:text-amber-400">
+                      <AlertCircle className="h-5 w-5" />
+                      <p className="text-xs font-black uppercase tracking-widest">Atención: Modo Invitado</p>
+                    </div>
+                    <p className="text-sm text-slate-500 font-medium">
+                      Estás jugando como invitado. <span className="text-slate-900 dark:text-white font-bold">Tu progreso y puntos no se guardarán</span> y no podrás conseguir el cupón de 3€.
+                    </p>
+                    <div className="flex gap-2">
+                      <Button asChild variant="secondary" className="flex-1 rounded-xl font-bold h-10 text-xs">
+                        <Link href="/login">Iniciar Sesión</Link>
+                      </Button>
+                      <Button asChild variant="ghost" className="flex-1 rounded-xl font-bold h-10 text-xs hover:bg-amber-500/10 text-amber-600">
+                        <Link href="/register">Crear Cuenta</Link>
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    ¡Suerte, {user.email?.split('@')[0]}! Tu progreso se guardará automáticamente.
                   </p>
                 )}
               </div>
@@ -369,26 +393,6 @@ export default function QuizPage() {
                 </p>
               </div>
 
-              {!user ? (
-                <div className="p-6 rounded-3xl bg-blue-500/5 border border-blue-500/10 space-y-4">
-                  <p className="text-sm font-bold text-blue-600 dark:text-blue-400">
-                    Tu puntuación no se ha guardado. Inicia sesión para entrar en el ranking.
-                  </p>
-                  <div className="flex gap-3">
-                    <Button asChild variant="outline" className="flex-1 h-12 rounded-xl font-bold">
-                      <Link href="/login"><LogIn className="mr-2 h-4 w-4" /> Login</Link>
-                    </Button>
-                    <Button asChild className="flex-1 h-12 rounded-xl bg-slate-900 dark:bg-white dark:text-slate-900 font-bold">
-                      <Link href="/register"><UserPlus className="mr-2 h-4 w-4" /> Registro</Link>
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="p-4 rounded-2xl bg-emerald-500/5 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center gap-2 border border-emerald-500/10">
-                  <CheckCircle2 className="h-5 w-5" />
-                  <span>Tu puntuación ha sido guardada con éxito</span>
-                </div>
-              )}
 
               <Button onClick={restart} variant="ghost" className="w-full h-14 rounded-2xl font-bold text-slate-500 hover:text-primary transition-colors">
                 <RotateCcw className="mr-2 h-4 w-4" /> Jugar otra vez
