@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { CartProvider } from "@/lib/cart-context";
 import { NotificationProvider } from "@/lib/notification-context";
 import GlobalNotification from "@/components/global-notification";
+import { CookieConsent } from "@/components/cookie-consent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({
               <Hero />
               {children}
               <GlobalNotification />
+              <CookieConsent />
             </CartProvider>
           </NotificationProvider>
         </QueryProvider>
