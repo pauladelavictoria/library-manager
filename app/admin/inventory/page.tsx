@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { cn } from "@/lib/utils";
 import { InventoryFilters } from "@/components/inventory-filters";
 import { CreatePromoDialog } from "@/components/create-promo-dialog";
+import { getPromoPerformance } from "@/app/actions/promo";
 import { CreateEventDialog } from "@/components/create-event-dialog";
 import { SalesChart } from "@/components/sales-chart";
 import { BestSellersBubbles } from "@/components/best-sellers-bubbles";
@@ -16,6 +17,7 @@ import { PromoActions } from "@/components/promo-actions";
 import { EventActions } from "@/components/admin/event-actions";
 import { CreateBookDialog } from "@/components/admin/create-book-dialog";
 import { BookActions } from "@/components/admin/book-actions";
+import { getBooks } from "@/app/actions/books";
 import { Calendar as CalendarIcon, Users as UsersIcon, MapPin, PenTool, BookOpen, Presentation, LayoutDashboard, Book, Tag as TagIcon, CalendarDays } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -56,67 +58,49 @@ export default async function AdminInventoryPage({
     redirect("/");
   }
 
-  const { data: allBooksData, error: booksError } = await supabase
-    .from("books")
-    .select("*");
-
-  if (booksError) console.error("Error fetching books:", booksError);
-
-  const { data: allOrderItems } = await supabase
-    .from("order_items")
-    .select("book_id, quantity, order_id, price_at_purchase");
-
-  const salesByBook: Record<string, number> = {};
-  (allOrderItems || []).forEach(item => {
-    if (item.book_id) {
-      salesByBook[item.book_id] = (salesByBook[item.book_id] || 0) + item.quantity;
-    }
-  });
-
-  const enrichedBooks = (allBooksData || []).map(book => ({
-    ...book,
-    sold_count: salesByBook[book.id] || 0
-  }));
-
-  const filteredBooks = enrichedBooks.filter(book => {
-    const matchesSearch = !params.q ||
-      book.title.toLowerCase().includes(params.q.toLowerCase()) ||
-      book.isbn?.toLowerCase().includes(params.q.toLowerCase());
-
-    const matchesCategory = !params.category || params.category === "Todas" ||
-      book.categories?.includes(params.category);
-
-    const matchesAuthor = !params.author || params.author === "Todos" ||
-      book.authors?.includes(params.author);
-
-    const matchesPublisher = !params.publisher || params.publisher === "Todos" ||
-      book.publisher === params.publisher;
-
-    return matchesSearch && matchesCategory && matchesAuthor && matchesPublisher;
-  });
-
-  const sortBy = params.sort || "title";
-  const sortedBooks = [...filteredBooks].sort((a, b) => {
-    if (sortBy === "sales") return b.sold_count - a.sold_count;
-    if (sortBy === "stock") return (a.stock_quantity || 0) - (b.stock_quantity || 0);
-    if (sortBy === "category") return (a.categories?.[0] || "").localeCompare(b.categories?.[0] || "");
-    return a.title.localeCompare(b.title);
-  });
-
-  const totalItems = sortedBooks.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const paginatedBooks = sortedBooks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
-  const filterOptions = {
-    authors: Array.from(new Set(enrichedBooks.flatMap(b => b.authors || []))).sort(),
-    categories: Array.from(new Set(enrichedBooks.flatMap(b => b.categories || []))).sort(),
-    publishers: Array.from(new Set(enrichedBooks.map(b => b.publisher).filter(Boolean))).sort() as string[],
+  const sortByMap: Record<string, any> = {
+    sales: "sales",
+    stock: "stock",
+    category: "category",
+    title: "title",
   };
 
-  const sortedBestSellers = [...enrichedBooks]
-    .sort((a, b) => b.sold_count - a.sold_count)
-    .slice(0, 10)
-    .map(b => ({ title: b.title, total: b.sold_count, cover_url: b.cover_url }));
+  const { data: booksData, meta } = await getBooks({
+    page: currentPage,
+    limit: itemsPerPage,
+    search: params.q,
+    category: params.category,
+    author: params.author,
+    publisher: params.publisher,
+    sortBy: sortByMap[params.sort || "title"] || "title",
+    sortOrder: params.sort === "stock" ? "asc" : "desc"
+  });
+
+  const paginatedBooks = booksData || [];
+  const totalItems = meta?.total || 0;
+  const totalPages = meta?.totalPages || 0;
+
+
+  const { data: filterBase } = await supabase.from("books").select("authors, categories, publisher");
+
+  const filterOptions = {
+    authors: Array.from(new Set((filterBase || []).flatMap(b => b.authors || []))).sort(),
+    categories: Array.from(new Set((filterBase || []).flatMap(b => b.categories || []))).sort(),
+    publishers: Array.from(new Set((filterBase || []).map(b => b.publisher).filter(Boolean))).sort() as string[],
+  };
+
+  const { data: topSellers } = await getBooks({
+    limit: 10,
+    sortBy: "sales",
+    sortOrder: "desc"
+  });
+  const sortedBestSellers = (topSellers || []).map(b => ({
+    title: b.title,
+    total: b.sold_count,
+    cover_url: b.cover_url
+  }));
+
+  const enrichedBooks = paginatedBooks;
 
   const period = params.period || "week";
   const daysToFetch = period === "month" ? 30 : 7;
@@ -155,45 +139,12 @@ export default async function AdminInventoryPage({
     amount: Number(amount.toFixed(2))
   }));
 
-  const { data: allOrders } = await supabase
-    .from("orders")
-    .select("id, promo_code, total_amount");
-  const { data: allPromoCodes } = await supabase
-    .from("promo_codes")
-    .select("*");
+  const { data: promoStatsResult } = await getPromoPerformance();
+  const promoPerformance = promoStatsResult || [];
 
+  const totalDiscountGiven = promoPerformance.reduce((sum, p) => sum + (p.total_discount || 0), 0);
+  const activePromosCount = promoPerformance.filter(p => p.isActive).length;
 
-  const promoPerformance = (allPromoCodes || []).map(promo => {
-    const usages = (allOrders || []).filter(o => o.promo_code === promo.code);
-    const count = usages.length;
-
-    let totalDiscount = 0;
-    let totalRevenue = 0;
-
-    usages.forEach(order => {
-      const items = (allOrderItems || []).filter(item => item.order_id === order.id);
-      const subtotal = items.reduce((sum, item) => sum + (Number(item.price_at_purchase) * item.quantity), 0);
-      const discount = subtotal - Number(order.total_amount);
-      totalDiscount += Math.max(0, discount);
-      totalRevenue += Number(order.total_amount);
-    });
-    return {
-      id: promo.id,
-      code: promo.code,
-      discount_amount: promo.discount_amount,
-      expiry_date: promo.expiry_date,
-      is_one_time: promo.is_one_time,
-      count,
-      totalDiscount,
-      totalRevenue,
-      isActive: (new Date(promo.expiry_date) > new Date()) && (!promo.is_one_time || count === 0)
-    };
-  }).sort((a, b) => b.count - a.count);
-
-  const totalDiscountGiven = promoPerformance.reduce((sum, p) => sum + p.totalDiscount, 0);
-  const activePromosCount = (allPromoCodes || []).filter(p => new Date(p.expiry_date) > new Date()).length;
-
-  const maxSales = Math.max(...sortedBestSellers.map(s => s.total), 1);
 
   const { data: allEvents } = await supabase
     .from("events")
@@ -252,7 +203,7 @@ export default async function AdminInventoryPage({
           <TabsContent value="dashboard">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
               <SalesChart data={salesChartData} />
-              
+
               <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm overflow-hidden">
                 <CardHeader className="pb-4">
                   <div className="flex flex-col gap-6">
@@ -287,345 +238,345 @@ export default async function AdminInventoryPage({
 
           <TabsContent value="marketing">
             <div className="mb-12">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-1 bg-primary rounded-full" />
-              <h2 className="text-2xl font-bold tracking-tight">Rendimiento de Promociones</h2>
-            </div>
-            <div className="flex gap-3">
-              <CreatePromoDialog />
-            </div>
-          </div>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <div className="h-8 w-1 bg-primary rounded-full" />
+                  <h2 className="text-2xl font-bold tracking-tight">Rendimiento de Promociones</h2>
+                </div>
+                <div className="flex gap-3">
+                  <CreatePromoDialog />
+                </div>
+              </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg bg-emerald-500/5 border-emerald-500/10">
-              <CardHeader className="pb-2">
-                <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Ahorro Total Clientes</CardDescription>
-                <CardTitle className="text-3xl font-black text-emerald-600 dark:text-emerald-400">€{totalDiscountGiven.toFixed(2)}</CardTitle>
-              </CardHeader>
-            </Card>
-            <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg">
-              <CardHeader className="pb-2">
-                <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Cupones Activos</CardDescription>
-                <CardTitle className="text-3xl font-black">{activePromosCount}</CardTitle>
-              </CardHeader>
-            </Card>
-            <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg">
-              <CardHeader className="pb-2">
-                <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Pedidos con Cupón</CardDescription>
-                <CardTitle className="text-3xl font-black">{promoPerformance.reduce((sum, p) => sum + p.count, 0)}</CardTitle>
-              </CardHeader>
-            </Card>
-            <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg">
-              <CardHeader className="pb-2">
-                <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Ingresos vía Promo</CardDescription>
-                <CardTitle className="text-3xl font-black text-primary">€{promoPerformance.reduce((sum, p) => sum + p.totalRevenue, 0).toFixed(2)}</CardTitle>
-              </CardHeader>
-            </Card>
-          </div>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg bg-emerald-500/5 border-emerald-500/10">
+                  <CardHeader className="pb-2">
+                    <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Ahorro Total Clientes</CardDescription>
+                    <CardTitle className="text-3xl font-black text-emerald-600 dark:text-emerald-400">€{totalDiscountGiven.toFixed(2)}</CardTitle>
+                  </CardHeader>
+                </Card>
+                <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg">
+                  <CardHeader className="pb-2">
+                    <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Cupones Activos</CardDescription>
+                    <CardTitle className="text-3xl font-black">{activePromosCount}</CardTitle>
+                  </CardHeader>
+                </Card>
+                <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg">
+                  <CardHeader className="pb-2">
+                    <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Pedidos con Cupón</CardDescription>
+                    <CardTitle className="text-3xl font-black">{promoPerformance.reduce((sum, p) => sum + (p.usage_count || 0), 0)}</CardTitle>
+                  </CardHeader>
+                </Card>
+                <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg">
+                  <CardHeader className="pb-2">
+                    <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Ingresos vía Promo</CardDescription>
+                    <CardTitle className="text-3xl font-black text-primary">€{promoPerformance.reduce((sum, p) => sum + (p.total_revenue || 0), 0).toFixed(2)}</CardTitle>
+                  </CardHeader>
+                </Card>
+              </div>
 
-          <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
-            <Table>
-              <TableHeader>
-                <TableRow className="hover:bg-transparent border-slate-100 dark:border-slate-800">
-                  <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Código</TableHead>
-                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Descuento</TableHead>
-                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Usos</TableHead>
-                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Total Descontado</TableHead>
-                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Ingresos (Neto)</TableHead>
-                  <TableHead className="pr-8 text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {promoPerformance.map((promo) => (
-                  <TableRow key={promo.code} className="group border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
-                    <TableCell className="pl-8 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                          <Tag className="h-4 w-4" />
-                        </div>
-                        <div>
-                          <p className="font-black tracking-tight">{promo.code}</p>
-                          <div className="flex items-center gap-1.5">
-                            <div className={cn("h-1.5 w-1.5 rounded-full", promo.isActive ? "bg-emerald-500" : "bg-slate-300")} />
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                              {promo.isActive ? "Activo" : (promo.is_one_time && promo.count > 0 ? "Usado" : "Inactivo")}
-                            </p>
-                            {promo.is_one_time && (
-                              <Badge variant="secondary" className="text-[8px] h-3.5 px-1 rounded bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-none font-black uppercase">
-                                Único
-                              </Badge>
-                            )}
+              <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="hover:bg-transparent border-slate-100 dark:border-slate-800">
+                      <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Código</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Descuento</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Usos</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Total Descontado</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Ingresos (Neto)</TableHead>
+                      <TableHead className="pr-8 text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {promoPerformance.map((promo) => (
+                      <TableRow key={promo.code} className="group border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                        <TableCell className="pl-8 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                              <Tag className="h-4 w-4" />
+                            </div>
+                            <div>
+                              <p className="font-black tracking-tight">{promo.code}</p>
+                              <div className="flex items-center gap-1.5">
+                                <div className={cn("h-1.5 w-1.5 rounded-full", promo.isActive ? "bg-emerald-500" : "bg-slate-300")} />
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                                  {promo.isActive ? "Activo" : (promo.is_one_time && promo.usage_count > 0 ? "Usado" : "Inactivo")}
+                                </p>
+                                {promo.is_one_time && (
+                                  <Badge variant="secondary" className="text-[8px] h-3.5 px-1 rounded bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-none font-black uppercase">
+                                    Único
+                                  </Badge>
+                                )}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="rounded-md font-black border-primary/20 text-primary bg-primary/5">
-                        -{promo.discount_amount}%
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <p className="font-bold text-slate-600 dark:text-slate-400">{promo.count}</p>
-                    </TableCell>
-                    <TableCell>
-                      <p className="font-bold text-red-600 dark:text-red-400/80">-€{promo.totalDiscount.toFixed(2)}</p>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <p className="font-black text-lg tracking-tight">€{promo.totalRevenue.toFixed(2)}</p>
-                    </TableCell>
-                    <TableCell className="pr-8 text-right">
-                      <PromoActions promo={promo} />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Card>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="rounded-md font-black border-primary/20 text-primary bg-primary/5">
+                            -{promo.discount_amount}%
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <p className="font-bold text-slate-600 dark:text-slate-400">{promo.usage_count}</p>
+                        </TableCell>
+                        <TableCell>
+                          <p className="font-bold text-red-600 dark:text-red-400/80">-€{(promo.total_discount || 0).toFixed(2)}</p>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <p className="font-black text-lg tracking-tight">€{(promo.total_revenue || 0).toFixed(2)}</p>
+                        </TableCell>
+                        <TableCell className="pr-8 text-right">
+                          <PromoActions promo={promo} />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Card>
             </div>
           </TabsContent>
 
           <TabsContent value="events">
             <div className="mb-12">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-1 bg-primary rounded-full" />
-              <h2 className="text-2xl font-bold tracking-tight">Agenda Cultural</h2>
-            </div>
-            <CreateEventDialog />
-          </div>
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <div className="h-8 w-1 bg-primary rounded-full" />
+                  <h2 className="text-2xl font-bold tracking-tight">Agenda Cultural</h2>
+                </div>
+                <CreateEventDialog />
+              </div>
 
-          <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
-            <Table>
-              <TableHeader>
-                <TableRow className="hover:bg-transparent border-slate-100 dark:border-slate-800">
-                  <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Evento</TableHead>
-                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Tipo</TableHead>
-                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Fecha y Hora</TableHead>
-                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Ubicación</TableHead>
-                  <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Asistentes</TableHead>
-                  <TableHead className="pr-8 text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {eventPerformance.length > 0 ? (
-                  eventPerformance.map((event) => (
-                    <TableRow
-                      key={event.id}
-                      className={cn(
-                        "group border-slate-100 dark:border-slate-800 transition-colors",
-                        event.isPast
-                          ? "bg-slate-50/30 dark:bg-slate-900/10 opacity-60"
-                          : "hover:bg-slate-50/50 dark:hover:bg-slate-900/50"
-                      )}
-                    >
-                      <TableCell className="pl-8 py-4">
-                        <div className="flex items-center gap-2">
-                          <p className="font-black tracking-tight">{event.title}</p>
-                          {event.isPast && (
-                            <Badge variant="secondary" className="text-[9px] h-4 rounded-sm bg-slate-200 dark:bg-slate-800 text-slate-500 font-bold border-none px-1 uppercase tracking-tighter">
-                              Finalizado
-                            </Badge>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className="rounded-md font-black border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex w-fit items-center gap-1.5 capitalize">
-                          {event.type === 'signing' && <PenTool className="h-3 w-3" />}
-                          {event.type === 'workshop' && <BookOpen className="h-3 w-3" />}
-                          {event.type === 'club' && <UsersIcon className="h-3 w-3" />}
-                          {event.type === 'presentation' && <Presentation className="h-3 w-3" />}
-                          {event.type === 'generic' && <CalendarIcon className="h-3 w-3" />}
-                          {event.type}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <p className="text-sm font-bold text-slate-600 dark:text-slate-400">
-                          {new Date(event.event_date).toLocaleString('es-ES', {
-                            day: 'numeric',
-                            month: 'short',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </p>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1.5 text-slate-500">
-                          <MapPin className="h-3 w-3" />
-                          <span className="text-xs font-medium">{event.location || "N/A"}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 font-black text-sm">
-                          {event.attendees}
-                        </div>
-                      </TableCell>
-                      <TableCell className="pr-8 text-right">
-                        <EventActions event={event} />
-                      </TableCell>
+              <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="hover:bg-transparent border-slate-100 dark:border-slate-800">
+                      <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Evento</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Tipo</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Fecha y Hora</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Ubicación</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Asistentes</TableHead>
+                      <TableHead className="pr-8 text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
                     </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={6} className="h-24 text-center text-slate-500 font-medium italic">
-                      No hay eventos programados.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </Card>
+                  </TableHeader>
+                  <TableBody>
+                    {eventPerformance.length > 0 ? (
+                      eventPerformance.map((event) => (
+                        <TableRow
+                          key={event.id}
+                          className={cn(
+                            "group border-slate-100 dark:border-slate-800 transition-colors",
+                            event.isPast
+                              ? "bg-slate-50/30 dark:bg-slate-900/10 opacity-60"
+                              : "hover:bg-slate-50/50 dark:hover:bg-slate-900/50"
+                          )}
+                        >
+                          <TableCell className="pl-8 py-4">
+                            <div className="flex items-center gap-2">
+                              <p className="font-black tracking-tight">{event.title}</p>
+                              {event.isPast && (
+                                <Badge variant="secondary" className="text-[9px] h-4 rounded-sm bg-slate-200 dark:bg-slate-800 text-slate-500 font-bold border-none px-1 uppercase tracking-tighter">
+                                  Finalizado
+                                </Badge>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className="rounded-md font-black border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex w-fit items-center gap-1.5 capitalize">
+                              {event.type === 'signing' && <PenTool className="h-3 w-3" />}
+                              {event.type === 'workshop' && <BookOpen className="h-3 w-3" />}
+                              {event.type === 'club' && <UsersIcon className="h-3 w-3" />}
+                              {event.type === 'presentation' && <Presentation className="h-3 w-3" />}
+                              {event.type === 'generic' && <CalendarIcon className="h-3 w-3" />}
+                              {event.type}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <p className="text-sm font-bold text-slate-600 dark:text-slate-400">
+                              {new Date(event.event_date).toLocaleString('es-ES', {
+                                day: 'numeric',
+                                month: 'short',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })}
+                            </p>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-1.5 text-slate-500">
+                              <MapPin className="h-3 w-3" />
+                              <span className="text-xs font-medium">{event.location || "N/A"}</span>
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 font-black text-sm">
+                              {event.attendees}
+                            </div>
+                          </TableCell>
+                          <TableCell className="pr-8 text-right">
+                            <EventActions event={event} />
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={6} className="h-24 text-center text-slate-500 font-medium italic">
+                          No hay eventos programados.
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </Card>
             </div>
           </TabsContent>
 
           <TabsContent value="catalog">
             <main className="w-full">
-          <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
-            <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-6 bg-white dark:bg-slate-900 px-8 py-8">
-              <div>
-                <CardTitle className="text-3xl font-black">Catálogo de Inventario</CardTitle>
-                <CardDescription className="font-medium">Gestión total de los libros y existencias de la librería.</CardDescription>
-              </div>
-              <CreateBookDialog />
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="p-8 border-b border-slate-100 dark:border-slate-800">
-                <InventoryFilters
-                  authors={filterOptions.authors}
-                  categories={filterOptions.categories}
-                  publishers={filterOptions.publishers}
-                />
-              </div>
-              <Table>
-                <TableHeader>
-                  <TableRow className="hover:bg-transparent border-slate-100 dark:border-slate-800">
-                    <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Libro</TableHead>
-                    <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Estado</TableHead>
-                    <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Ventas</TableHead>
-                    <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Stock</TableHead>
-                    <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Precio</TableHead>
-                    <TableHead className="pr-8 text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {paginatedBooks.map((book) => {
-                    const isLowStock = (book.stock_quantity || 0) < 5;
-                    return (
-                      <TableRow
-                        key={book.id}
+              <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
+                <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-6 bg-white dark:bg-slate-900 px-8 py-8">
+                  <div>
+                    <CardTitle className="text-3xl font-black">Catálogo de Inventario</CardTitle>
+                    <CardDescription className="font-medium">Gestión total de los libros y existencias de la librería.</CardDescription>
+                  </div>
+                  <CreateBookDialog />
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="p-8 border-b border-slate-100 dark:border-slate-800">
+                    <InventoryFilters
+                      authors={filterOptions.authors}
+                      categories={filterOptions.categories}
+                      publishers={filterOptions.publishers}
+                    />
+                  </div>
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="hover:bg-transparent border-slate-100 dark:border-slate-800">
+                        <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Libro</TableHead>
+                        <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Estado</TableHead>
+                        <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Ventas</TableHead>
+                        <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Stock</TableHead>
+                        <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Precio</TableHead>
+                        <TableHead className="pr-8 text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {paginatedBooks.map((book) => {
+                        const isLowStock = (book.stock_quantity || 0) < 5;
+                        return (
+                          <TableRow
+                            key={book.id}
+                            className={cn(
+                              "group transition-colors border-slate-50 dark:border-slate-800",
+                              isLowStock
+                                ? "bg-red-50/50 dark:bg-red-900/10 hover:bg-red-100/50 dark:hover:bg-red-900/20"
+                                : "hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                            )}
+                          >
+                            <TableCell className="pl-8 py-6">
+                              <div className="flex items-center gap-4">
+                                <div className="w-12 h-16 rounded-lg overflow-hidden shrink-0 shadow-sm border border-slate-100 dark:border-slate-800">
+                                  {book.cover_url ? (
+                                    <img src={book.cover_url} alt={book.title} className="w-full h-full object-cover" />
+                                  ) : (
+                                    <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[8px]">No img</div>
+                                  )}
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="font-bold text-base line-clamp-1 group-hover:text-primary transition-colors">{book.title}</p>
+                                  <p className="text-sm text-slate-400 truncate max-w-[200px]">{book.isbn}</p>
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              {isLowStock ? (
+                                <Badge variant="destructive" className="rounded-lg px-2.5 py-1 font-black text-[10px] tracking-wider animate-pulse shadow-sm">
+                                  CRÍTICO
+                                </Badge>
+                              ) : (
+                                <Badge variant="outline" className="rounded-lg px-2.5 py-1 font-bold text-[10px] tracking-wider text-emerald-600 border-emerald-500/20 bg-emerald-500/10">
+                                  SALUDABLE
+                                </Badge>
+                              )}
+                            </TableCell>
+                            <TableCell className="text-center">
+                              <div className="inline-flex flex-col items-center">
+                                <span className="text-xl font-black text-slate-900 dark:text-white">{book.sold_count}</span>
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">unidades</span>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <span className={cn(
+                                  "font-black text-xl",
+                                  isLowStock ? "text-red-600" : "text-slate-700 dark:text-slate-300"
+                                )}>
+                                  {book.stock_quantity}
+                                </span>
+                                {isLowStock && <AlertTriangle className="h-4 w-4 text-red-500" />}
+                              </div>
+                            </TableCell>
+                            <TableCell className="font-bold text-base text-slate-600 dark:text-slate-400">
+                              €{book.selling_price || '0.00'}
+                            </TableCell>
+                            <TableCell className="pr-8 text-right">
+                              <BookActions book={book} />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+
+                  <div className="p-8 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <p className="text-sm font-medium text-slate-500">
+                      Mostrando <span className="font-bold text-slate-900 dark:text-white">{(currentPage - 1) * itemsPerPage + 1}</span> a <span className="font-bold text-slate-900 dark:text-white">{Math.min(currentPage * itemsPerPage, totalItems)}</span> de <span className="font-bold text-slate-900 dark:text-white">{totalItems}</span> libros
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Link
+                        href={`?${new URLSearchParams({ ...params, page: (currentPage - 1).toString() }).toString()}`}
                         className={cn(
-                          "group transition-colors border-slate-50 dark:border-slate-800",
-                          isLowStock
-                            ? "bg-red-50/50 dark:bg-red-900/10 hover:bg-red-100/50 dark:hover:bg-red-900/20"
-                            : "hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                          "p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 transition-colors shadow-sm",
+                          currentPage === 1 && "pointer-events-none opacity-50"
                         )}
                       >
-                        <TableCell className="pl-8 py-6">
-                          <div className="flex items-center gap-4">
-                            <div className="w-12 h-16 rounded-lg overflow-hidden shrink-0 shadow-sm border border-slate-100 dark:border-slate-800">
-                              {book.cover_url ? (
-                                <img src={book.cover_url} alt={book.title} className="w-full h-full object-cover" />
-                              ) : (
-                                <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[8px]">No img</div>
+                        <ChevronLeft className="h-5 w-5" />
+                      </Link>
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                          const pageNum = i + 1;
+                          return (
+                            <Link
+                              key={pageNum}
+                              href={`?${new URLSearchParams({ ...params, page: pageNum.toString() }).toString()}`}
+                              className={cn(
+                                "w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm transition-all",
+                                currentPage === pageNum
+                                  ? "bg-primary text-white shadow-lg shadow-primary/30"
+                                  : "hover:bg-slate-200 dark:hover:bg-slate-800"
                               )}
-                            </div>
-                            <div className="min-w-0">
-                              <p className="font-bold text-base line-clamp-1 group-hover:text-primary transition-colors">{book.title}</p>
-                              <p className="text-sm text-slate-400 truncate max-w-[200px]">{book.isbn}</p>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          {isLowStock ? (
-                            <Badge variant="destructive" className="rounded-lg px-2.5 py-1 font-black text-[10px] tracking-wider animate-pulse shadow-sm">
-                              CRÍTICO
-                            </Badge>
-                          ) : (
-                            <Badge variant="outline" className="rounded-lg px-2.5 py-1 font-bold text-[10px] tracking-wider text-emerald-600 border-emerald-500/20 bg-emerald-500/10">
-                              SALUDABLE
-                            </Badge>
-                          )}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <div className="inline-flex flex-col items-center">
-                            <span className="text-xl font-black text-slate-900 dark:text-white">{book.sold_count}</span>
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">unidades</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <span className={cn(
-                              "font-black text-xl",
-                              isLowStock ? "text-red-600" : "text-slate-700 dark:text-slate-300"
-                            )}>
-                              {book.stock_quantity}
-                            </span>
-                            {isLowStock && <AlertTriangle className="h-4 w-4 text-red-500" />}
-                          </div>
-                        </TableCell>
-                        <TableCell className="font-bold text-base text-slate-600 dark:text-slate-400">
-                          €{book.selling_price || '0.00'}
-                        </TableCell>
-                        <TableCell className="pr-8 text-right">
-                          <BookActions book={book} />
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-
-              <div className="p-8 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                <p className="text-sm font-medium text-slate-500">
-                  Mostrando <span className="font-bold text-slate-900 dark:text-white">{(currentPage - 1) * itemsPerPage + 1}</span> a <span className="font-bold text-slate-900 dark:text-white">{Math.min(currentPage * itemsPerPage, totalItems)}</span> de <span className="font-bold text-slate-900 dark:text-white">{totalItems}</span> libros
-                </p>
-                <div className="flex items-center gap-2">
-                  <Link
-                    href={`?${new URLSearchParams({ ...params, page: (currentPage - 1).toString() }).toString()}`}
-                    className={cn(
-                      "p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 transition-colors shadow-sm",
-                      currentPage === 1 && "pointer-events-none opacity-50"
-                    )}
-                  >
-                    <ChevronLeft className="h-5 w-5" />
-                  </Link>
-                  <div className="flex items-center gap-1">
-                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                      const pageNum = i + 1;
-                      return (
-                        <Link
-                          key={pageNum}
-                          href={`?${new URLSearchParams({ ...params, page: pageNum.toString() }).toString()}`}
-                          className={cn(
-                            "w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm transition-all",
-                            currentPage === pageNum
-                              ? "bg-primary text-white shadow-lg shadow-primary/30"
-                              : "hover:bg-slate-200 dark:hover:bg-slate-800"
-                          )}
-                        >
-                          {pageNum}
-                        </Link>
-                      );
-                    })}
-                    {totalPages > 5 && <span className="px-2">...</span>}
+                            >
+                              {pageNum}
+                            </Link>
+                          );
+                        })}
+                        {totalPages > 5 && <span className="px-2">...</span>}
+                      </div>
+                      <Link
+                        href={`?${new URLSearchParams({ ...params, page: (currentPage + 1).toString() }).toString()}`}
+                        className={cn(
+                          "p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 transition-colors shadow-sm",
+                          currentPage === totalPages && "pointer-events-none opacity-50"
+                        )}
+                      >
+                        <ChevronRight className="h-5 w-5" />
+                      </Link>
+                    </div>
                   </div>
-                  <Link
-                    href={`?${new URLSearchParams({ ...params, page: (currentPage + 1).toString() }).toString()}`}
-                    className={cn(
-                      "p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 transition-colors shadow-sm",
-                      currentPage === totalPages && "pointer-events-none opacity-50"
-                    )}
-                  >
-                    <ChevronRight className="h-5 w-5" />
-                  </Link>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </main>
-      </TabsContent>
-    </Tabs>
-  </div>
-</div>
+                </CardContent>
+              </Card>
+            </main>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
   );
 }

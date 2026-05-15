@@ -15,29 +15,49 @@ export async function GET(req: NextRequest) {
     const category = searchParams.get("category");
     const author = searchParams.get("author");
     const search = searchParams.get("search");
+    const publisher = searchParams.get("publisher");
+    
+    // Ordenación
+    const sortBy = searchParams.get("sortBy") || "created_at";
+    const sortOrder = searchParams.get("sortOrder") || "desc";
 
     let query = supabase
-      .from("books")
-      .select("*", { count: "exact" })
-      .range(offset, offset + limit - 1);
+      .from("books_with_stats")
+      .select("*", { count: "exact" });
 
-    // Filtro por categoría (buscamos si el array categories contiene el valor)
-    if (category) {
+    // Filtro por categoría
+    if (category && category !== "Todas") {
       query = query.contains("categories", [category]);
     }
 
-    // Filtro por autor (buscamos si el array authors contiene el valor)
-    if (author) {
+    // Filtro por autor
+    if (author && author !== "Todos") {
       query = query.contains("authors", [author]);
     }
 
-    // Búsqueda general por título
-    if (search) {
-      query = query.ilike("title", `%${search}%`);
+    if (publisher && publisher !== "Todos") {
+      query = query.eq("publisher", publisher);
     }
 
-    // Ordenar por fecha de creación descendente (los más nuevos primero)
-    query = query.order("created_at", { ascending: false });
+    // Búsqueda general
+    if (search) {
+      query = query.or(`title.ilike.%${search}%,isbn.ilike.%${search}%`);
+    }
+
+    // Ordenar
+    const validSortColumns: Record<string, string> = {
+      title: "title",
+      price: "selling_price",
+      stock: "stock_quantity",
+      sales: "sold_count",
+      created_at: "created_at",
+    };
+
+    const sortColumn = validSortColumns[sortBy] || "created_at";
+    query = query.order(sortColumn, { ascending: sortOrder === "asc" });
+
+    // Rango de paginación
+    query = query.range(offset, offset + limit - 1);
 
     const { data: books, error, count } = await query;
 

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { headers } from "next/headers";
 import { Book } from "@/lib/types";
 import { PromoHandler } from "@/components/promo-handler";
+import { BookSort } from "@/components/book-sort";
 import { Suspense } from "react";
 
 export const metadata = {
@@ -22,6 +23,8 @@ export default async function BooksPage({
   const page = typeof params.page === 'string' ? params.page : '1';
   const search = typeof params.search === 'string' ? params.search : '';
   const category = typeof params.category === 'string' ? params.category : 'Todas';
+  const sortBy = typeof params.sortBy === 'string' ? params.sortBy : 'created_at';
+  const sortOrder = typeof params.sortOrder === 'string' ? params.sortOrder : 'desc';
 
   const promo = typeof params.promo === 'string' ? params.promo : '';
 
@@ -32,6 +35,8 @@ export default async function BooksPage({
   const apiUrl = new URL(`${protocol}://${host}/api/books`);
   apiUrl.searchParams.set("page", page);
   apiUrl.searchParams.set("limit", "20");
+  apiUrl.searchParams.set("sortBy", sortBy);
+  apiUrl.searchParams.set("sortOrder", sortOrder);
   if (search) apiUrl.searchParams.set("search", search);
   if (category !== 'Todas') apiUrl.searchParams.set("category", category);
 
@@ -101,10 +106,12 @@ export default async function BooksPage({
           </aside>
 
           <main className="flex-1">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
               <p className="text-sm text-slate-500 dark:text-slate-400">
                 Mostrando <span className="font-medium text-slate-900 dark:text-white">{books?.length || 0}</span> resultados de {count || 0}
               </p>
+
+              <BookSort currentSort={sortBy} />
             </div>
 
             {books && books.length > 0 ? (
@@ -132,12 +139,12 @@ export default async function BooksPage({
               <div className="mt-12 flex justify-center gap-2">
                 {currentPage > 1 && (
                   <Button variant="outline" asChild>
-                    <Link href={`/books?page=${currentPage - 1}${search ? `&search=${search}` : ''}${category !== 'Todas' ? `&category=${category}` : ''}${promo ? `&promo=${promo}` : ''}`}>Anterior</Link>
+                    <Link href={`/books?page=${currentPage - 1}${search ? `&search=${search}` : ''}${category !== 'Todas' ? `&category=${category}` : ''}${promo ? `&promo=${promo}` : ''}${sortBy ? `&sortBy=${sortBy}` : ''}${sortOrder ? `&sortOrder=${sortOrder}` : ''}`}>Anterior</Link>
                   </Button>
                 )}
                 {(currentPage * limit) < count && (
                   <Button variant="outline" asChild>
-                    <Link href={`/books?page=${currentPage + 1}${search ? `&search=${search}` : ''}${category !== 'Todas' ? `&category=${category}` : ''}${promo ? `&promo=${promo}` : ''}`}>Siguiente</Link>
+                    <Link href={`/books?page=${currentPage + 1}${search ? `&search=${search}` : ''}${category !== 'Todas' ? `&category=${category}` : ''}${promo ? `&promo=${promo}` : ''}${sortBy ? `&sortBy=${sortBy}` : ''}${sortOrder ? `&sortOrder=${sortOrder}` : ''}`}>Siguiente</Link>
                   </Button>
                 )}
               </div>
