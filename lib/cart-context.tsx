@@ -47,7 +47,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     // Load data regardless of user status
     const savedCart = localStorage.getItem("cart");
     const savedPromo = localStorage.getItem("appliedPromo");
-    
+
     if (savedCart && user) { // Cart still requires user for now
       try {
         setCart(JSON.parse(savedCart));
@@ -55,7 +55,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         console.error("Failed to parse cart from localStorage", e);
       }
     }
-    
+
     if (savedPromo) {
       try {
         setAppliedPromo(JSON.parse(savedPromo));
@@ -82,7 +82,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (user) {
         localStorage.setItem("cart", JSON.stringify(cart));
       }
-      
+
       if (appliedPromo) {
         localStorage.setItem("appliedPromo", JSON.stringify(appliedPromo));
       } else {
@@ -149,6 +149,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const expiryDate = new Date(data.expiry_date);
       if (expiryDate < new Date()) {
         return { success: false, message: "Este código promocional ha caducado" };
+      }
+
+      if (data.is_one_time) {
+        const { count, error: countError } = await supabase
+          .from("orders")
+          .select("*", { count: "exact", head: true })
+          .eq("promo_code", data.code);
+
+        if (countError) throw countError;
+        if (count && count > 0) {
+          return { success: false, message: "Este código promocional ya ha sido utilizado" };
+        }
       }
 
       setAppliedPromo(data as PromoCode);

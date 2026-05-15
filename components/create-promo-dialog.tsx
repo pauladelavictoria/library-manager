@@ -32,6 +32,7 @@ export function CreatePromoDialog() {
     const code = formData.get("code") as string;
     const discount = parseFloat(formData.get("discount") as string);
     const expiry = formData.get("expiry") as string;
+    const isOneTime = formData.get("is_one_time") === "on";
 
     if (!code || isNaN(discount) || !expiry) {
       toast.error("Por favor, rellena todos los campos");
@@ -43,6 +44,7 @@ export function CreatePromoDialog() {
       code,
       discount_amount: discount,
       expiry_date: expiry,
+      is_one_time: isOneTime,
     });
 
     if (result.success) {
@@ -163,6 +165,18 @@ export function CreatePromoDialog() {
                   required
                 />
               </div>
+            </div>
+          </div>
+          <div className="flex items-center space-x-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+            <input
+              type="checkbox"
+              id="is_one_time"
+              name="is_one_time"
+              className="h-5 w-5 rounded-md border-slate-300 text-primary focus:ring-primary cursor-pointer"
+            />
+            <div className="space-y-0.5">
+              <Label htmlFor="is_one_time" className="text-sm font-bold cursor-pointer">Cupón de un solo uso</Label>
+              <p className="text-[10px] text-slate-500 font-medium">El código se desactivará tras la primera compra.</p>
             </div>
           </div>
           <DialogFooter>

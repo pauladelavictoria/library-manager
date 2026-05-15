@@ -182,10 +182,11 @@ export default async function AdminInventoryPage({
       code: promo.code,
       discount_amount: promo.discount_amount,
       expiry_date: promo.expiry_date,
+      is_one_time: promo.is_one_time,
       count,
       totalDiscount,
       totalRevenue,
-      isActive: new Date(promo.expiry_date) > new Date()
+      isActive: (new Date(promo.expiry_date) > new Date()) && (!promo.is_one_time || count === 0)
     };
   }).sort((a, b) => b.count - a.count);
 
@@ -348,8 +349,13 @@ export default async function AdminInventoryPage({
                           <div className="flex items-center gap-1.5">
                             <div className={cn("h-1.5 w-1.5 rounded-full", promo.isActive ? "bg-emerald-500" : "bg-slate-300")} />
                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                              {promo.isActive ? "Activo" : "Caducado"}
+                              {promo.isActive ? "Activo" : (promo.is_one_time && promo.count > 0 ? "Usado" : "Inactivo")}
                             </p>
+                            {promo.is_one_time && (
+                              <Badge variant="secondary" className="text-[8px] h-3.5 px-1 rounded bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-none font-black uppercase">
+                                Único
+                              </Badge>
+                            )}
                           </div>
                         </div>
                       </div>

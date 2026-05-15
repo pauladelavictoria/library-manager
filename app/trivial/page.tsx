@@ -1,17 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Trophy, HelpCircle, RotateCcw, LogIn, UserPlus, Star, CheckCircle2, XCircle, Loader2 } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Trophy, HelpCircle, RotateCcw, LogIn, UserPlus, Star, CheckCircle2, XCircle, Loader2, Timer, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { saveQuizScore } from "@/app/actions/quiz";
+import { saveQuizScore, updateQuizScore } from "@/app/actions/quiz";
+import { setQuizCooldown } from "@/app/actions/quiz-cooldown";
 import { createClient } from "@/supabase/client";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
+const COOLDOWN_MINUTES = 60;
+const QUESTION_TIME = 15;
+
 export default function QuizPage() {
-  const [currentStep, setCurrentStep] = useState<"intro" | "playing" | "results">("intro");
+  const [currentStep, setCurrentStep] = useState<"intro" | "playing" | "results" | "blocked" | "limit">("intro");
   const [questions, setQuestions] = useState<any[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -20,25 +24,112 @@ export default function QuizPage() {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  const [timeLeft, setTimeLeft] = useState(QUESTION_TIME);
+  const [cooldownRemaining, setCooldownRemaining] = useState<number | null>(null);
+  const [dailyAttempts, setDailyAttempts] = useState(0);
+  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+
+  const fetchQuestions = useCallback(async () => {
+    const supabase = createClient();
+    const { data: dbQuestions } = await supabase.from("quiz_questions").select("*");
+    if (dbQuestions) {
+      const shuffled = [...dbQuestions].sort(() => 0.5 - Math.random());
+      setQuestions(shuffled.slice(0, 10));
+    }
+  }, []);
+
+  const checkLimits = useCallback(async (authUser: any) => {
     const supabase = createClient();
 
-    async function loadData() {
-      const [{ data: { user: authUser } }, { data: dbQuestions }] = await Promise.all([
-        supabase.auth.getUser(),
-        supabase.from("quiz_questions").select("*")
-      ]);
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("last_quiz_attempt")
+      .eq("id", authUser.id)
+      .single();
 
-      setUser(authUser);
-      if (dbQuestions) {
-        const shuffled = [...dbQuestions].sort(() => 0.5 - Math.random());
-        setQuestions(shuffled.slice(0, 10));
+    if (profile?.last_quiz_attempt) {
+      const lastAttempt = new Date(profile.last_quiz_attempt).getTime();
+      const now = new Date().getTime();
+      const diffMinutes = (now - lastAttempt) / (1000 * 60);
+
+      if (diffMinutes < COOLDOWN_MINUTES) {
+        setCooldownRemaining(Math.ceil(COOLDOWN_MINUTES - diffMinutes));
+        setCurrentStep("blocked");
+        return true;
       }
+    }
+
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const { count: attemptsCount } = await supabase
+      .from("quiz_scores")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", authUser.id)
+      .gte("created_at", twentyFourHoursAgo);
+
+    const attempts = attemptsCount || 0;
+    setDailyAttempts(attempts);
+
+    if (attempts >= 10) {
+      setCurrentStep("limit");
+      return true;
+    }
+
+    return false;
+  }, []);
+
+  useEffect(() => {
+    async function loadData() {
+      const supabase = createClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      setUser(authUser);
+
+      if (authUser) {
+        const isBlocked = await checkLimits(authUser);
+        if (isBlocked) {
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      await fetchQuestions();
       setIsLoading(false);
     }
 
     loadData();
-  }, []);
+  }, [fetchQuestions, checkLimits]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (currentStep === "playing" && selectedOption === null && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+    } else if (timeLeft === 0 && currentStep === "playing" && selectedOption === null) {
+      handleTimeout();
+    }
+
+    return () => clearInterval(timer);
+  }, [currentStep, timeLeft, selectedOption]);
+
+  async function handleTimeout() {
+    setCurrentStep("blocked");
+    setCooldownRemaining(COOLDOWN_MINUTES);
+  }
+
+  async function startGame() {
+    if (user && questions.length > 0) {
+      const [saveResult] = await Promise.all([
+        saveQuizScore(0, questions.length),
+        setQuizCooldown()
+      ]);
+
+      if (saveResult.success && saveResult.id) {
+        setActiveSessionId(saveResult.id);
+      }
+    }
+    setCurrentStep("playing");
+    setTimeLeft(QUESTION_TIME);
+  }
 
   function handleAnswer(optionIndex: number) {
     if (selectedOption !== null || questions.length === 0) return;
@@ -46,6 +137,8 @@ export default function QuizPage() {
     setSelectedOption(optionIndex);
     const correct = optionIndex === questions[currentQuestion].answer;
     setIsCorrect(correct);
+
+    const finalScore = correct ? score + 1 : score;
     if (correct) setScore(prev => prev + 1);
 
     setTimeout(() => {
@@ -53,40 +146,22 @@ export default function QuizPage() {
         setCurrentQuestion(prev => prev + 1);
         setSelectedOption(null);
         setIsCorrect(null);
+        setTimeLeft(QUESTION_TIME);
       } else {
-        finishGame();
+        finishGame(finalScore);
       }
     }, 1500);
   }
 
-  async function finishGame() {
+  async function finishGame(finalScore: number) {
     setCurrentStep("results");
-    if (user && questions.length > 0) {
-      await saveQuizScore(score, questions.length);
+    if (user && activeSessionId) {
+      await updateQuizScore(activeSessionId, finalScore);
     }
   }
 
-  useEffect(() => {
-    if (currentStep === "results" && user && questions.length > 0) {
-      saveQuizScore(score, questions.length);
-    }
-  }, [currentStep, user, questions.length, score]);
-
   function restart() {
-    setIsLoading(true);
-    const supabase = createClient();
-    supabase.from("quiz_questions").select("*").then(({ data }) => {
-      if (data) {
-        const shuffled = [...data].sort(() => 0.5 - Math.random());
-        setQuestions(shuffled.slice(0, 10));
-      }
-      setCurrentStep("intro");
-      setCurrentQuestion(0);
-      setScore(0);
-      setSelectedOption(null);
-      setIsCorrect(null);
-      setIsLoading(false);
-    });
+    window.location.reload();
   }
 
   if (isLoading) {
@@ -104,6 +179,56 @@ export default function QuizPage() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-24 pb-12">
       <div className="container mx-auto px-4 max-w-2xl">
 
+        {currentStep === "blocked" && (
+          <Card className="rounded-[2.5rem] border-none shadow-2xl overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl animate-in fade-in zoom-in duration-500">
+            <CardContent className="p-12 text-center space-y-8">
+              <div className="mx-auto w-24 h-24 bg-red-500/10 rounded-full flex items-center justify-center">
+                <Timer className="h-12 w-12 text-red-500" />
+              </div>
+              <div className="space-y-3">
+                <h1 className="text-4xl font-black tracking-tight">Acceso Bloqueado</h1>
+                <p className="text-slate-500 font-medium text-lg">
+                  Has agotado tu tiempo o has fallado. Debes esperar a que pase el tiempo de enfriamiento.
+                </p>
+              </div>
+              <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-3xl">
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">PODRÁS VOLVER A JUGAR EN</p>
+                <p className="text-4xl font-black text-slate-900 dark:text-white">
+                  ~ {cooldownRemaining} minutos
+                </p>
+              </div>
+              <Button asChild variant="outline" className="w-full h-14 rounded-2xl font-bold">
+                <Link href="/dashboard">Volver al Dashboard</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {currentStep === "limit" && (
+          <Card className="rounded-[2.5rem] border-none shadow-2xl overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl animate-in fade-in zoom-in duration-500">
+            <CardContent className="p-12 text-center space-y-8">
+              <div className="mx-auto w-24 h-24 bg-amber-500/10 rounded-full flex items-center justify-center">
+                <AlertCircle className="h-12 w-12 text-amber-500" />
+              </div>
+              <div className="space-y-3">
+                <h1 className="text-4xl font-black tracking-tight">Límite Diario Alcanzado</h1>
+                <p className="text-slate-500 font-medium text-lg">
+                  Has completado tus 10 partidas de hoy. Vuelve mañana para seguir acumulando puntos.
+                </p>
+              </div>
+              <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-3xl">
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">PARTIDAS HOY</p>
+                <p className="text-4xl font-black text-slate-900 dark:text-white">
+                  10 / 10
+                </p>
+              </div>
+              <Button asChild variant="outline" className="w-full h-14 rounded-2xl font-bold">
+                <Link href="/dashboard">Volver al Dashboard</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
         {currentStep === "intro" && (
           <Card className="rounded-[2.5rem] border-none shadow-2xl overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl">
             <CardContent className="p-12 text-center space-y-8">
@@ -111,11 +236,37 @@ export default function QuizPage() {
                 <HelpCircle className="h-12 w-12 text-primary" />
               </div>
               <div className="space-y-3">
-                <h1 className="text-4xl font-black tracking-tight">Trivia Literario</h1>
+                <h1 className="text-4xl font-black tracking-tight">Trivial Literario</h1>
                 <p className="text-slate-500 font-medium text-lg italic">¿Cuánto sabes realmente de libros?</p>
               </div>
+
+              <div className="grid grid-cols-2 gap-4 text-left">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                  <Timer className="h-5 w-5 text-primary mb-2" />
+                  <p className="text-xs font-black uppercase tracking-widest text-slate-400">Tiempo</p>
+                  <p className="font-bold">15 segundos por pregunta </p>
+                </div>
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                  <AlertCircle className="h-5 w-5 text-red-500 mb-2" />
+                  <p className="text-xs font-black uppercase tracking-widest text-slate-400">Límite</p>
+                  <p className="font-bold">10 partidas cada día</p>
+                </div>
+              </div>
+
+              {user && (
+                <div className="bg-primary/5 border border-primary/10 rounded-2xl p-4 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Star className="h-5 w-5 text-primary fill-primary/20" />
+                    <p className="text-sm font-bold">Tus partidas hoy</p>
+                  </div>
+                  <Badge className="bg-primary text-white border-none font-black px-3 py-1 rounded-full">
+                    {dailyAttempts} / 10
+                  </Badge>
+                </div>
+              )}
+
               <div className="flex flex-col gap-4 pt-4">
-                <Button onClick={() => setCurrentStep("playing")} className="h-16 rounded-2xl bg-primary text-white text-xl font-black shadow-xl shadow-primary/20 hover:scale-105 transition-all">
+                <Button onClick={startGame} className="h-16 rounded-2xl bg-primary text-white text-xl font-black shadow-xl shadow-primary/20 hover:scale-105 transition-all">
                   ¡Empezar a Jugar!
                 </Button>
                 {!user && (
@@ -134,6 +285,15 @@ export default function QuizPage() {
               <Badge className="bg-primary/10 text-primary border-none font-bold px-4 py-1 rounded-full">
                 Pregunta {currentQuestion + 1} de {questions.length}
               </Badge>
+
+              <div className={cn(
+                "flex items-center gap-2 font-black transition-colors px-4 py-1 rounded-full border-2",
+                timeLeft <= 5 ? "text-red-500 border-red-500/20 bg-red-500/5 animate-pulse" : "text-slate-400 border-transparent"
+              )}>
+                <Timer className="h-4 w-4" />
+                <span>{timeLeft}s</span>
+              </div>
+
               <div className="flex items-center gap-2 font-black text-slate-400">
                 <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
                 <span>{score} Puntos</span>
@@ -143,8 +303,11 @@ export default function QuizPage() {
             <Card className="rounded-[2.5rem] border-none shadow-2xl overflow-hidden bg-white dark:bg-slate-900">
               <div className="h-2 bg-slate-100 dark:bg-slate-800 w-full overflow-hidden">
                 <div
-                  className="h-full bg-primary transition-all duration-500 ease-out"
-                  style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
+                  className={cn(
+                    "h-full transition-all duration-1000 linear",
+                    timeLeft <= 5 ? "bg-red-500" : "bg-primary"
+                  )}
+                  style={{ width: `${(timeLeft / QUESTION_TIME) * 100}%` }}
                 />
               </div>
               <CardContent className="p-10 space-y-8">

@@ -12,20 +12,40 @@ export async function saveQuizScore(score: number, total: number) {
       return { success: false, error: "No autenticado", code: "AUTH_REQUIRED" };
     }
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("quiz_scores")
       .insert({
         user_id: user.id,
         score: score,
         total_questions: total,
-      });
+      })
+      .select("id")
+      .single();
 
     if (error) throw error;
 
-    revalidatePath("/profile");
-    return { success: true };
+    revalidatePath("/dashboard");
+    return { success: true, id: data.id };
   } catch (error: any) {
     console.error("Error saving quiz score:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function updateQuizScore(id: string, score: number) {
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase
+      .from("quiz_scores")
+      .update({ score: score })
+      .eq("id", id);
+
+    if (error) throw error;
+
+    revalidatePath("/dashboard");
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error updating quiz score:", error);
     return { success: false, error: error.message };
   }
 }

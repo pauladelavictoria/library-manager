@@ -7,6 +7,7 @@ export async function createPromoCode(formData: {
   code: string;
   discount_amount: number;
   expiry_date: string;
+  is_one_time?: boolean;
 }) {
 
   try {
@@ -37,6 +38,7 @@ export async function createPromoCode(formData: {
         code: formData.code.toUpperCase(),
         discount_amount: formData.discount_amount,
         expiry_date: formData.expiry_date,
+        is_one_time: formData.is_one_time || false,
       });
 
     if (error) {
@@ -74,6 +76,7 @@ export async function deletePromoCode(id: string) {
 export async function updatePromoCode(id: string, data: {
   discount_amount?: number;
   expiry_date?: string;
+  is_one_time?: boolean;
 }) {
   try {
     const supabase = await createClient();
