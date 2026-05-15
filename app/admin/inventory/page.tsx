@@ -14,7 +14,10 @@ import { SalesChart } from "@/components/sales-chart";
 import { BestSellersBubbles } from "@/components/best-sellers-bubbles";
 import { PromoActions } from "@/components/promo-actions";
 import { EventActions } from "@/components/admin/event-actions";
-import { Calendar as CalendarIcon, Users as UsersIcon, MapPin, PenTool, BookOpen, Presentation } from "lucide-react";
+import { CreateBookDialog } from "@/components/admin/create-book-dialog";
+import { BookActions } from "@/components/admin/book-actions";
+import { Calendar as CalendarIcon, Users as UsersIcon, MapPin, PenTool, BookOpen, Presentation, LayoutDashboard, Book, Tag as TagIcon, CalendarDays } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 
 export const metadata = {
@@ -223,45 +226,66 @@ export default async function AdminInventoryPage({
             <h1 className="text-4xl font-black tracking-tight mb-2">Gestión de la Librería</h1>
             <p className="text-slate-500 dark:text-slate-400">Supervisa el rendimiento y gestiona el inventario.</p>
           </div>
-
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <SalesChart data={salesChartData} />
+        <Tabs defaultValue="dashboard" className="w-full">
+          <TabsList className="mb-8 w-fit bg-slate-100/50 dark:bg-slate-900/50 backdrop-blur-sm border border-slate-200/50 dark:border-slate-800/50">
+            <TabsTrigger value="dashboard" className="gap-2">
+              <LayoutDashboard className="h-4 w-4" />
+              Vista General
+            </TabsTrigger>
+            <TabsTrigger value="catalog" className="gap-2">
+              <Book className="h-4 w-4" />
+              Catálogo de Libros
+            </TabsTrigger>
+            <TabsTrigger value="marketing" className="gap-2">
+              <TagIcon className="h-4 w-4" />
+              Promociones
+            </TabsTrigger>
+            <TabsTrigger value="events" className="gap-2">
+              <CalendarDays className="h-4 w-4" />
+              Agenda Cultural
+            </TabsTrigger>
+          </TabsList>
 
-          <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm overflow-hidden">
-            <CardHeader className="pb-4">
-              <div className="flex flex-col gap-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="text-xl font-bold flex items-center gap-2">
-                      <Trophy className="h-5 w-5 text-yellow-500" />
-                      Libros Más Vendidos
-                    </CardTitle>
-                    <CardDescription className="font-medium">
-                      {params.category && params.category !== "Todas" ? `Top ventas en ${params.category}` :
-                        params.author && params.author !== "Todos" ? `Top ventas de ${params.author}` :
-                          "Top 5 títulos con mayor número de ventas generales."}
-                    </CardDescription>
+          <TabsContent value="dashboard">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              <SalesChart data={salesChartData} />
+              
+              <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm overflow-hidden">
+                <CardHeader className="pb-4">
+                  <div className="flex flex-col gap-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle className="text-xl font-bold flex items-center gap-2">
+                          <Trophy className="h-5 w-5 text-yellow-500" />
+                          Libros Más Vendidos
+                        </CardTitle>
+                        <CardDescription className="font-medium text-slate-500">
+                          {params.category && params.category !== "Todas" ? `Top ventas en ${params.category}` :
+                            params.author && params.author !== "Todos" ? `Top ventas de ${params.author}` :
+                              "Top 10 títulos con mayor número de ventas generales."}
+                        </CardDescription>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </CardHeader>
+                <CardContent className="pt-2 pb-8 flex flex-col justify-center min-h-[400px]">
+                  {sortedBestSellers.length > 0 ? (
+                    <BestSellersBubbles data={sortedBestSellers} />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl">
+                      <Trophy className="h-12 w-12 text-slate-300 mb-3" />
+                      <p className="text-slate-500 font-medium">No hay ventas registradas para este filtro</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
 
-              </div>
-            </CardHeader>
-            <CardContent className="pt-2 pb-8 flex flex-col justify-center min-h-[400px]">
-              {sortedBestSellers.length > 0 ? (
-                <BestSellersBubbles data={sortedBestSellers} />
-              ) : (
-                <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl">
-                  <Trophy className="h-12 w-12 text-slate-300 mb-3" />
-                  <p className="text-slate-500 font-medium">No hay ventas registradas para este filtro</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="mb-12">
+          <TabsContent value="marketing">
+            <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <div className="h-8 w-1 bg-primary rounded-full" />
@@ -352,9 +376,11 @@ export default async function AdminInventoryPage({
               </TableBody>
             </Table>
           </Card>
-        </div>
+            </div>
+          </TabsContent>
 
-        <div className="mb-12">
+          <TabsContent value="events">
+            <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <div className="h-8 w-1 bg-primary rounded-full" />
@@ -443,15 +469,18 @@ export default async function AdminInventoryPage({
               </TableBody>
             </Table>
           </Card>
-        </div>
+            </div>
+          </TabsContent>
 
-        <main className="w-full">
+          <TabsContent value="catalog">
+            <main className="w-full">
           <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
             <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-6 bg-white dark:bg-slate-900 px-8 py-8">
               <div>
                 <CardTitle className="text-3xl font-black">Catálogo de Inventario</CardTitle>
                 <CardDescription className="font-medium">Gestión total de los libros y existencias de la librería.</CardDescription>
               </div>
+              <CreateBookDialog />
             </CardHeader>
             <CardContent className="p-0">
               <div className="p-8 border-b border-slate-100 dark:border-slate-800">
@@ -469,6 +498,7 @@ export default async function AdminInventoryPage({
                     <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Ventas</TableHead>
                     <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Stock</TableHead>
                     <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Precio</TableHead>
+                    <TableHead className="pr-8 text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -531,14 +561,7 @@ export default async function AdminInventoryPage({
                           €{book.selling_price || '0.00'}
                         </TableCell>
                         <TableCell className="pr-8 text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            {isLowStock && (
-                              <Button size="sm" className="h-8 rounded-lg bg-red-600 hover:bg-red-700 text-white font-bold text-[10px] px-3 shadow-sm">
-                                REPOSICIÓN
-                              </Button>
-                            )}
-
-                          </div>
+                          <BookActions book={book} />
                         </TableCell>
                       </TableRow>
                     );
@@ -594,7 +617,9 @@ export default async function AdminInventoryPage({
             </CardContent>
           </Card>
         </main>
-      </div>
-    </div>
+      </TabsContent>
+    </Tabs>
+  </div>
+</div>
   );
 }
