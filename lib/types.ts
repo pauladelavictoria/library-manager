@@ -35,3 +35,18 @@ export interface Profile {
   updated_at: string;
   created_at: string;
 }
+
+
+export interface Event {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+  location: string;
+  capacity: number;
+  image_url: string | null;
+  event_date: string;
+  type: string;
+}

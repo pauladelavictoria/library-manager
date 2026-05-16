@@ -1,11 +1,10 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { BookOpen, Sparkles, ArrowRight, Star } from "lucide-react";
-import { headers } from "next/headers";
-import { Book } from "@/lib/types";
 import { EventsCalendar } from "@/components/events-calendar";
 import { getRecommendedBooks } from "@/app/actions/books";
 import { createClient } from "@/supabase/server";
+import { Event } from "@/lib/types";
 
 export const metadata = {
   title: "Home | Librería",
@@ -20,27 +19,19 @@ export default async function Home({ searchParams,
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Fetch Books
-  const { data: rawBooks, count: totalCount } = await supabase
-    .from("books")
-    .select("*", { count: "exact" })
-    .limit(10);
-  const books: Book[] = rawBooks || [];
-  const count = totalCount || 0;
 
-  // Fetch Events
+
   const { data: events } = await supabase
     .from("events")
     .select("*")
     .gte("event_date", new Date().toISOString())
     .order("event_date", { ascending: true })
-    .limit(4);
+    .limit(4) as { data: Event[]; }
 
   const { data: recommendedBooks } = await getRecommendedBooks();
 
   return (
     <div className="relative isolate overflow-hidden bg-background">
-      {/* Background Decorative Elements */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute left-[50%] top-0 h-[1000px] w-[1000px] -translate-x-[50%] [mask-image:radial-gradient(closest-side,white,transparent)] sm:left-full sm:-ml-80 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2 lg:translate-y-[-10%]">
           <div className="aspect-[1108/632] fill-primary/10" />

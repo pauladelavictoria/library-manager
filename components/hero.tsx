@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import UserAuthState from "./user-auth-state";
-import { BookOpen, ShoppingCart, Trophy, LayoutDashboard, Package2 } from "lucide-react";
+import { BookOpen, ShoppingCart, Trophy, Package2 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/hooks/use-cart";
@@ -18,7 +18,6 @@ export default function Hero() {
   const navItems = [
     { name: "Libros", href: "/books", icon: BookOpen },
     { name: "Trivial", href: "/trivial", icon: Trophy },
-    user && { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     user && profile?.is_admin && { name: "Gestión", href: "/admin/inventory", icon: Package2 },
     user && { name: "Carrito", href: "/cart", icon: ShoppingCart },
   ].filter(Boolean) as { name: string; href: string; icon: any }[];
@@ -36,7 +35,7 @@ export default function Hero() {
                 <BookOpen className="h-6 w-6 text-primary" />
               </div>
               <span className="font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
-                LibraryManager
+                Librería Éter
               </span>
             </Link>
 

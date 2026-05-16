@@ -9,15 +9,8 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { createClient } from "@/supabase/client";
 import { useNotification } from "@/lib/notification-context";
+import { Event } from "@/lib/types";
 
-interface Event {
-  id: string;
-  title: string;
-  description: string;
-  location: string;
-  event_date: string;
-  type: string;
-}
 
 interface EventsCalendarProps {
   events: Event[];

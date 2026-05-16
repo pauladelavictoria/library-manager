@@ -61,7 +61,7 @@ export default function UserAuthState() {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link href={"/dashboard"}>Dashboard</Link>
+              <Link href={"/dashboard"}>Área personal</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <button onClick={removeUser} disabled={isPending}>

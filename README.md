@@ -1,4 +1,4 @@
-# 📚 Library Manager: Plataforma de Gamificación y Gestión Editorial
+# 📚 Librería éter: Plataforma de Gamificación y Gestión Editorial
 
 ¡Bienvenido a la nueva generación de gestión de librerías! Este proyecto no es solo un gestor de inventario; es una plataforma completa diseñada para maximizar la retención de usuarios a través de la gamificación y ofrecer herramientas críticas de negocio para equipos corporativos.
 

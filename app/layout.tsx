@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/components/query-provider";
 import Hero from "@/components/hero";
-import { Toaster } from "@/components/ui/sonner";
 import { CartProvider } from "@/lib/cart-context";
 import { NotificationProvider } from "@/lib/notification-context";
 import GlobalNotification from "@/components/global-notification";
@@ -21,9 +20,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "library manager",
+  title: "Librería Éter",
   description:
-    "library manager 📚",
+    "Librería Éter 📚",
 };
 
 export default function RootLayout({
