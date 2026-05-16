@@ -20,6 +20,7 @@ import { getBooks } from "@/app/actions/books";
 import { Calendar as CalendarIcon, Users as UsersIcon, MapPin, PenTool, BookOpen, Presentation, LayoutDashboard, Book, Tag as TagIcon, CalendarDays } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Book as BookType } from "@/lib/types";
+import { RecommendationToggle } from "@/components/admin/recommendation-toggle";
 
 
 export const metadata = {
@@ -97,6 +98,7 @@ export default async function AdminInventoryPage({
   const sortedBestSellers = (topSellers || []) as BookType[];
 
   const enrichedBooks = paginatedBooks;
+  const recommendedCount = paginatedBooks.filter(b => (b as any).is_recommended).length;
 
   const period = params.period || "week";
   const daysToFetch = period === "month" ? 30 : 7;
@@ -448,6 +450,7 @@ export default async function AdminInventoryPage({
                       <TableRow className="hover:bg-transparent border-slate-100 dark:border-slate-800">
                         <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Libro</TableHead>
                         <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Estado</TableHead>
+                        <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Reco</TableHead>
                         <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Ventas</TableHead>
                         <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Stock</TableHead>
                         <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Precio</TableHead>
@@ -494,6 +497,13 @@ export default async function AdminInventoryPage({
                                   SALUDABLE
                                 </Badge>
                               )}
+                            </TableCell>
+                            <TableCell className="text-center">
+                              <RecommendationToggle 
+                                bookId={book.id} 
+                                isRecommended={(book as any).is_recommended} 
+                                currentCount={recommendedCount}
+                              />
                             </TableCell>
                             <TableCell className="text-center">
                               <div className="inline-flex flex-col items-center">

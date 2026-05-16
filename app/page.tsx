@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { BookOpen, Sparkles, ArrowRight } from "lucide-react";
+import { BookOpen, Sparkles, ArrowRight, Star } from "lucide-react";
 import { headers } from "next/headers";
 import { Book } from "@/lib/types";
 import { EventsCalendar } from "@/components/events-calendar";
+import { getRecommendedBooks } from "@/app/actions/books";
 import { createClient } from "@/supabase/server";
 
 export const metadata = {
@@ -34,6 +35,8 @@ export default async function Home({ searchParams,
     .gte("event_date", new Date().toISOString())
     .order("event_date", { ascending: true })
     .limit(4);
+
+  const { data: recommendedBooks } = await getRecommendedBooks();
 
   return (
     <div className="relative isolate overflow-hidden bg-background">
@@ -74,28 +77,61 @@ export default async function Home({ searchParams,
             </Link>
           </div>
         </div>
-
-        <div className="mt-16 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow">
-          <div className="relative rounded-2xl bg-white/5 p-2 ring-1 ring-white/10 backdrop-blur-sm shadow-2xl">
-            <div className="rounded-xl bg-background overflow-hidden border border-white/5 aspect-video flex items-center justify-center group">
-              <div className="text-center p-8">
-                <BookOpen className="h-24 w-24 text-primary/20 mx-auto mb-4 group-hover:scale-110 transition-transform duration-500" />
-                <h3 className="text-xl font-semibold text-muted-foreground">Vista Previa de Biblioteca</h3>
-                <p className="text-sm text-muted-foreground/60 mt-2">Más de {count} títulos disponibles</p>
-              </div>
-            </div>
-            {/* Floating badges for extra "Wow" */}
-            <div className="absolute -top-4 -right-4 bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-bold shadow-xl animate-bounce">
-              +1k Usuarios
-            </div>
-            <div className="absolute -bottom-4 -left-4 bg-accent text-accent-foreground px-4 py-2 rounded-full text-sm font-bold shadow-xl">
-              Nuevos Títulos Semanales
-            </div>
-          </div>
-        </div>
       </div>
 
-      {/* Events Calendar Section */}
+      {recommendedBooks && recommendedBooks.length > 0 && (
+        <div className="container mx-auto px-6 pb-24">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-500 text-xs font-bold uppercase tracking-widest mb-4">
+                <Star className="h-3 w-3 fill-current" />
+                <span>Recomendación Exclusiva</span>
+              </div>
+              <h2 className="text-4xl font-black tracking-tight">Recomendaciones del Librero</h2>
+              <p className="text-slate-500 font-medium max-w-xl mt-2 text-lg">
+                Joyas literarias seleccionadas cuidadosamente por nuestro equipo para transformar tu forma de leer.
+              </p>
+            </div>
+            <Link href="/books" className="group flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">
+              Ver catálogo completo <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {recommendedBooks.map((book) => (
+              <Link key={book.id} href={`/books/${book.id}`} className="group">
+                <div className="relative aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl transition-transform duration-500 group-hover:scale-[1.02] group-hover:-translate-y-2">
+                  {book.cover_url ? (
+                    <img src={book.cover_url} alt={book.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  ) : (
+                    <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                      <BookOpen className="h-12 w-12 text-slate-300" />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+
+                  <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                    <div className="flex items-center gap-2 mb-3">
+                      {book.categories?.[0] && (
+                        <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest">
+                          {book.categories[0]}
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="text-2xl font-black text-white mb-2 leading-tight drop-shadow-md">
+                      {book.title}
+                    </h3>
+                    <p className="text-white/70 font-medium text-sm line-clamp-1">
+                      {book.authors?.join(", ")}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="container mx-auto px-6 pb-24">
         <EventsCalendar events={events} userId={user?.id} />
       </div>
