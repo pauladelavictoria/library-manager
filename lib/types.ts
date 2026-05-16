@@ -12,6 +12,7 @@ export interface Book {
   cost_price: number | null;
   selling_price: number | null;
   stock_quantity: number;
+  sold_count: number;
   reorder_threshold: number;
   created_at: string;
 }

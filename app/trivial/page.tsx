@@ -11,8 +11,8 @@ import { createClient } from "@/supabase/client";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-const COOLDOWN_MINUTES = 60;
-const QUESTION_TIME = 15;
+const COOLDOWN_MINUTES = 10;
+const QUESTION_TIME = 10;
 
 export default function QuizPage() {
   const [currentStep, setCurrentStep] = useState<"intro" | "playing" | "results" | "blocked" | "limit">("intro");
@@ -188,7 +188,7 @@ export default function QuizPage() {
               <div className="space-y-3">
                 <h1 className="text-4xl font-black tracking-tight">Acceso Bloqueado</h1>
                 <p className="text-slate-500 font-medium text-lg">
-                  Has agotado tu tiempo o has fallado. Debes esperar a que pase el tiempo de enfriamiento.
+                  Debes esperar a que pase el tiempo de enfriamiento.
                 </p>
               </div>
               <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-3xl">

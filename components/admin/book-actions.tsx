@@ -15,19 +15,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Book as BookType } from "@/lib/types";
 
 interface BookActionsProps {
-  book: {
-    id: string;
-    title: string;
-    author: string;
-    isbn: string;
-    stock_quantity: number;
-    selling_price: number;
-    category?: string;
-    publisher?: string;
-    cover_url?: string;
-  };
+  book: BookType;
 }
 
 export function BookActions({ book }: BookActionsProps) {
@@ -127,7 +118,7 @@ export function BookActions({ book }: BookActionsProps) {
                   <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Autor</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                    <Input name="author" defaultValue={book.author} className="pl-10 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-bold" required />
+                    <Input name="author" defaultValue={book.authors?.join(",")} className="pl-10 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-bold" required />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -142,7 +133,7 @@ export function BookActions({ book }: BookActionsProps) {
                     <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Precio</Label>
                     <div className="relative">
                       <Euro className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                      <Input name="price" type="number" step="0.01" defaultValue={book.selling_price} className="pl-10 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-bold" required />
+                      <Input name="price" type="number" step="0.01" defaultValue={book.selling_price || 0} className="pl-10 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-bold" required />
                     </div>
                   </div>
                 </div>

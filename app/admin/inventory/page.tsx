@@ -2,7 +2,6 @@ import { createClient } from "@/supabase/server";
 import { redirect } from "next/navigation";
 import { Package2, AlertTriangle, Trophy, Tag, ChevronRight, ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -20,6 +19,7 @@ import { BookActions } from "@/components/admin/book-actions";
 import { getBooks } from "@/app/actions/books";
 import { Calendar as CalendarIcon, Users as UsersIcon, MapPin, PenTool, BookOpen, Presentation, LayoutDashboard, Book, Tag as TagIcon, CalendarDays } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { Book as BookType } from "@/lib/types";
 
 
 export const metadata = {
@@ -94,11 +94,7 @@ export default async function AdminInventoryPage({
     sortBy: "sales",
     sortOrder: "desc"
   });
-  const sortedBestSellers = (topSellers || []).map(b => ({
-    title: b.title,
-    total: b.sold_count,
-    cover_url: b.cover_url
-  }));
+  const sortedBestSellers = (topSellers || []) as BookType[];
 
   const enrichedBooks = paginatedBooks;
 
@@ -473,13 +469,15 @@ export default async function AdminInventoryPage({
                           >
                             <TableCell className="pl-8 py-6">
                               <div className="flex items-center gap-4">
-                                <div className="w-12 h-16 rounded-lg overflow-hidden shrink-0 shadow-sm border border-slate-100 dark:border-slate-800">
-                                  {book.cover_url ? (
-                                    <img src={book.cover_url} alt={book.title} className="w-full h-full object-cover" />
-                                  ) : (
-                                    <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[8px]">No img</div>
-                                  )}
-                                </div>
+                                <Link href={`/books/${book.id}`}>
+                                  <div className="w-12 h-16 cursor-pointer rounded-lg overflow-hidden shrink-0 shadow-sm border border-slate-100 dark:border-slate-800">
+                                    {book.cover_url ? (
+                                      <img src={book.cover_url} alt={book.title} className="w-full h-full object-cover" />
+                                    ) : (
+                                      <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[8px]">No img</div>
+                                    )}
+                                  </div>
+                                </Link>
                                 <div className="min-w-0">
                                   <p className="font-bold text-base line-clamp-1 group-hover:text-primary transition-colors">{book.title}</p>
                                   <p className="text-sm text-slate-400 truncate max-w-[200px]">{book.isbn}</p>

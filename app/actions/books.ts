@@ -1,5 +1,6 @@
 "use server";
 
+import { Book } from "@/lib/types";
 import { createClient } from "@/supabase/server";
 import { revalidatePath } from "next/cache";
 
@@ -131,7 +132,7 @@ export async function getBooks(params: {
 
     return {
       success: true,
-      data: books,
+      data: books as Book[],
       meta: {
         total: count || 0,
         page,

@@ -11,13 +11,10 @@ import {
   Cell,
 } from "recharts";
 import { Card } from "@/components/ui/card";
+import type { Book } from "@/lib/types";
 
 interface BestSellersBubblesProps {
-  data: {
-    title: string;
-    total: number;
-    cover_url?: string;
-  }[];
+  data: Book[];
 }
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -40,7 +37,7 @@ export function BestSellersBubbles({ data }: BestSellersBubblesProps) {
     ...item,
     x: (index % 5) * 20 + Math.random() * 10,
     y: Math.floor(index / 5) * 50 + Math.random() * 20,
-    size: item.total,
+    size: item.sold_count,
   }));
 
   return (
