@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/components/query-provider";
 import Hero from "@/components/hero";
@@ -9,13 +9,11 @@ import GlobalNotification from "@/components/global-notification";
 import { CookieConsent } from "@/components/cookie-consent";
 import { Footer } from "@/components/footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const cormorantGaramond = Cormorant_Garamond({
+  variable: "--font-cormorantGaramond",
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
   subsets: ["latin"],
 });
 
@@ -33,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        className={`${cormorantGaramond.className} antialiased`}>
         <QueryProvider>
           <NotificationProvider>
             <CartProvider>
