@@ -74,7 +74,7 @@ export default function CartPage() {
             Parece que aún no has añadido ningún libro a tu colección. ¡Explora nuestro catálogo y descubre tu próxima aventura literaria!
           </p>
           <Link href="/books">
-            <Button size="lg" className="rounded-full px-10 py-7 text-lg font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all">
+            <Button size="lg">
               Explorar Catálogo
             </Button>
           </Link>
@@ -148,9 +148,9 @@ export default function CartPage() {
 
                     <div className="text-right">
                       <p className="text-xs text-muted-foreground mb-1 font-medium uppercase tracking-wider">Subtotal</p>
-                      <PriceTag 
-                        price={(item.selling_price || 0) * item.quantity} 
-                        size="lg" 
+                      <PriceTag
+                        price={(item.selling_price || 0) * item.quantity}
+                        size="lg"
                         className="items-end"
                       />
                     </div>
@@ -161,7 +161,7 @@ export default function CartPage() {
 
             <div className="pt-4">
               <Link href="/books">
-                <Button variant="ghost" className="rounded-full group font-semibold">
+                <Button variant="ghost">
                   <ArrowRight className="mr-2 h-4 w-4 rotate-180 transition-transform group-hover:-translate-x-1" />
                   Continuar Comprando
                 </Button>
@@ -263,8 +263,8 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   className="w-full rounded-2xl py-8 text-xl font-black shadow-xl shadow-primary/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] group"
                   onClick={handleCheckout}
                   disabled={isCheckingOut}

@@ -197,7 +197,7 @@ export default function QuizPage() {
                   ~ {cooldownRemaining} minutos
                 </p>
               </div>
-              <Button asChild variant="outline" className="w-full h-14 rounded-2xl font-bold">
+              <Button asChild variant="outline">
                 <Link href="/dashboard">Volver al Dashboard</Link>
               </Button>
             </CardContent>
@@ -222,7 +222,7 @@ export default function QuizPage() {
                   10 / 10
                 </p>
               </div>
-              <Button asChild variant="outline" className="w-full h-14 rounded-2xl font-bold">
+              <Button asChild variant="outline">
                 <Link href="/dashboard">Volver al Dashboard</Link>
               </Button>
             </CardContent>
@@ -271,7 +271,7 @@ export default function QuizPage() {
               )}
 
               <div className="flex flex-col gap-4 pt-4">
-                <Button onClick={startGame} className="h-16 rounded-2xl bg-primary text-white text-xl font-black shadow-xl shadow-primary/20 hover:scale-105 transition-all">
+                <Button onClick={startGame}>
                   ¡Empezar a Jugar!
                 </Button>
 
@@ -285,10 +285,10 @@ export default function QuizPage() {
                       Estás jugando como invitado. <span className="text-slate-900 dark:text-white font-bold">Tu progreso y puntos no se guardarán</span> y no podrás conseguir el cupón de 3€.
                     </p>
                     <div className="flex gap-2">
-                      <Button asChild variant="secondary" className="flex-1 rounded-xl font-bold h-10 text-xs">
+                      <Button asChild variant="secondary">
                         <Link href="/login">Iniciar Sesión</Link>
                       </Button>
-                      <Button asChild variant="ghost" className="flex-1 rounded-xl font-bold h-10 text-xs hover:bg-amber-500/10 text-amber-600">
+                      <Button asChild variant="ghost">
                         <Link href="/register">Crear Cuenta</Link>
                       </Button>
                     </div>
@@ -394,7 +394,7 @@ export default function QuizPage() {
               </div>
 
 
-              <Button onClick={restart} variant="ghost" className="w-full h-14 rounded-2xl font-bold text-slate-500 hover:text-primary transition-colors">
+              <Button onClick={restart} variant="ghost">
                 <RotateCcw className="mr-2 h-4 w-4" /> Jugar otra vez
               </Button>
             </CardContent>

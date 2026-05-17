@@ -101,7 +101,7 @@ export function CreatePromoDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-full bg-primary font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-all">
+        <Button >
           <Plus className="mr-2 h-4 w-4" />
           Nuevo Cupón
         </Button>

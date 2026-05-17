@@ -58,7 +58,7 @@ export default function UserAuthState() {
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>Mi perfil</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Link href={"/dashboard"}>Área personal</Link>
@@ -68,7 +68,7 @@ export default function UserAuthState() {
                 {isPending ? (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
-                  "Log Out"
+                  "Cerrar sesión"
                 )}
               </button>
             </DropdownMenuItem>
@@ -76,7 +76,7 @@ export default function UserAuthState() {
         </DropdownMenu>
       ) : (
         <Link href={"/register"}>
-          <Button disabled={isPending} className="rounded-full px-6 shadow-md hover:shadow-lg transition-all duration-300">
+          <Button disabled={isPending}>
             {isPending ? (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             ) : (

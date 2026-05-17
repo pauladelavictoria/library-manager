@@ -1,5 +1,5 @@
 import { BookCard } from "@/components/book-card";
-import { Search, FilterX, BookOpen } from "lucide-react";
+import { Search, FilterX } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { headers } from "next/headers";
@@ -57,11 +57,8 @@ export default async function BooksPage({
       </Suspense>
       <div className="bg-gradient-to-b from-primary/10 via-primary/5 to-transparent pt-24 pb-12">
         <div className="container px-4 md:px-6 mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-            <BookOpen className="h-4 w-4" />
-            <span>Novedades Literarias</span>
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-4 text-slate-900 dark:text-white">
+
+          <h1 className="text-6xl font-serif mb-4">
             Explora nuestro <br className="hidden md:block" /> catálogo
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
@@ -95,7 +92,7 @@ export default async function BooksPage({
               </div>
 
               <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex gap-2">
-                <Button type="submit" className="w-full">Aplicar Filtros</Button>
+                <Button type="submit" >Aplicar Filtros</Button>
                 {(search || category !== 'Todas') && (
                   <Button variant="outline" asChild size="icon" title="Limpiar Filtros">
                     <Link href={`/books${promo ? `?promo=${promo}` : ''}`}><FilterX className="h-4 w-4" /></Link>

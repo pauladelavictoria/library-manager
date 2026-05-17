@@ -25,7 +25,7 @@ import { RecommendationToggle } from "@/components/admin/recommendation-toggle";
 
 export const metadata = {
   title: "Gestión de Inventario | Admin",
-  description: "Panel de control para la gestión de libros y stock.",
+  description: "Panel de control para la gestión de libros, eventos, promociones y stock.",
 };
 
 export default async function AdminInventoryPage({
@@ -499,9 +499,9 @@ export default async function AdminInventoryPage({
                               )}
                             </TableCell>
                             <TableCell className="text-center">
-                              <RecommendationToggle 
-                                bookId={book.id} 
-                                isRecommended={(book as any).is_recommended} 
+                              <RecommendationToggle
+                                bookId={book.id}
+                                isRecommended={(book as any).is_recommended}
                                 currentCount={recommendedCount}
                               />
                             </TableCell>

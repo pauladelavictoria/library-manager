@@ -98,7 +98,7 @@ export function BookActions({ book }: BookActionsProps) {
                 <h3 className="text-xl font-black">Libro Actualizado</h3>
                 <p className="text-sm text-slate-500 font-medium text-balance">Los cambios en el catálogo se han guardado correctamente.</p>
               </div>
-              <Button onClick={() => setIsEditing(false)} className="w-full h-12 rounded-xl bg-slate-900 dark:bg-white dark:text-slate-900 font-bold">Cerrar</Button>
+              <Button onClick={() => setIsEditing(false)}>Cerrar</Button>
             </div>
           ) : (
             <div className="p-8 space-y-6">
@@ -138,8 +138,8 @@ export function BookActions({ book }: BookActionsProps) {
                   </div>
                 </div>
                 <DialogFooter className="pt-4 gap-2">
-                  <Button type="button" variant="ghost" onClick={() => setIsEditing(false)} className="rounded-xl font-bold">Cancelar</Button>
-                  <Button type="submit" disabled={isLoading} className="rounded-xl bg-primary text-white font-bold px-8 shadow-xl shadow-primary/20">
+                  <Button type="button" variant="ghost" onClick={() => setIsEditing(false)}>Cancelar</Button>
+                  <Button type="submit" disabled={isLoading}>
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Guardar Cambios"}
                   </Button>
                 </DialogFooter>
@@ -164,7 +164,7 @@ export function BookActions({ book }: BookActionsProps) {
                 <h3 className="text-xl font-black tracking-tight">Eliminado</h3>
                 <p className="text-sm text-slate-500 font-medium text-balance">El título ha sido borrado del catálogo permanentemente.</p>
               </div>
-              <Button onClick={() => setShowDeleteConfirm(false)} className="w-full h-12 rounded-xl bg-slate-900 dark:bg-white dark:text-slate-900 font-bold">Cerrar</Button>
+              <Button onClick={() => setShowDeleteConfirm(false)}>Cerrar</Button>
             </div>
           ) : (
             <div className="p-10 text-center space-y-6">
@@ -178,10 +178,10 @@ export function BookActions({ book }: BookActionsProps) {
                 </p>
               </div>
               <div className="flex flex-col gap-3">
-                <Button onClick={handleDelete} disabled={isLoading} className="w-full h-12 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold shadow-lg shadow-red-500/20">
+                <Button onClick={handleDelete} disabled={isLoading}>
                   {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sí, borrar libro"}
                 </Button>
-                <Button variant="ghost" onClick={() => setShowDeleteConfirm(false)} className="w-full h-12 rounded-xl font-bold">Cancelar</Button>
+                <Button variant="ghost" onClick={() => setShowDeleteConfirm(false)}>Cancelar</Button>
               </div>
             </div>
           )}

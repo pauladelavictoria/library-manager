@@ -119,10 +119,7 @@ export default function GlobalNotification() {
             {(type === 'cart' || (type === 'success' && activeNotification.title === 'Cupón aplicado')) && (
               <div className="flex gap-3">
                 <Link href="/cart" className="flex-1" onClick={closeNotification}>
-                  <button className={cn(
-                    "w-full rounded-2xl bg-primary text-primary-foreground font-black shadow-lg shadow-primary/30 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2",
-                    isLarge ? "py-4 text-base" : "py-2.5 text-xs"
-                  )}>
+                  <button >
                     Ver Carrito
                     <ArrowRight className={isLarge ? "h-5 w-5" : "h-3 w-3"} />
                   </button>
@@ -133,18 +130,12 @@ export default function GlobalNotification() {
             {data?.showAuth && (
               <div className={cn("flex", isLarge ? "gap-4" : "gap-2")}>
                 <Link href="/login" className="flex-1" onClick={closeNotification}>
-                  <button className={cn(
-                    "w-full rounded-2xl bg-primary text-primary-foreground font-black shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]",
-                    isLarge ? "py-4 text-base" : "py-2 text-xs"
-                  )}>
+                  <button >
                     Iniciar Sesión
                   </button>
                 </Link>
                 <Link href="/register" className="flex-1" onClick={closeNotification}>
-                  <button className={cn(
-                    "w-full rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-black border border-slate-200 dark:border-slate-700 shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]",
-                    isLarge ? "py-4 text-base" : "py-2 text-xs"
-                  )}>
+                  <button>
                     Crear Cuenta
                   </button>
                 </Link>

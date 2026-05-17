@@ -16,7 +16,7 @@ export default function DashboardPage() {
             <h1 className="text-4xl font-black tracking-tight mb-2">Mi Dashboard</h1>
             <p className="text-muted-foreground text-lg">Bienvenido de nuevo a tu biblioteca personal.</p>
           </div>
-          <Button asChild variant="outline" className="rounded-full shadow-sm hover:shadow-md transition-all">
+          <Button asChild variant="outline">
             <Link href="/" className="inline-flex items-center">
               <Home className="mr-2 h-4 w-4" />
               Volver al Inicio
@@ -165,7 +165,7 @@ async function TriviaStats() {
           </div>
         )}
 
-        <Button asChild className="w-full h-12 rounded-2xl bg-white text-slate-900 hover:bg-slate-200 font-bold shadow-lg">
+        <Button asChild >
           <Link href="/trivial">
             <Star className="mr-2 h-4 w-4 fill-primary text-primary" />
             Jugar al Trivial
@@ -196,7 +196,7 @@ async function UserOrders() {
       <div className="bg-white/40 dark:bg-slate-900/40 rounded-[2.5rem] p-12 text-center border border-dashed border-slate-300 dark:border-slate-700">
         <ShoppingBag className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-20" />
         <p className="text-xl font-bold text-muted-foreground">Aún no has realizado ninguna compra</p>
-        <Button asChild className="mt-6 rounded-full px-8" variant="secondary">
+        <Button asChild variant="secondary">
           <Link href="/books">Ir a la tienda</Link>
         </Button>
       </div>
@@ -266,7 +266,7 @@ async function UserOrders() {
                       <div className="text-right flex-shrink-0">
                         <p className="text-sm font-bold">€{item.price_at_purchase.toFixed(2)}</p>
                         <p className="text-xs text-muted-foreground font-medium mb-2">Cant: {item.quantity}</p>
-                        <Button asChild variant="ghost" size="sm" className="h-8 rounded-full text-[10px] font-bold gap-1.5 hover:bg-primary/5 hover:text-primary">
+                        <Button asChild variant="ghost" size="sm" >
                           <Link href={`/books/${item.book_id}`}>
                             <BookOpen className="h-3 w-3" />
                             Detalles

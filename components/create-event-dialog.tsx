@@ -109,7 +109,7 @@ export function CreateEventDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="rounded-full font-bold border-slate-200 dark:border-slate-800 hover:bg-slate-50 transition-all">
+        <Button variant="outline">
           <Calendar className="mr-2 h-4 w-4" />
           Nuevo Evento
         </Button>
@@ -179,10 +179,10 @@ export function CreateEventDialog() {
           </div>
 
           <div className="flex gap-3">
-            <Button type="button" variant="ghost" onClick={() => setOpen(false)} className="flex-1 h-12 rounded-xl font-bold">
+            <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
               Cancelar
             </Button>
-            <Button type="submit" disabled={isLoading} className="flex-[2] h-12 rounded-xl bg-slate-900 dark:bg-white dark:text-slate-900 font-bold shadow-xl">
+            <Button type="submit" disabled={isLoading}>
               {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Crear Evento"}
             </Button>
           </div>

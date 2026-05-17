@@ -157,7 +157,7 @@ export default function RegisterForm() {
                 )}
               />
             </div>
-            <Button className="mt-8 w-full">
+            <Button>
               {isPending ? (
                 <div className="flex items-center justify-center gap-1">
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
@@ -172,7 +172,7 @@ export default function RegisterForm() {
       </div>
       <div className="text-center">
         <Link href="/login" className="w-full">
-          <Button variant="outline" className="w-full">
+          <Button variant="outline">
             Back to Login
           </Button>
         </Link>

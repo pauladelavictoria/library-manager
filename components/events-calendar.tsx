@@ -115,12 +115,9 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
     <section className="py-16">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-bold mb-4">
-            <Calendar className="h-4 w-4" />
-            <span>PRÓXIMAS ACTIVIDADES</span>
-          </div>
-          <h2 className="text-4xl font-black tracking-tight">Calendario de Eventos</h2>
-          <p className="text-slate-500 dark:text-slate-400 mt-2 max-w-2xl font-medium">
+
+          <h2 className="font-serif text-3xl">CALENDARIO DE EVENTOS</h2>
+          <p className="">
             Únete a nuestra comunidad. Presentaciones, firmas de libros y talleres exclusivos para amantes de la lectura.
           </p>
         </div>

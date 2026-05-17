@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { Facebook, Instagram, Mail, Clock, MapPin, BookOpen, Heart } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
+import { Button } from "./ui/button";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -26,7 +27,7 @@ export function Footer() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button className="p-2 rounded-lg bg-slate-900 hover:text-primary transition-colors">
+                    <button >
                       <Instagram className="h-5 w-5" />
                     </button>
                   </TooltipTrigger>
@@ -39,7 +40,7 @@ export function Footer() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button className="p-2 rounded-lg bg-slate-900 hover:text-primary transition-colors">
+                    <button >
                       <Facebook className="h-5 w-5" />
                     </button>
                   </TooltipTrigger>
@@ -89,9 +90,9 @@ export function Footer() {
             <h4 className="text-white font-bold mb-2">¿Buscas algo especial?</h4>
             <p className="text-xs mb-6 text-slate-500">Únete a nuestro club de lectura y recibe novedades semanales.</p>
             <Link href="/register">
-              <button className="w-full py-3 bg-white text-slate-950 rounded-xl font-bold text-sm hover:scale-[1.02] transition-all">
+              <Button variant="secondary">
                 Registrarme Gratis
-              </button>
+              </Button>
             </Link>
           </div>
         </div>

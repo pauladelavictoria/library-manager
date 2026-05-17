@@ -26,7 +26,7 @@ export default async function BookDetailPage({
       <div className="container mx-auto px-4 py-20 text-center">
         <h1 className="text-3xl font-bold mb-6">Libro no encontrado</h1>
         <Link href="/books">
-          <Button variant="outline" className="rounded-full">
+          <Button variant="outline">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Volver al catálogo
           </Button>

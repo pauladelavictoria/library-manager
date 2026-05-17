@@ -66,7 +66,7 @@ export function CreateBookDialog() {
               <h3 className="text-2xl font-black tracking-tight">¡Catálogo Actualizado!</h3>
               <p className="text-slate-500 dark:text-slate-400 font-medium">El nuevo título ya está disponible para la venta.</p>
             </div>
-            <Button onClick={() => setOpen(false)} className="w-full h-14 rounded-2xl bg-slate-900 dark:bg-white dark:text-slate-900 font-bold text-lg shadow-xl">Cerrar</Button>
+            <Button onClick={() => setOpen(false)}>Cerrar</Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -76,7 +76,7 @@ export function CreateBookDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-full bg-primary font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-all px-6">
+        <Button>
           <Plus className="mr-2 h-4 w-4" />
           Añadir Libro
         </Button>
@@ -143,8 +143,8 @@ export function CreateBookDialog() {
             </div>
           </div>
           <DialogFooter className="pt-4">
-            <Button type="button" variant="ghost" onClick={() => setOpen(false)} className="rounded-xl font-bold">Cancelar</Button>
-            <Button type="submit" disabled={isLoading} className="rounded-xl bg-slate-900 dark:bg-white dark:text-slate-900 font-bold px-8 shadow-xl">
+            <Button type="button" variant="ghost" onClick={() => setOpen(false)}>Cancelar</Button>
+            <Button type="submit" disabled={isLoading}>
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Registrar Libro"}
             </Button>
           </DialogFooter>

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, ChevronLeft, Home } from "lucide-react";
 
+//need to change
+
 export default function NotFound() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-background px-4 mx-auto">

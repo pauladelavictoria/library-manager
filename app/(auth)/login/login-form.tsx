@@ -104,7 +104,7 @@ export default function LoginForm() {
               )}
             />
           </div>
-          <Button type="submit" className="w-full mt-8" disabled={isPending}>
+          <Button type="submit" disabled={isPending}>
             {isPending ? (
               <div className="flex items-center justify-center gap-1">
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />

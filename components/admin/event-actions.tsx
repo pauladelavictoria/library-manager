@@ -37,7 +37,7 @@ interface EventActionsProps {
 export function EventActions({ event }: EventActionsProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
-  
+
   const [isEditing, setIsEditing] = useState(false);
   const [showEditSuccess, setShowEditSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -115,7 +115,7 @@ export function EventActions({ event }: EventActionsProps) {
                   Los cambios en el evento se han guardado correctamente.
                 </p>
               </div>
-              <Button onClick={() => setIsEditing(false)} className="w-full h-12 rounded-xl bg-slate-900 dark:bg-white dark:text-slate-900 font-bold">Cerrar</Button>
+              <Button onClick={() => setIsEditing(false)}>Cerrar</Button>
             </div>
           ) : (
             <div className="p-8 space-y-6">
@@ -160,8 +160,8 @@ export function EventActions({ event }: EventActionsProps) {
                   </div>
                 </div>
                 <DialogFooter className="pt-4 gap-2">
-                  <Button type="button" variant="ghost" onClick={() => setIsEditing(false)} className="rounded-xl font-bold">Cancelar</Button>
-                  <Button type="submit" disabled={isLoading} className="rounded-xl bg-primary text-white font-bold px-8 shadow-xl shadow-primary/20">
+                  <Button type="button" variant="ghost" onClick={() => setIsEditing(false)}>Cancelar</Button>
+                  <Button type="submit" disabled={isLoading}>
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Guardar"}
                   </Button>
                 </DialogFooter>
@@ -187,7 +187,7 @@ export function EventActions({ event }: EventActionsProps) {
                 <h3 className="text-xl font-black tracking-tight">Eliminado</h3>
                 <p className="text-sm text-slate-500 font-medium text-balance">El evento ha sido cancelado y borrado de la agenda.</p>
               </div>
-              <Button onClick={() => setShowDeleteConfirm(false)} className="w-full h-12 rounded-xl bg-slate-900 dark:bg-white dark:text-slate-900 font-bold">Cerrar</Button>
+              <Button onClick={() => setShowDeleteConfirm(false)}>Cerrar</Button>
             </div>
           ) : (
             <div className="p-10 text-center space-y-6">
@@ -201,10 +201,10 @@ export function EventActions({ event }: EventActionsProps) {
                 </p>
               </div>
               <div className="flex flex-col gap-3">
-                <Button onClick={handleDelete} disabled={isLoading} className="w-full h-12 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold shadow-lg shadow-red-500/20">
+                <Button onClick={handleDelete} disabled={isLoading}>
                   {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sí, borrar evento"}
                 </Button>
-                <Button variant="ghost" onClick={() => setShowDeleteConfirm(false)} className="w-full h-12 rounded-xl font-bold">Volver atrás</Button>
+                <Button variant="ghost" onClick={() => setShowDeleteConfirm(false)}>Volver atrás</Button>
               </div>
             </div>
           )}
