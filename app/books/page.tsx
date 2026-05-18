@@ -50,24 +50,22 @@ export default async function BooksPage({
 
   const categories = ["Fiction", "Fantasy", "Science", "History", "Romance", "Thriller", "Todas"];
 
+
   return (
-    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950/50">
+    <div className="p-14">
       <Suspense fallback={null}>
         <PromoHandler />
       </Suspense>
-      <div className="bg-gradient-to-b from-primary/10 via-primary/5 to-transparent pt-24 pb-12">
-        <div className="container px-4 md:px-6 mx-auto">
-
-          <h1 className="text-6xl font-serif mb-4">
-            Explora nuestro <br className="hidden md:block" /> catálogo
-          </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
-            Encuentra tu próxima gran lectura entre nuestros más de {count || 0} títulos disponibles. Las mejores historias a un clic de distancia.
-          </p>
-        </div>
+      <div>
+        <h1 className="text-6xl font-serif mb-4">
+          Explora nuestro catálogo
+        </h1>
+        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
+          Encuentra tu próxima gran lectura entre nuestros más de {count || 0} títulos disponibles. Las mejores historias a un clic de distancia.
+        </p>
       </div>
 
-      <div className="container mx-auto px-4 md:px-6 py-8">
+      <div className="my-8">
         <div className="flex flex-col lg:flex-row gap-8">
 
           <aside className="w-full lg:w-64 shrink-0 space-y-8">
@@ -91,21 +89,19 @@ export default async function BooksPage({
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex gap-2">
-                <Button type="submit" >Aplicar Filtros</Button>
-                {(search || category !== 'Todas') && (
-                  <Button variant="outline" asChild size="icon" title="Limpiar Filtros">
-                    <Link href={`/books${promo ? `?promo=${promo}` : ''}`}><FilterX className="h-4 w-4" /></Link>
-                  </Button>
-                )}
-              </div>
+              <Button type="submit" variant="ghost">Aplicar Filtros</Button>
+              {(search || category !== 'Todas') && (
+                <Button variant="default" asChild title="Limpiar Filtros">
+                  <Link href={`/books${promo ? `?promo=${promo}` : ''}`}><FilterX className="h-4 w-4" /></Link>
+                </Button>
+              )}
             </form>
           </aside>
 
           <main className="flex-1">
             <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
               <p className="text-sm text-slate-500 dark:text-slate-400">
-                Mostrando <span className="font-medium text-slate-900 dark:text-white">{books?.length || 0}</span> resultados de {count || 0}
+                Mostrando <span className="font-medium text-slate-900">{books?.length || 0}</span> resultados de {count || 0}
               </p>
 
               <BookSort currentSort={sortBy} />
@@ -126,7 +122,7 @@ export default async function BooksPage({
                 <p className="text-slate-500 dark:text-slate-400 mb-6 max-w-sm">
                   Intenta cambiar los filtros o realizar una búsqueda diferente.
                 </p>
-                <Button asChild variant="outline">
+                <Button asChild variant="default">
                   <Link href={`/books${promo ? `?promo=${promo}` : ''}`}>Limpiar Filtros</Link>
                 </Button>
               </div>
@@ -135,12 +131,12 @@ export default async function BooksPage({
             {count && count > limit && (
               <div className="mt-12 flex justify-center gap-2">
                 {currentPage > 1 && (
-                  <Button variant="outline" asChild>
+                  <Button variant="default" >
                     <Link href={`/books?page=${currentPage - 1}${search ? `&search=${search}` : ''}${category !== 'Todas' ? `&category=${category}` : ''}${promo ? `&promo=${promo}` : ''}${sortBy ? `&sortBy=${sortBy}` : ''}${sortOrder ? `&sortOrder=${sortOrder}` : ''}`}>Anterior</Link>
                   </Button>
                 )}
                 {(currentPage * limit) < count && (
-                  <Button variant="outline" asChild>
+                  <Button variant="default" >
                     <Link href={`/books?page=${currentPage + 1}${search ? `&search=${search}` : ''}${category !== 'Todas' ? `&category=${category}` : ''}${promo ? `&promo=${promo}` : ''}${sortBy ? `&sortBy=${sortBy}` : ''}${sortOrder ? `&sortOrder=${sortOrder}` : ''}`}>Siguiente</Link>
                   </Button>
                 )}

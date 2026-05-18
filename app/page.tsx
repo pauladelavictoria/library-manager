@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { BookOpen, ArrowRight, Star } from "lucide-react";
-import { EventsCalendar } from "@/components/events-calendar";
+import { EventsCalendar } from "@/components/home/events-calendar";
 import { getRecommendedBooks } from "@/app/actions/books";
 import { createClient } from "@/supabase/server";
 import { Event } from "@/lib/types";
@@ -11,7 +11,7 @@ export const metadata = {
   description: "Explora nuestra colección de libros y únete a nuestros eventos.",
 };
 
-export default async function Home({ searchParams,
+export default async function Home({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
@@ -31,10 +31,10 @@ export default async function Home({ searchParams,
   const { data: recommendedBooks } = await getRecommendedBooks();
 
   return (
-    <div className="p-[32px]">
+    <div className="p-14 bg-[url(/images/background.jpg)] bg-contain bg-no-repeat">
 
-      <div className="ml-30 my-[60px]">
-        <h1 className=" text-[120px] font-serif ">
+      <div className="ml-30 my-10">
+        <h1 className=" text-[120px] font-serif leading-[100px] mb-8">
           Tu próxima gran aventura comienza aquí.
         </h1>
         <p className="">
@@ -47,7 +47,7 @@ export default async function Home({ searchParams,
             </Button>
           </Link>
           <Link href="/trivial">
-            <Button variant="ghost">
+            <Button variant="destructive">
               JUGAR TRIVIAL
             </Button>
           </Link>
@@ -56,13 +56,16 @@ export default async function Home({ searchParams,
 
       {recommendedBooks && recommendedBooks.length > 0 && (
         <div className="flex flex-col justify-between gap-4 mb-12 mt-[100px]">
-          <div>
-            <h2 className="text-4xl font-serif">RECOMENDACIONES DEL LIBRERO</h2>
-            <p className="mb-[16px]">
-              Joyas literarias seleccionadas cuidadosamente por nuestro equipo para transformar tu forma de leer.
-            </p>
+          <div className="flex justify-between">
+            <div className="">
+              <h2 className="text-2xl">RECOMENDACIONES DEL LIBRERO</h2>
+              <p className="mb-[16px]">
+                Joyas literarias seleccionadas cuidadosamente por nuestro equipo para transformar tu forma de leer.
+              </p>
+            </div>
+
             <Link href="/books">
-              <Button variant="ghost">
+              <Button variant="destructive">
                 VER CATÁLOGO COMPLETO
               </Button>
             </Link>
@@ -74,14 +77,14 @@ export default async function Home({ searchParams,
               <Link key={book.id} href={`/books/${book.id}`} className="group">
                 <div>
                   {book.cover_url ? (
-                    <img src={book.cover_url} alt={book.title} className="object-cover transition-transform duration-700 group-hover:scale-110 mb-4 h-[300px]" />
+                    <img src={book.cover_url} alt={book.title} className="object-cover cursor-pointer mb-4 h-[300px]" />
                   ) : (
                     <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                       <BookOpen className="h-12 w-12 text-slate-300" />
                     </div>
                   )}
                   <div className="">
-                    <h3 className="font-serif">
+                    <h3 className="">
                       {book.title}
                     </h3>
                     <p>
@@ -95,9 +98,7 @@ export default async function Home({ searchParams,
         </div>
       )}
 
-      <div className="container mx-auto px-6 pb-24">
-        <EventsCalendar events={events} userId={user?.id} />
-      </div>
+      <EventsCalendar events={events} userId={user?.id} />
     </div>
   );
 }

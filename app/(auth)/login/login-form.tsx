@@ -124,7 +124,7 @@ export default function LoginForm() {
           <span className="bg-background px-2 text-muted-foreground">Or</span>
         </div>
       </div>
-      <Button variant="outline" asChild>
+      <Button variant="default" asChild>
         <Link href="/register">Create an account</Link>
       </Button>
       <div className="relative">
@@ -137,7 +137,7 @@ export default function LoginForm() {
           </span>
         </div>
       </div>
-      <Button variant="outline" disabled={isPending}>
+      <Button variant="default" disabled={isPending}>
         {isPending ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (

@@ -13,14 +13,14 @@ import { CreateEventDialog } from "@/components/create-event-dialog";
 import { SalesChart } from "@/components/sales-chart";
 import { BestSellersBubbles } from "@/components/best-sellers-bubbles";
 import { PromoActions } from "@/components/promo-actions";
-import { EventActions } from "@/components/admin/event-actions";
-import { CreateBookDialog } from "@/components/admin/create-book-dialog";
-import { BookActions } from "@/components/admin/book-actions";
+import { EventActions } from "@/components/event-actions";
+import { CreateBookDialog } from "@/components/create-book-dialog";
+import { BookActions } from "@/components/book-actions";
 import { getBooks } from "@/app/actions/books";
 import { Calendar as CalendarIcon, Users as UsersIcon, MapPin, PenTool, BookOpen, Presentation, LayoutDashboard, Book, Tag as TagIcon, CalendarDays } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Book as BookType } from "@/lib/types";
-import { RecommendationToggle } from "@/components/admin/recommendation-toggle";
+import { RecommendationToggle } from "@/components/recommendation-toggle";
 
 
 export const metadata = {

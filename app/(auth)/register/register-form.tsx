@@ -79,7 +79,7 @@ export default function RegisterForm() {
   return (
     <div className="w-full max-w-md mx-auto space-y-6">
       <div className="grid gap-6">
-        <Button variant="outline" type="button" disabled={isPending}>
+        <Button variant="default" type="button" disabled={isPending}>
           <Icons.google className="mr-2 h-4 w-4" />
           Sign up with Google
         </Button>
@@ -172,7 +172,7 @@ export default function RegisterForm() {
       </div>
       <div className="text-center">
         <Link href="/login" className="w-full">
-          <Button variant="outline">
+          <Button variant="default">
             Back to Login
           </Button>
         </Link>

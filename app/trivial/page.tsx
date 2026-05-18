@@ -176,7 +176,7 @@ export default function QuizPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-24 pb-12">
+    <div className="p-14 bg-[url(/images/background.jpg)] bg-contain bg-no-repeat">
       <div className="container mx-auto px-4 max-w-2xl">
 
         {currentStep === "blocked" && (
@@ -197,7 +197,7 @@ export default function QuizPage() {
                   ~ {cooldownRemaining} minutos
                 </p>
               </div>
-              <Button asChild variant="outline">
+              <Button asChild variant="default">
                 <Link href="/dashboard">Volver al Dashboard</Link>
               </Button>
             </CardContent>
@@ -222,7 +222,7 @@ export default function QuizPage() {
                   10 / 10
                 </p>
               </div>
-              <Button asChild variant="outline">
+              <Button asChild variant="default">
                 <Link href="/dashboard">Volver al Dashboard</Link>
               </Button>
             </CardContent>
@@ -285,7 +285,7 @@ export default function QuizPage() {
                       Estás jugando como invitado. <span className="text-slate-900 dark:text-white font-bold">Tu progreso y puntos no se guardarán</span> y no podrás conseguir el cupón de 3€.
                     </p>
                     <div className="flex gap-2">
-                      <Button asChild variant="secondary">
+                      <Button asChild variant="default">
                         <Link href="/login">Iniciar Sesión</Link>
                       </Button>
                       <Button asChild variant="ghost">

@@ -116,14 +116,14 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
         <div>
 
-          <h2 className="font-serif text-3xl">CALENDARIO DE EVENTOS</h2>
+          <h2 className="text-2xl">CALENDARIO DE EVENTOS</h2>
           <p className="">
             Únete a nuestra comunidad. Presentaciones, firmas de libros y talleres exclusivos para amantes de la lectura.
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {events.map((event) => {
           const Icon = eventTypeIcons[event.type] || Calendar;
           const date = new Date(event.event_date);
@@ -134,12 +134,12 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
           const isBooked = bookedEventIds.has(event.id);
 
           return (
-            <Card key={event.id} className="group rounded-[2rem] border-slate-200 dark:border-slate-800 hover:border-primary/30 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/5 bg-white dark:bg-slate-900 overflow-hidden">
+            <Card key={event.id} className="rounded-[2rem] overflow-hidden min-w-[320px]">
               <CardContent className="p-0">
                 <div className="relative p-6">
-                  <div className="absolute top-6 right-6 flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm">
-                    <span className="text-xl font-black leading-none">{day}</span>
-                    <span className="text-[10px] font-bold text-primary mt-1">{month}</span>
+                  <div className="absolute top-6 right-6 flex flex-col items-center justify-center w-14 h-14 rounded-1xl bg-slate-50">
+                    <span className="text-xs font-black leading-none">{day}</span>
+                    <span className="text-xs font-bold text-primary mt-1">{month}</span>
                   </div>
 
                   <Badge className={cn("mb-4 rounded-lg px-2.5 py-1 font-bold border", eventTypeColors[event.type])} variant="outline">
@@ -147,24 +147,26 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
                     {event.type.toUpperCase()}
                   </Badge>
 
-                  <h3 className="text-xl font-bold leading-tight mb-3 line-clamp-2 min-h-[3.5rem] group-hover:text-primary transition-colors">
-                    {event.title}
-                  </h3>
+                  <div>
+                    <h3 className="text-xl font-bold my-5">
+                      {event.title}
+                    </h3>
 
-                  <div className="space-y-2 mb-6">
-                    <div className="flex items-center text-slate-500 dark:text-slate-400 text-sm font-medium">
-                      <Clock className="mr-2 h-4 w-4 text-primary/60" />
-                      {time}h
+                    <div className="space-y-2 mb-6">
+                      <div className="flex items-center">
+                        <Clock className="mr-2 h-4 w-4" />
+                        {time}h
+                      </div>
+                      <div className="flex items-center">
+                        <MapPin className="mr-2 h-4 w-4" />
+                        {event.location}
+                      </div>
                     </div>
-                    <div className="flex items-center text-slate-500 dark:text-slate-400 text-sm font-medium">
-                      <MapPin className="mr-2 h-4 w-4 text-primary/60" />
-                      {event.location}
-                    </div>
+
+                    <p className="text-sm  line-clamp-2 mb-6 h-10">
+                      {event.description}
+                    </p>
                   </div>
-
-                  <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-6 h-10">
-                    {event.description}
-                  </p>
 
                   <Button
                     onClick={() => handleBooking(event)}

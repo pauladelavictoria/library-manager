@@ -39,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${cormorantGaramond.variable} ${inter.variable} antialiased`}>
+        className={`${cormorantGaramond.variable} ${inter.variable} antialiased `}>
         <QueryProvider>
           <NotificationProvider>
             <CartProvider>

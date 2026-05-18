@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import UserAuthState from "./user-auth-state";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { useCart } from "@/hooks/use-cart";
 import { useAuth } from "@/lib/auth-context";
 import FuzzySearch from "./fuzzy-search";
@@ -11,7 +9,6 @@ import { Button } from "./ui/button";
 
 
 export default function Hero() {
-  const pathname = usePathname();
   const { totalItems } = useCart();
   const { user, profile } = useAuth();
 
@@ -23,7 +20,7 @@ export default function Hero() {
   ].filter(Boolean) as { name: string; href: string; }[];
 
   return (
-    <header className="sticky top-0 p-4 pl-8 transition-all duration-300 flex items-center justify-between bg-background">
+    <header className="sticky top-0 p-4 pl-8 transition-all duration-300 flex items-center justify-between bg-background z-50">
       <div className="flex items-center gap-8">
         <Link
           href="/"
@@ -34,7 +31,7 @@ export default function Hero() {
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center space-x-1 gap-[32px]">
+        <nav className="md:flex items-center space-x-1 gap-[32px]">
 
           {navItems.map((item) => (
             <Link
@@ -45,7 +42,7 @@ export default function Hero() {
                 {item.name}
                 {
                   item.href === "/cart" && totalItems > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground animate-in zoom-in">
+                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px]">
                       {totalItems}
                     </span>
                   )
