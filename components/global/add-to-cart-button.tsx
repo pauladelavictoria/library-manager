@@ -21,7 +21,7 @@ export default function AddToCartButton({ book, variant, text = false }: AddToCa
       onClick={() => addToCart(book)}
     >
       <ShoppingCart className="h-4 w-4" />
-      {text && <span className="ml-2"> Añadir al carrito</span>}
+      {text && <span className="ml-sm"> Añadir al carrito</span>}
     </Button>
   );
 }

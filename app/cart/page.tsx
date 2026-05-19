@@ -64,12 +64,12 @@ export default function CartPage() {
 
   if (cart.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-20 text-center">
-        <div className="bg-primary/10 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8 animate-pulse">
+      <div className="container mx-auto px-md py-xl text-center">
+        <div className="bg-primary/10 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-lg animate-pulse">
           <ShoppingBag className="h-12 w-12 text-primary" />
         </div>
-        <h1 className="text-4xl font-black mb-4 tracking-tight">Tu carrito está vacío</h1>
-        <p className="text-lg text-muted-foreground mb-10 leading-relaxed">
+        <h1 className="text-4xl font-black mb-md tracking-tight">Tu carrito está vacío</h1>
+        <p className="text-lg text-muted-foreground mb-lg leading-relaxed">
           Parece que aún no has añadido ningún libro a tu colección. ¡Explora nuestro catálogo y descubre tu próxima aventura literaria!
         </p>
         <Link href="/books">
@@ -82,11 +82,11 @@ export default function CartPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 lg:py-24">
+    <div className="container mx-auto px-md py-lg lg:py-xl">
       <div className="max-w-6xl mx-auto">
-        <header className="flex items-end gap-4 mb-12">
+        <header className="flex items-end gap-4 mb-lg">
           <h1 className="text-5xl font-black tracking-tighter">Tu Carrito</h1>
-          <span className="text-2xl text-muted-foreground font-medium mb-1">({totalItems} {totalItems === 1 ? 'item' : 'items'})</span>
+          <span className="text-2xl text-muted-foreground font-medium mb-xs">({totalItems} {totalItems === 1 ? 'item' : 'items'})</span>
         </header>
 
         <div className="grid lg:grid-cols-3 gap-16">
@@ -94,7 +94,7 @@ export default function CartPage() {
             {cart.map((item) => (
               <div
                 key={item.id}
-                className="group flex flex-col sm:flex-row gap-6 p-6 rounded-3xl bg-white/40 backdrop-blur-md border border-slate-200/50 shadow-sm transition-all duration-300 hover:shadow-xl hover:bg-white/60"
+                className="group flex flex-col sm:flex-row gap-6 p-lg rounded-3xl bg-white/40 backdrop-blur-md border border-slate-200/50 shadow-sm transition-all duration-300 hover:shadow-xl hover:bg-white/60"
               >
                 <div className="w-full sm:w-32 h-48 flex-shrink-0 overflow-hidden rounded-2xl bg-slate-100 shadow-inner">
                   {item.cover_url ? (
@@ -108,15 +108,15 @@ export default function CartPage() {
                   )}
                 </div>
 
-                <div className="flex flex-col flex-1 py-1">
-                  <div className="flex justify-between items-start gap-4 mb-2">
+                <div className="flex flex-col flex-1 py-xs">
+                  <div className="flex justify-between items-start gap-4 mb-sm">
                     <div>
                       <h3 className="font-bold text-xl leading-tight line-clamp-2 group-hover:text-primary transition-colors">{item.title}</h3>
                       <p className="text-muted-foreground font-medium">{item.authors?.[0] || "Autor desconocido"}</p>
                     </div>
                     <button
                       onClick={() => removeFromCart(item.id)}
-                      className="p-2.5 rounded-full bg-slate-100 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200"
+                      className="p-sm.5 rounded-full bg-slate-100 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200"
                       aria-label="Eliminar producto"
                     >
                       <Trash2 className="h-5 w-5" />
@@ -124,7 +124,7 @@ export default function CartPage() {
                   </div>
 
                   <div className="mt-auto flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 bg-background/80 backdrop-blur-sm rounded-full border border-slate-200 p-1.5 shadow-sm">
+                    <div className="flex items-center gap-4 bg-background/80 backdrop-blur-sm rounded-full border border-slate-200 p-xs.5 shadow-sm">
                       <Button
                         variant="ghost"
                         className="h-9 w-9 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
@@ -143,7 +143,7 @@ export default function CartPage() {
                     </div>
 
                     <div className="text-right">
-                      <p className="text-xs text-muted-foreground mb-1 font-medium uppercase tracking-wider">Subtotal</p>
+                      <p className="text-xs text-muted-foreground mb-xs font-medium uppercase tracking-wider">Subtotal</p>
                       <PriceTag
                         price={(item.selling_price || 0) * item.quantity}
                         size="lg"
@@ -155,10 +155,10 @@ export default function CartPage() {
               </div>
             ))}
 
-            <div className="pt-4">
+            <div className="pt-md">
               <Link href="/books">
                 <Button variant="ghost">
-                  <ArrowRight className="mr-2 h-4 w-4 rotate-180 transition-transform group-hover:-translate-x-1" />
+                  <ArrowRight className="mr-sm h-4 w-4 rotate-180 transition-transform group-hover:-translate-x-1" />
                   Continuar Comprando
                 </Button>
               </Link>
@@ -166,14 +166,14 @@ export default function CartPage() {
           </div>
 
           <div className="lg:col-span-1">
-            <div className="sticky top-24 overflow-hidden rounded-[2.5rem] bg-slate-50 border border-slate-200 shadow-2xl p-1">
-              <div className="bg-white rounded-[2.2rem] p-8">
-                <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
+            <div className="sticky top-24 overflow-hidden rounded-[2.5rem] bg-slate-50 border border-slate-200 shadow-2xl p-xs">
+              <div className="bg-white rounded-[2.2rem] p-lg">
+                <h2 className="text-2xl font-bold mb-lg flex items-center gap-2">
                   <ShoppingBag className="h-6 w-6 text-primary" />
                   Resumen
                 </h2>
 
-                <div className="space-y-5 mb-10">
+                <div className="space-y-5 mb-lg">
                   <div className="flex justify-between text-lg">
                     <span className="text-muted-foreground">Subtotal</span>
                     <span className="font-bold">€{subtotal.toFixed(2)}</span>
@@ -199,7 +199,7 @@ export default function CartPage() {
 
                   <div className="flex justify-between text-lg">
                     <span className="text-muted-foreground">Envío</span>
-                    <span className="text-primary font-bold bg-primary/10 px-3 py-0.5 rounded-full text-sm">Gratis</span>
+                    <span className="text-primary font-bold bg-primary/10 px-sm py-0.5 rounded-full text-sm">Gratis</span>
                   </div>
 
                   <div className="flex justify-between text-lg">
@@ -207,14 +207,14 @@ export default function CartPage() {
                     <span className="font-medium">Incluidos</span>
                   </div>
 
-                  <div className="pt-4 pb-2">
+                  <div className="pt-md pb-sm">
                     {!appliedPromo ? (
                       <div className="flex gap-2">
                         <div className="relative flex-1">
                           <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                           <Input
                             placeholder="Código promo"
-                            className="pl-10 rounded-xl bg-slate-100 border-none focus-visible:ring-primary"
+                            className="pl-lg rounded-xl bg-slate-100 border-none focus-visible:ring-primary"
                             value={promoInput}
                             onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
                             onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
@@ -222,7 +222,7 @@ export default function CartPage() {
                         </div>
                         <Button
                           variant="primary"
-                          className="rounded-xl px-4"
+                          className="rounded-xl px-md"
                           onClick={handleApplyPromo}
                           disabled={isApplying || !promoInput.trim()}
                         >
@@ -230,7 +230,7 @@ export default function CartPage() {
                         </Button>
                       </div>
                     ) : (
-                      <div className="bg-green-50 border border-green-200 rounded-2xl p-3 flex items-center justify-between">
+                      <div className="bg-green-50 border border-green-200 rounded-2xl p-sm flex items-center justify-between">
                         <div className="flex items-center gap-2 text-green-700 text-sm font-bold">
                           <CheckCircle2 className="h-4 w-4" />
                           Código {appliedPromo.code} aplicado
@@ -246,9 +246,9 @@ export default function CartPage() {
                     )}
                   </div>
 
-                  <Separator className="my-2" />
+                  <Separator className="my-sm" />
 
-                  <div className="flex justify-between items-baseline pt-2">
+                  <div className="flex justify-between items-baseline pt-sm">
                     <span className="text-xl font-bold">Total</span>
                     <div className="text-right">
                       <span className="text-4xl font-black text-primary">
@@ -259,15 +259,15 @@ export default function CartPage() {
                 </div>
 
                 <Button
-                  className="w-full rounded-2xl py-8 text-xl font-black shadow-xl shadow-primary/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] group"
+                  className="w-full rounded-2xl py-lg text-xl font-black shadow-xl shadow-primary/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] group"
                   onClick={handleCheckout}
                   disabled={isCheckingOut}
                 >
                   {isCheckingOut ? "Procesando..." : "Pagar Ahora"}
-                  {!isCheckingOut && <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover:translate-x-1" />}
+                  {!isCheckingOut && <ArrowRight className="ml-sm h-6 w-6 transition-transform group-hover:translate-x-1" />}
                 </Button>
 
-                <div className="mt-8 flex flex-col gap-4">
+                <div className="mt-lg flex flex-col gap-4">
                   <div className="flex items-center gap-3 text-sm text-muted-foreground font-medium">
                     <div className="h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
                     Garantía de satisfacción de 30 días

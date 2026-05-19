@@ -69,7 +69,7 @@ export default function FuzzySearch() {
         {query && (
           <button
             onClick={() => setQuery("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-xs"
           >
             <X className="h-3 w-3" />
           </button>
@@ -77,8 +77,8 @@ export default function FuzzySearch() {
       </div>
 
       {isOpen && results.length > 0 && (
-        <div className="absolute top-full mt-2 w-full bg-background/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-[60] animate-in fade-in zoom-in-95 duration-200 origin-top">
-          <div className="p-2">
+        <div className="absolute top-full mt-sm w-full bg-background/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-[60] animate-in fade-in zoom-in-95 duration-200 origin-top">
+          <div className="p-sm">
             {results.map((book) => (
               <Link
                 key={book.id}
@@ -87,7 +87,7 @@ export default function FuzzySearch() {
                   setIsOpen(false);
                   setQuery("");
                 }}
-                className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors group"
+                className="flex items-center gap-3 p-sm rounded-xl hover:bg-white/5 transition-colors group"
               >
                 <div className="w-10 h-14 rounded-lg overflow-hidden shrink-0 shadow-sm border border-white/5">
                   {book.cover_url ? (
@@ -103,7 +103,7 @@ export default function FuzzySearch() {
               </Link>
             ))}
           </div>
-          <div className="p-2 border-t border-white/5 bg-white/[0.02]">
+          <div className="p-sm border-t border-white/5 bg-white/[0.02]">
             <Link
               href={`/books?q=${query}`}
               onClick={() => setIsOpen(false)}

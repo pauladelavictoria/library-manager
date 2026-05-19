@@ -164,22 +164,22 @@ export default async function AdminInventoryPage({
   });
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pt-24 pb-12">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50/50 pt-xl pb-lg">
+      <div className="container mx-auto px-md sm:px-lg lg:px-lg">
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-lg">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 px-sm py-xs rounded-full bg-primary/10 text-primary text-sm font-medium mb-md">
               <Package2 className="h-4 w-4" />
               <span>Administración</span>
             </div>
-            <h1 className="text-4xl font-black tracking-tight mb-2">Gestión de la Librería</h1>
+            <h1 className="text-4xl font-black tracking-tight mb-sm">Gestión de la Librería</h1>
             <p className="text-slate-500">Supervisa el rendimiento y gestiona el inventario.</p>
           </div>
         </div>
 
         <Tabs defaultValue="dashboard" className="w-full">
-          <TabsList className="mb-8 w-fit bg-slate-100/50 backdrop-blur-sm border border-slate-200/50">
+          <TabsList className="mb-lg w-fit bg-slate-100/50 backdrop-blur-sm border border-slate-200/50">
             <TabsTrigger value="dashboard" className="gap-2">
               <LayoutDashboard className="h-4 w-4" />
               Vista General
@@ -199,11 +199,11 @@ export default async function AdminInventoryPage({
           </TabsList>
 
           <TabsContent value="dashboard">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-lg">
               <SalesChart data={salesChartData} />
 
               <Card className="rounded-[2rem] border-slate-200 shadow-xl bg-white/50 backdrop-blur-sm overflow-hidden">
-                <CardHeader className="pb-4">
+                <CardHeader className="pb-md">
                   <div className="flex flex-col gap-6">
                     <div className="flex items-center justify-between">
                       <div>
@@ -220,12 +220,12 @@ export default async function AdminInventoryPage({
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent className="pt-2 pb-8 flex flex-col justify-center min-h-[400px]">
+                <CardContent className="pt-sm pb-lg flex flex-col justify-center min-h-[400px]">
                   {sortedBestSellers.length > 0 ? (
                     <BestSellersBubbles data={sortedBestSellers} />
                   ) : (
-                    <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-200 rounded-3xl">
-                      <Trophy className="h-12 w-12 text-slate-300 mb-3" />
+                    <div className="flex flex-col items-center justify-center py-lg text-center border-2 border-dashed border-slate-200 rounded-3xl">
+                      <Trophy className="h-12 w-12 text-slate-300 mb-sm" />
                       <p className="text-slate-500 font-medium">No hay ventas registradas para este filtro</p>
                     </div>
                   )}
@@ -235,8 +235,8 @@ export default async function AdminInventoryPage({
           </TabsContent>
 
           <TabsContent value="marketing">
-            <div className="mb-12">
-              <div className="flex items-center justify-between mb-6">
+            <div className="mb-lg">
+              <div className="flex items-center justify-between mb-lg">
                 <div className="flex items-center gap-2">
                   <div className="h-8 w-1 bg-primary rounded-full" />
                   <h2 className="text-2xl font-bold tracking-tight">Rendimiento de Promociones</h2>
@@ -246,27 +246,27 @@ export default async function AdminInventoryPage({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-lg">
                 <Card className="rounded-3xl border-slate-200 shadow-lg bg-emerald-500/5 border-emerald-500/10">
-                  <CardHeader className="pb-2">
+                  <CardHeader className="pb-sm">
                     <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Ahorro Total Clientes</CardDescription>
                     <CardTitle className="text-3xl font-black text-emerald-600">€{totalDiscountGiven.toFixed(2)}</CardTitle>
                   </CardHeader>
                 </Card>
                 <Card className="rounded-3xl border-slate-200 shadow-lg">
-                  <CardHeader className="pb-2">
+                  <CardHeader className="pb-sm">
                     <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Cupones Activos</CardDescription>
                     <CardTitle className="text-3xl font-black">{activePromosCount}</CardTitle>
                   </CardHeader>
                 </Card>
                 <Card className="rounded-3xl border-slate-200 shadow-lg">
-                  <CardHeader className="pb-2">
+                  <CardHeader className="pb-sm">
                     <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Pedidos con Cupón</CardDescription>
                     <CardTitle className="text-3xl font-black">{promoPerformance.reduce((sum, p) => sum + (p.usage_count || 0), 0)}</CardTitle>
                   </CardHeader>
                 </Card>
                 <Card className="rounded-3xl border-slate-200 shadow-lg">
-                  <CardHeader className="pb-2">
+                  <CardHeader className="pb-sm">
                     <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Ingresos vía Promo</CardDescription>
                     <CardTitle className="text-3xl font-black text-primary">€{promoPerformance.reduce((sum, p) => sum + (p.total_revenue || 0), 0).toFixed(2)}</CardTitle>
                   </CardHeader>
@@ -277,20 +277,20 @@ export default async function AdminInventoryPage({
                 <Table>
                   <TableHeader>
                     <TableRow className="hover:bg-transparent border-slate-100">
-                      <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Código</TableHead>
+                      <TableHead className="pl-lg font-bold uppercase text-[10px] tracking-widest text-slate-400 py-lg">Código</TableHead>
                       <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Descuento</TableHead>
                       <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Usos</TableHead>
                       <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Total Descontado</TableHead>
                       <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Ingresos (Neto)</TableHead>
-                      <TableHead className="pr-8 text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
+                      <TableHead className="pr-lg text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {promoPerformance.map((promo) => (
                       <TableRow key={promo.code} className="group border-slate-100 hover:bg-slate-50/50 transition-colors">
-                        <TableCell className="pl-8 py-4">
+                        <TableCell className="pl-lg py-md">
                           <div className="flex items-center gap-3">
-                            <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                            <div className="p-sm rounded-lg bg-primary/10 text-primary">
                               <Tag className="h-4 w-4" />
                             </div>
                             <div>
@@ -301,7 +301,7 @@ export default async function AdminInventoryPage({
                                   {promo.isActive ? "Activo" : (promo.is_one_time && promo.usage_count > 0 ? "Usado" : "Inactivo")}
                                 </p>
                                 {promo.is_one_time && (
-                                  <Badge variant="secondary" className="text-[8px] h-3.5 px-1 rounded bg-amber-100 text-amber-700 border-none font-black uppercase">
+                                  <Badge variant="secondary" className="text-[8px] h-3.5 px-xs rounded bg-amber-100 text-amber-700 border-none font-black uppercase">
                                     Único
                                   </Badge>
                                 )}
@@ -323,7 +323,7 @@ export default async function AdminInventoryPage({
                         <TableCell className="text-center">
                           <p className="font-black text-lg tracking-tight">€{(promo.total_revenue || 0).toFixed(2)}</p>
                         </TableCell>
-                        <TableCell className="pr-8 text-right">
+                        <TableCell className="pr-lg text-right">
                           <PromoActions promo={promo} />
                         </TableCell>
                       </TableRow>
@@ -335,8 +335,8 @@ export default async function AdminInventoryPage({
           </TabsContent>
 
           <TabsContent value="events">
-            <div className="mb-12">
-              <div className="flex items-center justify-between mb-6">
+            <div className="mb-lg">
+              <div className="flex items-center justify-between mb-lg">
                 <div className="flex items-center gap-2">
                   <div className="h-8 w-1 bg-primary rounded-full" />
                   <h2 className="text-2xl font-bold tracking-tight">Agenda Cultural</h2>
@@ -348,12 +348,12 @@ export default async function AdminInventoryPage({
                 <Table>
                   <TableHeader>
                     <TableRow className="hover:bg-transparent border-slate-100">
-                      <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Evento</TableHead>
+                      <TableHead className="pl-lg font-bold uppercase text-[10px] tracking-widest text-slate-400 py-lg">Evento</TableHead>
                       <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Tipo</TableHead>
                       <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Fecha y Hora</TableHead>
                       <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Ubicación</TableHead>
                       <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Asistentes</TableHead>
-                      <TableHead className="pr-8 text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
+                      <TableHead className="pr-lg text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -363,11 +363,11 @@ export default async function AdminInventoryPage({
                           key={event.id}
                           className={cn( "group border-slate-100 transition-colors", event.isPast ? "bg-slate-50/30 opacity-60" : "hover:bg-slate-50/50 " )}
                         >
-                          <TableCell className="pl-8 py-4">
+                          <TableCell className="pl-lg py-md">
                             <div className="flex items-center gap-2">
                               <p className="font-black tracking-tight">{event.title}</p>
                               {event.isPast && (
-                                <Badge variant="secondary" className="text-[9px] h-4 rounded-sm bg-slate-200 text-slate-500 font-bold border-none px-1 uppercase tracking-tighter">
+                                <Badge variant="secondary" className="text-[9px] h-4 rounded-sm bg-slate-200 text-slate-500 font-bold border-none px-xs uppercase tracking-tighter">
                                   Finalizado
                                 </Badge>
                               )}
@@ -400,11 +400,11 @@ export default async function AdminInventoryPage({
                             </div>
                           </TableCell>
                           <TableCell className="text-center">
-                            <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 font-black text-sm">
+                            <div className="inline-flex items-center justify-center px-sm py-xs rounded-full bg-emerald-50 text-emerald-600 font-black text-sm">
                               {event.attendees}
                             </div>
                           </TableCell>
-                          <TableCell className="pr-8 text-right">
+                          <TableCell className="pr-lg text-right">
                             <EventActions event={event} />
                           </TableCell>
                         </TableRow>
@@ -425,7 +425,7 @@ export default async function AdminInventoryPage({
           <TabsContent value="catalog">
             <main className="w-full">
               <Card className="rounded-[2rem] border-slate-200 shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
-                <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-6 bg-white px-8 py-8">
+                <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-lg bg-white px-lg py-lg">
                   <div>
                     <CardTitle className="text-3xl font-black">Catálogo de Inventario</CardTitle>
                     <CardDescription className="font-medium">Gestión total de los libros y existencias de la librería.</CardDescription>
@@ -433,7 +433,7 @@ export default async function AdminInventoryPage({
                   <CreateBookDialog />
                 </CardHeader>
                 <CardContent className="p-0">
-                  <div className="p-8 border-b border-slate-100">
+                  <div className="p-lg border-b border-slate-100">
                     <InventoryFilters
                       authors={filterOptions.authors}
                       categories={filterOptions.categories}
@@ -443,13 +443,13 @@ export default async function AdminInventoryPage({
                   <Table>
                     <TableHeader>
                       <TableRow className="hover:bg-transparent border-slate-100">
-                        <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Libro</TableHead>
+                        <TableHead className="pl-lg font-bold uppercase text-[10px] tracking-widest text-slate-400 py-lg">Libro</TableHead>
                         <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Estado</TableHead>
                         <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Reco</TableHead>
                         <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Ventas</TableHead>
                         <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Stock</TableHead>
                         <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Precio</TableHead>
-                        <TableHead className="pr-8 text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
+                        <TableHead className="pr-lg text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -460,7 +460,7 @@ export default async function AdminInventoryPage({
                             key={book.id}
                             className={cn( "group transition-colors border-slate-50 ", isLowStock ? "bg-red-50/50 hover:bg-red-100/50 " : "hover:bg-slate-50 " )}
                           >
-                            <TableCell className="pl-8 py-6">
+                            <TableCell className="pl-lg py-lg">
                               <div className="flex items-center gap-4">
                                 <Link href={`/books/${book.id}`}>
                                   <div className="w-12 h-16 cursor-pointer rounded-lg overflow-hidden shrink-0 shadow-sm border border-slate-100">
@@ -479,11 +479,11 @@ export default async function AdminInventoryPage({
                             </TableCell>
                             <TableCell>
                               {isLowStock ? (
-                                <Badge variant="destructive" className="rounded-lg px-2.5 py-1 font-black text-[10px] tracking-wider animate-pulse shadow-sm">
+                                <Badge variant="destructive" className="rounded-lg px-sm.5 py-xs font-black text-[10px] tracking-wider animate-pulse shadow-sm">
                                   CRÍTICO
                                 </Badge>
                               ) : (
-                                <Badge variant="outline" className="rounded-lg px-2.5 py-1 font-bold text-[10px] tracking-wider text-emerald-600 border-emerald-500/20 bg-emerald-500/10">
+                                <Badge variant="outline" className="rounded-lg px-sm.5 py-xs font-bold text-[10px] tracking-wider text-emerald-600 border-emerald-500/20 bg-emerald-500/10">
                                   SALUDABLE
                                 </Badge>
                               )}
@@ -512,7 +512,7 @@ export default async function AdminInventoryPage({
                             <TableCell className="font-bold text-base text-slate-600">
                               €{book.selling_price || '0.00'}
                             </TableCell>
-                            <TableCell className="pr-8 text-right">
+                            <TableCell className="pr-lg text-right">
                               <BookActions book={book} />
                             </TableCell>
                           </TableRow>
@@ -521,14 +521,14 @@ export default async function AdminInventoryPage({
                     </TableBody>
                   </Table>
 
-                  <div className="p-8 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
+                  <div className="p-lg bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
                     <p className="text-sm font-medium text-slate-500">
                       Mostrando <span className="font-bold text-slate-900">{(currentPage - 1) * itemsPerPage + 1}</span> a <span className="font-bold text-slate-900">{Math.min(currentPage * itemsPerPage, totalItems)}</span> de <span className="font-bold text-slate-900">{totalItems}</span> libros
                     </p>
                     <div className="flex items-center gap-2">
                       <Link
                         href={`?${new URLSearchParams({ ...params, page: (currentPage - 1).toString() }).toString()}`}
-                        className={cn( "p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-sm", currentPage === 1 && "pointer-events-none opacity-50" )}
+                        className={cn( "p-sm rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-sm", currentPage === 1 && "pointer-events-none opacity-50" )}
                       >
                         <ChevronLeft className="h-5 w-5" />
                       </Link>
@@ -545,11 +545,11 @@ export default async function AdminInventoryPage({
                             </Link>
                           );
                         })}
-                        {totalPages > 5 && <span className="px-2">...</span>}
+                        {totalPages > 5 && <span className="px-sm">...</span>}
                       </div>
                       <Link
                         href={`?${new URLSearchParams({ ...params, page: (currentPage + 1).toString() }).toString()}`}
-                        className={cn( "p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-sm", currentPage === totalPages && "pointer-events-none opacity-50" )}
+                        className={cn( "p-sm rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-sm", currentPage === totalPages && "pointer-events-none opacity-50" )}
                       >
                         <ChevronRight className="h-5 w-5" />
                       </Link>

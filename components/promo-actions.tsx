@@ -96,7 +96,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
       }}>
         <DialogContent className="sm:max-w-[425px] rounded-[2.5rem] border-none shadow-2xl overflow-hidden p-0">
           {showEditSuccess ? (
-            <div className="p-10 text-center space-y-6 bg-white/90 backdrop-blur-xl">
+            <div className="p-lg text-center space-y-6 bg-white/90 backdrop-blur-xl">
               <div className="relative mx-auto w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
                 <CheckCircle2 className="h-10 w-10 text-blue-500" />
               </div>
@@ -114,7 +114,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
               </Button>
             </div>
           ) : (
-            <div className="p-8 space-y-6">
+            <div className="p-lg space-y-6">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-black">Editar Cupón</DialogTitle>
                 <DialogDescription className="font-medium text-slate-500">
@@ -143,7 +143,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
                     required
                   />
                 </div>
-                <DialogFooter className="pt-2 gap-2">
+                <DialogFooter className="pt-sm gap-2">
                   <Button type="button" variant="ghost" onClick={() => setIsEditing(false)} >Cancelar</Button>
                   <Button type="submit" disabled={isLoading} >
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Guardar"}
@@ -162,7 +162,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
       }}>
         <DialogContent className="sm:max-w-[400px] rounded-[2.5rem] border-none shadow-2xl overflow-hidden p-0">
           {showDeleteSuccess ? (
-            <div className="p-10 text-center space-y-6 bg-white/90 backdrop-blur-xl">
+            <div className="p-lg text-center space-y-6 bg-white/90 backdrop-blur-xl">
               <div className="relative mx-auto w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
                 <Trash2 className="h-10 w-10 text-red-500" />
               </div>
@@ -173,7 +173,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
               <Button onClick={() => setShowDeleteConfirm(false)} >Cerrar</Button>
             </div>
           ) : (
-            <div className="p-10 text-center space-y-6">
+            <div className="p-lg text-center space-y-6">
               <div className="mx-auto w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center">
                 <AlertTriangle className="h-10 w-10 text-red-500" />
               </div>

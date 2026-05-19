@@ -29,7 +29,7 @@ export function CookieConsent() {
 
   return (
     <div className="fixed bottom-6 left-6 right-6 md:left-auto md:max-w-md z-[100] animate-in fade-in slide-in-from-bottom-10 duration-700 ease-out">
-      <div className="relative overflow-hidden rounded-[2.5rem] border border-white/20 bg-white/70 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-6 md:p-8">
+      <div className="relative overflow-hidden rounded-[2.5rem] border border-white/20 bg-white/70 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-lg md:p-lg">
 
         <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
@@ -37,14 +37,14 @@ export function CookieConsent() {
         <div className="relative flex flex-col gap-6">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-primary/10 text-primary">
+              <div className="p-sm rounded-2xl bg-primary/10 text-primary">
                 <Cookie className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-black tracking-tight">Preferencias de Cookies</h3>
             </div>
             <button
               onClick={() => setIsVisible(false)}
-              className="p-2 rounded-full hover:bg-slate-100 transition-colors"
+              className="p-sm rounded-full hover:bg-slate-100 transition-colors"
             >
               <X className="h-4 w-4 text-slate-400" />
             </button>
@@ -69,7 +69,7 @@ export function CookieConsent() {
             </Button>
           </div>
 
-          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest pt-2">
+          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest pt-sm">
             <ShieldCheck className="h-3 w-3" />
             <span>Navegación Segura y Privada</span>
           </div>

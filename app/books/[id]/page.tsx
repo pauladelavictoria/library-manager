@@ -24,11 +24,11 @@ export default async function BookDetailPage({
   const res = await fetch(apiUrl, { cache: 'no-store' });
   if (!res.ok) {
     return (
-      <div className="container mx-auto px-4 py-20 text-center">
-        <h1 className="text-3xl font-bold mb-6">Libro no encontrado</h1>
+      <div className="container mx-auto px-md py-xl text-center">
+        <h1 className="text-3xl font-bold mb-lg">Libro no encontrado</h1>
         <Link href="/books">
           <Button variant="ghost">
-            <ArrowLeft className="mr-2 h-4 w-4" />
+            <ArrowLeft className="mr-sm h-4 w-4" />
             Volver al catálogo
           </Button>
         </Link>
@@ -40,21 +40,21 @@ export default async function BookDetailPage({
   const authorName = book.authors && book.authors.length > 0 ? book.authors[0] : "Autor desconocido";
 
   return (
-    <div className="p-14 bg-[url(/images/background.jpg)] bg-contain bg-no-repeat">
-      <div className="container mx-auto px-4 py-12 lg:py-16">
+    <div className="p-xl bg-[url(/images/background.jpg)] bg-contain bg-no-repeat">
+      <div className="container mx-auto px-md py-lg lg:py-xl">
         <Link
           href="/books"
-          className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-12 group font-medium"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-lg group font-medium"
         >
           <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
           Volver al catálogo
         </Link>
 
 
-        <div className="mb-10">
-          <div className="flex flex-wrap gap-3 mb-8">
+        <div className="mb-lg">
+          <div className="flex flex-wrap gap-3 mb-lg">
             {book.categories?.map(cat => (
-              <span key={cat} className="px-5 py-1.5 rounded-full bg-white text-xs font-black uppercase tracking-widest border border-primary/20">
+              <span key={cat} className="px-md py-xs.5 rounded-full bg-white text-xs font-black uppercase tracking-widest border border-primary/20">
                 {cat}
               </span>
             ))}
@@ -73,7 +73,7 @@ export default async function BookDetailPage({
 
           </div>
 
-          <div className="grid grid-cols-2 gap-10 my-10">
+          <div className="grid grid-cols-2 gap-10 my-lg">
             <div className="overflow-hidden">
               {book.cover_url ? (
                 <img
@@ -92,7 +92,7 @@ export default async function BookDetailPage({
               <SynopsisToggle description={book.description} />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-10 my-10">
+          <div className="grid grid-cols-2 gap-10 my-lg">
             <PriceDisplay book={book} />
             <PaymentConditions />
           </div>

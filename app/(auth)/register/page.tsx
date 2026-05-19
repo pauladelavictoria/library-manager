@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 
 export default function SignupPage() {
   return (
-    <div className="p-14 bg-[url(/images/background.jpg)] bg-cover">
-      <div className="space-y-2 bg-background rounded-lg w-full max-w-md mx-auto p-10">
+    <div className="p-xl bg-[url(/images/background.jpg)] bg-cover">
+      <div className="space-y-2 bg-background rounded-lg w-full max-w-md mx-auto p-lg">
         <h1 className="text-2xl font-semibold tracking-tight">
           Create an account
         </h1>
@@ -18,7 +18,7 @@ export default function SignupPage() {
         </p>
         <RegisterForm />
       </div>
-      <p className="px-8 text-center text-sm text-muted-foreground">
+      <p className="px-lg text-center text-sm text-muted-foreground">
         By clicking continue, you agree to our terms of service and privacy
         policy.
       </p>

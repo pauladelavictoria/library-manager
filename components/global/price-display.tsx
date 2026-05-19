@@ -22,13 +22,13 @@ export default function PriceDisplay({ book }: PriceDisplayProps) {
 
   return (
     <div className="flex flex-col gap-4 bg-transparent border-cardDark rounded-2xl w-fit">
-      <div className="flex items-center gap-10 p-8">
+      <div className="flex items-center gap-10 p-lg">
         <div>
           <p className="text-[10px]">
             {appliedPromo ? "Precio con Descuento" : "Precio"}
           </p>
           <PriceTag price={originalPrice} size="xl" />
-          <div className="mt-6">
+          <div className="mt-lg">
             <AddToCartButton book={book} variant="primary" text />
           </div>
         </div>
@@ -43,13 +43,13 @@ export default function PriceDisplay({ book }: PriceDisplayProps) {
               {book.stock_quantity > 0 ? "Disponible" : "Agotado"}
             </p>
           </div>
-          <p className="text-xs text-muted-foreground mt-1 font-medium">{book.stock_quantity} unidades restantes</p>
+          <p className="text-xs text-muted-foreground mt-xs font-medium">{book.stock_quantity} unidades restantes</p>
         </div>
 
       </div>
 
       {appliedPromo && (
-        <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 rounded-2xl animate-in fade-in slide-in-from-top-2">
+        <div className="flex items-center gap-2 px-md py-sm bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 rounded-2xl animate-in fade-in slide-in-from-top-2">
           <Tag className="h-4 w-4" />
           <span className="text-sm font-bold uppercase tracking-wider">
             Código {appliedPromo.code} aplicado (-{appliedPromo.discount_amount}%)

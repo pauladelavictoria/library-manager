@@ -71,7 +71,7 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
             placeholder="Título o ISBN..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-9 rounded-xl border-slate-200 bg-slate-50 w-full"
+            className="pl-lg rounded-xl border-slate-200 bg-slate-50 w-full"
           />
         </div>
 
@@ -132,7 +132,7 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
             onClick={clearFilters}
             className="rounded-full text-xs font-bold hover:bg-slate-200"
           >
-            <X className="mr-1 h-3 w-3" />
+            <X className="mr-xs h-3 w-3" />
             Limpiar
           </Button>
         )}

@@ -21,7 +21,7 @@ export function BookSort({ currentSort }: { currentSort: string }) {
       <select
         defaultValue={currentSort}
         onChange={(e) => handleSortChange(e.target.value)}
-        className="text-sm border-slate-200 bg-white rounded-lg focus:ring-primary focus:border-primary p-2 pr-8 outline-none cursor-pointer hover:border-primary/50 transition-colors"
+        className="text-sm border-slate-200 bg-white rounded-lg focus:ring-primary focus:border-primary p-sm pr-lg outline-none cursor-pointer hover:border-primary/50 transition-colors"
       >
         <option value="created_at">Novedades</option>
         <option value="price">Precio</option>

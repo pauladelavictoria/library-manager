@@ -40,8 +40,8 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
 
   return (
     <Card className="rounded-[2.5rem] border-slate-200/60 shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
-      <CardHeader className="bg-gradient-to-br from-primary/10 to-transparent pb-8">
-        <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center mb-4 border-4 border-white shadow-lg">
+      <CardHeader className="bg-gradient-to-br from-primary/10 to-transparent pb-lg">
+        <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center mb-md border-4 border-white shadow-lg">
           <span className="text-2xl font-black text-primary">
             {formData.full_name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
           </span>
@@ -65,14 +65,14 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
           </>
         )}
       </CardHeader>
-      <CardContent className="pt-8 space-y-6">
+      <CardContent className="pt-lg space-y-6">
         <div className="space-y-1">
           <p className="text-xs font-black uppercase tracking-wider text-muted-foreground">Teléfono</p>
           {isEditing ? (
             <Input
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="rounded-xl border-slate-200 mt-2"
+              className="rounded-xl border-slate-200 mt-sm"
               placeholder="Tu número de teléfono"
             />
           ) : (
@@ -96,7 +96,7 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
             <>
               <Button 
                 variant="outline" 
-                className="flex-1 rounded-2xl py-6 font-bold"
+                className="flex-1 rounded-2xl py-lg font-bold"
                 onClick={() => {
                   setIsEditing(false);
                   setFormData({
@@ -109,7 +109,7 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
                 Cancelar
               </Button>
               <Button 
-                className="flex-1 rounded-2xl py-6 font-bold shadow-lg shadow-primary/20"
+                className="flex-1 rounded-2xl py-lg font-bold shadow-lg shadow-primary/20"
                 onClick={handleSave}
                 disabled={isPending}
               >
@@ -119,7 +119,7 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
           ) : (
             <Button 
               variant="outline" 
-              className="w-full rounded-2xl py-6 font-bold hover:bg-primary/5 hover:text-primary border-slate-200 transition-all"
+              className="w-full rounded-2xl py-lg font-bold hover:bg-primary/5 hover:text-primary border-slate-200 transition-all"
               onClick={() => setIsEditing(true)}
             >
               Editar Perfil

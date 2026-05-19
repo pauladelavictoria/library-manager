@@ -107,7 +107,7 @@ export default function LoginForm() {
           <Button type="submit" variant="ghost" disabled={isPending}>
             {isPending ? (
               <div className="flex items-center justify-center gap-1">
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                <Icons.spinner className="mr-sm h-4 w-4 animate-spin" />
                 <span>Verificando...</span>
               </div>
             ) : (
@@ -129,9 +129,9 @@ export default function LoginForm() {
 
         <Button variant="primary" disabled={isPending}>
           {isPending ? (
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            <Icons.spinner className="mr-sm h-4 w-4 animate-spin" />
           ) : (
-            <Icons.google className="mr-2 h-4 w-4" />
+            <Icons.google className="mr-sm h-4 w-4" />
           )}
           Google
         </Button>

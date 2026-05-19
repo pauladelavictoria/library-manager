@@ -27,7 +27,7 @@ export default function Hero() {
   ].filter(Boolean) as { name: string; href: string; }[];
 
   return (
-    <header className="sticky top-0 p-4 pl-8 transition-all duration-300 flex items-center justify-between bg-background z-50">
+    <header className="sticky top-0 p-md pl-lg transition-all duration-300 flex items-center justify-between bg-background z-50">
       <div className="flex items-center gap-8">
         <Link
           href="/"
@@ -38,7 +38,7 @@ export default function Hero() {
           </span>
         </Link>
 
-        <nav className="md:flex items-center space-x-1 gap-[32px] pt-4">
+        <nav className="md:flex items-center space-x-1 gap-[32px] pt-md">
 
           {navItems.map((item) => (
             <Link

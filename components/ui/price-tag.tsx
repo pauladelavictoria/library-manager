@@ -41,7 +41,7 @@ export default function PriceTag({
       <div className="flex items-baseline gap-2">
         <div className="flex flex-col">
           {hasDiscount && (
-            <span className={cn("font-bold text-muted-foreground line-through opacity-50 leading-none mb-1", originalSizeClasses[size])}>
+            <span className={cn("font-bold text-muted-foreground line-through opacity-50 leading-none mb-xs", originalSizeClasses[size])}>
               €{price.toFixed(2)}
             </span>
           )}
@@ -51,7 +51,7 @@ export default function PriceTag({
         </div>
 
         {hasDiscount && showDiscountBadge && (
-          <span className="ml-2 px-2 py-0.5 bg-emerald-500/10 text-emerald-600 text-[10px] font-black uppercase tracking-wider rounded-md border border-emerald-500/20">
+          <span className="ml-sm px-sm py-0.5 bg-emerald-500/10 text-emerald-600 text-[10px] font-black uppercase tracking-wider rounded-md border border-emerald-500/20">
             -{appliedPromo?.discount_amount}%
           </span>
         )}

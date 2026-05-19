@@ -67,7 +67,7 @@ export function CreatePromoDialog() {
         if (!val) setTimeout(() => setShowSuccess(false), 300);
       }}>
         <DialogContent className="sm:max-w-[400px] border-none bg-white/80 backdrop-blur-xl p-0 overflow-hidden rounded-[2.5rem] shadow-2xl">
-          <div className="p-10 text-center space-y-6">
+          <div className="p-lg text-center space-y-6">
             <DialogTitle className="sr-only">Cupón creado con éxito</DialogTitle>
             <div className="relative mx-auto w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
               <div className="absolute inset-0 bg-emerald-500/20 rounded-full animate-ping opacity-25" />
@@ -79,8 +79,8 @@ export function CreatePromoDialog() {
                 El cupón ha sido activado correctamente.
               </p>
             </div>
-            <div className="bg-slate-50 p-4 rounded-2xl border border-dashed border-slate-200">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">CÓDIGO ACTIVO</p>
+            <div className="bg-slate-50 p-md rounded-2xl border border-dashed border-slate-200">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-xs">CÓDIGO ACTIVO</p>
               <p className="text-3xl font-black text-primary tracking-widest">{createdCode}</p>
             </div>
             <Button
@@ -102,7 +102,7 @@ export function CreatePromoDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button >
-          <Plus className="mr-2 h-4 w-4" />
+          <Plus className="mr-sm h-4 w-4" />
           Nuevo Cupón
         </Button>
       </DialogTrigger>
@@ -116,7 +116,7 @@ export function CreatePromoDialog() {
             Define un nuevo cupón de descuento para tus clientes.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-6 py-4">
+        <form onSubmit={handleSubmit} className="space-y-6 py-md">
           <div className="space-y-2">
             <Label htmlFor="code" className="text-xs font-black uppercase tracking-widest text-slate-400">
               Código del Cupón
@@ -127,7 +127,7 @@ export function CreatePromoDialog() {
                 id="code"
                 name="code"
                 placeholder="EJ: VERANO25"
-                className="pl-10 rounded-xl border-slate-200 uppercase font-bold"
+                className="pl-lg rounded-xl border-slate-200 uppercase font-bold"
                 required
               />
             </div>
@@ -146,7 +146,7 @@ export function CreatePromoDialog() {
                   min="1"
                   max="100"
                   placeholder="10"
-                  className="pl-10 rounded-xl border-slate-200 font-bold"
+                  className="pl-lg rounded-xl border-slate-200 font-bold"
                   required
                 />
               </div>
@@ -161,13 +161,13 @@ export function CreatePromoDialog() {
                   id="expiry"
                   name="expiry"
                   type="date"
-                  className="pl-10 rounded-xl border-slate-200 font-bold"
+                  className="pl-lg rounded-xl border-slate-200 font-bold"
                   required
                 />
               </div>
             </div>
           </div>
-          <div className="flex items-center space-x-3 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+          <div className="flex items-center space-x-3 p-md rounded-2xl bg-slate-50 border border-slate-100">
             <input
               type="checkbox"
               id="is_one_time"
@@ -182,7 +182,7 @@ export function CreatePromoDialog() {
           <DialogFooter>
             <Button
               type="submit"
-              className="w-full rounded-xl py-6 font-black text-lg bg-primary hover:scale-[1.02] transition-all"
+              className="w-full rounded-xl py-lg font-black text-lg bg-primary hover:scale-[1.02] transition-all"
               disabled={isLoading}
             >
               {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Activar Cupón"}

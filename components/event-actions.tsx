@@ -92,7 +92,7 @@ export function EventActions({ event }: { event: Event }) {
       }}>
         <DialogContent className="sm:max-w-[500px] rounded-[2.5rem] border-none shadow-2xl overflow-hidden p-0">
           {showEditSuccess ? (
-            <div className="p-10 text-center space-y-6 bg-white/90 backdrop-blur-xl">
+            <div className="p-lg text-center space-y-6 bg-white/90 backdrop-blur-xl">
               <DialogTitle className="sr-only">Evento actualizado con éxito</DialogTitle>
               <div className="relative mx-auto w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
                 <CheckCircle2 className="h-10 w-10 text-emerald-500" />
@@ -106,7 +106,7 @@ export function EventActions({ event }: { event: Event }) {
               <Button onClick={() => setIsEditing(false)}>Cerrar</Button>
             </div>
           ) : (
-            <div className="p-8 space-y-6">
+            <div className="p-lg space-y-6">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-black">Editar Evento</DialogTitle>
                 <DialogDescription className="font-medium text-slate-500">Ajusta los detalles de la actividad.</DialogDescription>
@@ -116,7 +116,7 @@ export function EventActions({ event }: { event: Event }) {
                   <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Título</Label>
                   <div className="relative">
                     <Type className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                    <Input name="title" defaultValue={event.title} className="pl-10 h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                    <Input name="title" defaultValue={event.title} className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -144,10 +144,10 @@ export function EventActions({ event }: { event: Event }) {
                   <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Ubicación</Label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                    <Input name="location" defaultValue={event.location} className="pl-10 h-11 rounded-xl bg-slate-50 border-none font-bold" />
+                    <Input name="location" defaultValue={event.location} className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" />
                   </div>
                 </div>
-                <DialogFooter className="pt-4 gap-2">
+                <DialogFooter className="pt-md gap-2">
                   <Button type="button" variant="ghost" onClick={() => setIsEditing(false)}>Cancelar</Button>
                   <Button type="submit" disabled={isLoading}>
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Guardar"}
@@ -165,7 +165,7 @@ export function EventActions({ event }: { event: Event }) {
       }}>
         <DialogContent className="sm:max-w-[400px] rounded-[2.5rem] border-none shadow-2xl overflow-hidden p-0">
           {showDeleteSuccess ? (
-            <div className="p-10 text-center space-y-6 bg-white/90 backdrop-blur-xl">
+            <div className="p-lg text-center space-y-6 bg-white/90 backdrop-blur-xl">
               <div className="relative mx-auto w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
                 <DialogTitle className="sr-only">Evento eliminado con éxito</DialogTitle>
                 <Trash2 className="h-10 w-10 text-red-500" />
@@ -177,7 +177,7 @@ export function EventActions({ event }: { event: Event }) {
               <Button onClick={() => setShowDeleteConfirm(false)}>Cerrar</Button>
             </div>
           ) : (
-            <div className="p-10 text-center space-y-6">
+            <div className="p-lg text-center space-y-6">
               <div className="mx-auto w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center">
                 <AlertTriangle className="h-10 w-10 text-red-500" />
               </div>

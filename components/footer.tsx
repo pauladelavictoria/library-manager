@@ -8,9 +8,9 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-slate-950 text-background p-8">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-4">
+    <footer className="bg-slate-950 text-background p-lg">
+      <div className="container mx-auto px-lg">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-md">
           <div className="space-y-6">
             <Link href="/">
               <p className="text-2xl">Librería Éter</p>
@@ -44,7 +44,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold uppercase text-xs mb-6">Navegación</h4>
+            <h4 className="font-bold uppercase text-xs mb-lg">Navegación</h4>
             <ul className="space-y-4 text-sm">
               <li><Link href="/" className="hover:underline">Inicio</Link></li>
               <li><Link href="/books" className="hover:underline">Catálogo Completo</Link></li>
@@ -54,7 +54,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold uppercase tracking-widest text-xs mb-6">Información</h4>
+            <h4 className="font-bold uppercase tracking-widest text-xs mb-lg">Información</h4>
             <ul className="space-y-4 text-sm">
               <li className="flex items-start gap-3">
                 <div>
@@ -72,9 +72,9 @@ export function Footer() {
             </ul>
           </div>
 
-          <div className="bg-slate-900/30 p-8 rounded-3xl border border-slate-800">
-            <h4 className="font-bold mb-2">¿Buscas algo especial?</h4>
-            <p className="text-xs mb-6 text-slate-500">Únete a nuestro club de lectura y recibe novedades semanales.</p>
+          <div className="bg-slate-900/30 p-lg rounded-3xl border border-slate-800">
+            <h4 className="font-bold mb-sm">¿Buscas algo especial?</h4>
+            <p className="text-xs mb-lg text-slate-500">Únete a nuestro club de lectura y recibe novedades semanales.</p>
             <Link href="/register">
               <Button variant="ghost">
                 Registrarme Gratis
@@ -83,7 +83,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium uppercase tracking-tighter">
+        <div className="pt-lg border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium uppercase tracking-tighter">
           <p>© {currentYear} Librería Éter. Todos los derechos imaginados.</p>
           <div className="flex items-center gap-1">
             Hecho con <Heart className="h-3 w-3 text-red-500 fill-current" /> por amantes de los libros

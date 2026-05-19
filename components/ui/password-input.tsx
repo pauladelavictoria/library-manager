@@ -9,7 +9,7 @@ const PasswordInput = React.forwardRef<
 >(({ className, ...props }, ref) => {
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
   return (
-    <div className="flex h-9 items-center justify-between gap-1 rounded-md border border-input bg-white px-3 py-1 shadow-sm transition-colors">
+    <div className="flex h-9 items-center justify-between gap-1 rounded-md border border-input bg-white px-sm py-xs shadow-sm transition-colors">
       <input
         {...props}
         type={showPassword ? "text" : "password"}

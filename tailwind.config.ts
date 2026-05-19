@@ -17,9 +17,23 @@ export default {
 				cardDark: 'hsl(var(--card-background-dark))',
 			},
 			borderRadius: {
-				lg: 'var(--radius)',
+				sm: 'calc(var(--radius) - 4px)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				lg: 'var(--radius)',
+			},
+			margin: {
+				xs: 'calc(var(--spacing) / 2)',
+				sm: 'var(--spacing)',
+				md: 'calc(var(--spacing) * 2)',
+				lg: 'calc(var(--spacing) * 4)',
+				xl: 'calc(var(--spacing) * 8)',
+			},
+			padding: {
+				xs: 'calc(var(--spacing) / 2)',
+				sm: 'var(--spacing)',
+				md: 'calc(var(--spacing) * 2)',
+				lg: 'calc(var(--spacing) * 4)',
+				xl: 'calc(var(--spacing) * 8)',
 			},
 			fontFamily: {
 				sans: ['var(--font-inter)', 'sans-serif'],

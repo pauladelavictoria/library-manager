@@ -21,8 +21,8 @@ const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <Card className="p-3 border-slate-200 shadow-xl bg-white/90 backdrop-blur-md rounded-2xl border">
-        <p className="font-black text-sm mb-1">{data.title}</p>
+      <Card className="p-sm border-slate-200 shadow-xl bg-white/90 backdrop-blur-md rounded-2xl border">
+        <p className="font-black text-sm mb-xs">{data.title}</p>
         <p className="text-xs font-bold text-primary uppercase tracking-widest">
           {data.total} unidades vendidas
         </p>

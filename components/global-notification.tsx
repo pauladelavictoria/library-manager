@@ -56,7 +56,7 @@ export default function GlobalNotification() {
   return (
     <div className={cn( "fixed bottom-6 right-6 z-[100] w-full transition-all duration-500 ease-out", isLarge ? "max-w-2xl" : "max-w-sm", isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-12 opacity-0 scale-95 pointer-events-none" )}>
       <div className={cn( "relative overflow-hidden rounded-[2.5rem] bg-white/90 border backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] ",
-        isLarge ? "p-10" : "p-6",
+        isLarge ? "p-lg" : "p-lg",
         bgColors[type] || bgColors.info
       )}>
         <div className={cn("flex", isLarge ? "gap-8" : "gap-4")}>
@@ -73,21 +73,21 @@ export default function GlobalNotification() {
           </div>
 
           <div className="flex-1 min-w-0">
-            <div className="flex justify-between items-start mb-2">
+            <div className="flex justify-between items-start mb-sm">
               <h4 className={cn( "font-black uppercase tracking-widest", isLarge ? "text-sm" : "text-[10px]", tagColors[type] || tagColors.info )}>
                 {title}
               </h4>
               <button
                 onClick={closeNotification}
-                className="text-slate-400 hover:text-slate-600 transition-colors p-1"
+                className="text-slate-400 hover:text-slate-600 transition-colors p-xs"
               >
                 <X className={isLarge ? "h-6 w-6" : "h-4 w-4"} />
               </button>
             </div>
-            <h3 className={cn( "font-black text-slate-900 leading-tight mb-2", isLarge ? "text-3xl" : "text-base" )}>
+            <h3 className={cn( "font-black text-slate-900 leading-tight mb-sm", isLarge ? "text-3xl" : "text-base" )}>
               {type === 'cart' ? data?.title : (activeNotification.title === 'Cupón aplicado' ? `¡Código ${data?.code || ''}!` : message)}
             </h3>
-            <p className={cn( "text-slate-500 font-medium", isLarge ? "text-lg mb-8" : "text-sm mb-4" )}>
+            <p className={cn( "text-slate-500 font-medium", isLarge ? "text-lg mb-lg" : "text-sm mb-md" )}>
               {type === 'cart'
                 ? (data?.quantity === 1 ? 'Nuevo ejemplar añadido' : `Ahora tienes ${data?.quantity} unidades`)
                 : (activeNotification.title === 'Cupón aplicado' ? message : '')}

@@ -49,29 +49,29 @@ export function SalesChart({ data }: SalesChartProps) {
           </div>
           
           <div className="flex items-center gap-4">
-            <div className="flex p-1 bg-slate-100 rounded-xl">
+            <div className="flex p-xs bg-slate-100 rounded-xl">
               <button
                 onClick={() => handlePeriodChange("week")}
-                className={cn( "px-3 py-1.5 rounded-lg text-xs font-bold transition-all", currentPeriod === "week" ? "bg-white shadow-sm text-primary" : "text-slate-500 hover:text-slate-700 " )}
+                className={cn( "px-sm py-xs.5 rounded-lg text-xs font-bold transition-all", currentPeriod === "week" ? "bg-white shadow-sm text-primary" : "text-slate-500 hover:text-slate-700 " )}
               >
                 Semana
               </button>
               <button
                 onClick={() => handlePeriodChange("month")}
-                className={cn( "px-3 py-1.5 rounded-lg text-xs font-bold transition-all", currentPeriod === "month" ? "bg-white shadow-sm text-primary" : "text-slate-500 hover:text-slate-700 " )}
+                className={cn( "px-sm py-xs.5 rounded-lg text-xs font-bold transition-all", currentPeriod === "month" ? "bg-white shadow-sm text-primary" : "text-slate-500 hover:text-slate-700 " )}
               >
                 Mes
               </button>
             </div>
             
             <div className="text-right hidden sm:block">
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Total Periodo</p>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-xs">Total Periodo</p>
               <p className="text-xl font-black text-primary leading-none">€{totalSales.toFixed(2)}</p>
             </div>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="pt-2 pb-6">
+      <CardContent className="pt-sm pb-lg">
         <div className="h-[240px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data}>

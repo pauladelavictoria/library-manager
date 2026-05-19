@@ -9,16 +9,16 @@ import { ProfileCard } from "@/components/profile-card";
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
-      <div className="container mx-auto px-4 py-12">
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+    <div className="min-h-screen bg-slate-50 pb-xl">
+      <div className="container mx-auto px-md py-lg">
+        <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-lg">
           <div>
-            <h1 className="text-4xl font-black tracking-tight mb-2">Mi Dashboard</h1>
+            <h1 className="text-4xl font-black tracking-tight mb-sm">Mi Dashboard</h1>
             <p className="text-muted-foreground text-lg">Bienvenido de nuevo a tu biblioteca personal.</p>
           </div>
           <Button asChild variant="outline">
             <Link href="/" className="inline-flex items-center">
-              <Home className="mr-2 h-4 w-4" />
+              <Home className="mr-sm h-4 w-4" />
               Volver al Inicio
             </Link>
           </Button>
@@ -112,7 +112,7 @@ async function TriviaStats() {
 
   return (
     <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-slate-900 text-white">
-      <CardContent className="p-8 space-y-6">
+      <CardContent className="p-lg space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center">
@@ -130,7 +130,7 @@ async function TriviaStats() {
         </div>
 
         <div className="space-y-2">
-          <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400 px-1">
+          <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400 px-xs">
             <span>Progreso Premio</span>
             <span>{Math.round(progress)}%</span>
           </div>
@@ -143,8 +143,8 @@ async function TriviaStats() {
         </div>
 
         {rewardReached ? (
-          <div className="p-5 rounded-3xl bg-emerald-500/10 border border-emerald-500/20 animate-in zoom-in duration-500">
-            <div className="flex items-center gap-3 mb-3">
+          <div className="p-md rounded-3xl bg-emerald-500/10 border border-emerald-500/20 animate-in zoom-in duration-500">
+            <div className="flex items-center gap-3 mb-sm">
               <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
                 <Gift className="h-4 w-4 text-white" />
               </div>
@@ -153,13 +153,13 @@ async function TriviaStats() {
                 <p className="font-bold text-sm">Cupón de 3€ disponible</p>
               </div>
             </div>
-            <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700 flex items-center justify-between">
+            <div className="bg-slate-800/80 p-sm rounded-xl border border-slate-700 flex items-center justify-between">
               <code className="text-xl font-black tracking-widest text-primary">{rewardCode}</code>
               <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px] font-black uppercase">Válido</Badge>
             </div>
           </div>
         ) : (
-          <div className="flex items-start gap-3 p-4 rounded-3xl bg-slate-800/30 border border-slate-800 text-xs text-slate-400 font-medium leading-relaxed">
+          <div className="flex items-start gap-3 p-md rounded-3xl bg-slate-800/30 border border-slate-800 text-xs text-slate-400 font-medium leading-relaxed">
             <HelpCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
             <p>Consigue 100 puntos para desbloquear un cupón de 3€. Obtienes 10 puntos por cada partida perfecta (10/10).</p>
           </div>
@@ -167,7 +167,7 @@ async function TriviaStats() {
 
         <Button asChild >
           <Link href="/trivial">
-            <Star className="mr-2 h-4 w-4 fill-primary text-primary" />
+            <Star className="mr-sm h-4 w-4 fill-primary text-primary" />
             Jugar al Trivial
           </Link>
         </Button>
@@ -193,8 +193,8 @@ async function UserOrders() {
 
   if (!orders || orders.length === 0) {
     return (
-      <div className="bg-white/40 rounded-[2.5rem] p-12 text-center border border-dashed border-slate-300">
-        <ShoppingBag className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-20" />
+      <div className="bg-white/40 rounded-[2.5rem] p-lg text-center border border-dashed border-slate-300">
+        <ShoppingBag className="h-12 w-12 text-muted-foreground mx-auto mb-md opacity-20" />
         <p className="text-xl font-bold text-muted-foreground">Aún no has realizado ninguna compra</p>
         <Button asChild variant="secondary">
           <Link href="/books">Ir a la tienda</Link>
@@ -211,7 +211,7 @@ async function UserOrders() {
           key={order.id}
           className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm overflow-hidden transition-all hover:shadow-md"
         >
-          <div className="p-8 border-b border-slate-100 bg-slate-50/50 flex flex-wrap items-center justify-between gap-4">
+          <div className="p-lg border-b border-slate-100 bg-slate-50/50 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-6">
               <div className="space-y-1">
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Pedido ID</p>
@@ -227,8 +227,8 @@ async function UserOrders() {
               {order.promo_code && (
                 <div className="space-y-1">
                   <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Cupón</p>
-                  <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20 border-none px-2 py-0">
-                    <Tag className="h-3 w-3 mr-1" />
+                  <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20 border-none px-sm py-0">
+                    <Tag className="h-3 w-3 mr-xs" />
                     {order.promo_code}
                   </Badge>
                 </div>
@@ -240,7 +240,7 @@ async function UserOrders() {
             </div>
           </div>
 
-          <div className="p-8">
+          <div className="p-lg">
             <div className="space-y-6">
               {order.order_items.map((item: any) => (
                 <div key={item.id} className="flex gap-6 group">
@@ -255,9 +255,9 @@ async function UserOrders() {
                     <div className="flex justify-between items-start gap-4">
                       <div>
                         <h4 className="font-bold text-lg leading-tight group-hover:text-primary transition-colors line-clamp-1">{item.title}</h4>
-                        <div className="flex flex-wrap gap-2 mt-2">
+                        <div className="flex flex-wrap gap-2 mt-sm">
                           {item.categories?.map((cat: string) => (
-                            <span key={cat} className="text-[10px] font-bold px-2 py-0.5 bg-slate-100 text-muted-foreground rounded-full">
+                            <span key={cat} className="text-[10px] font-bold px-sm py-0.5 bg-slate-100 text-muted-foreground rounded-full">
                               {cat}
                             </span>
                           ))}
@@ -265,7 +265,7 @@ async function UserOrders() {
                       </div>
                       <div className="text-right flex-shrink-0">
                         <p className="text-sm font-bold">€{item.price_at_purchase.toFixed(2)}</p>
-                        <p className="text-xs text-muted-foreground font-medium mb-2">Cant: {item.quantity}</p>
+                        <p className="text-xs text-muted-foreground font-medium mb-sm">Cant: {item.quantity}</p>
                         <Button asChild variant="ghost" size="sm" >
                           <Link href={`/books/${item.book_id}`}>
                             <BookOpen className="h-3 w-3" />

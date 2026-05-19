@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 export default function LoginPage() {
 
   return (
-    <div className="p-14 bg-[url(/images/background.jpg)] bg-cover bg-no-repeat">
-      <div className="space-y-2 bg-background rounded-lg w-full max-w-md mx-auto p-10 mb-10">
+    <div className="p-xl bg-[url(/images/background.jpg)] bg-cover bg-no-repeat">
+      <div className="space-y-2 bg-background rounded-lg w-full max-w-md mx-auto p-lg mb-lg">
         <div className="flex flex-col space-y-2 text-center">
           <h1 className="text-2xl font-semibold tracking-tight">
             Bienvenida

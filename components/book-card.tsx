@@ -29,13 +29,13 @@ export function BookCard({ book }: BookCardProps) {
         )}
       </Link>
 
-      <div className="flex flex-col flex-1 p-5">
+      <div className="flex flex-col flex-1 p-md">
         <Link href={`/books/${book.id}`}>
-          <h3 className="font-bold text-lg leading-tight line-clamp-2 mb-1 group-hover:text-primary transition-colors">
+          <h3 className="font-bold text-lg leading-tight line-clamp-2 mb-xs group-hover:text-primary transition-colors">
             {book.title}
           </h3>
         </Link>
-        <p className="text-sm text-muted-foreground mb-4">{authorName}</p>
+        <p className="text-sm text-muted-foreground mb-md">{authorName}</p>
 
         <div className="mt-auto flex items-center justify-between">
           <PriceTag price={originalPrice} size="lg" showDiscountBadge />

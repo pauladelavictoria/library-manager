@@ -62,12 +62,12 @@ export default async function BooksPage({
 
 
   return (
-    <div className="p-14">
+    <div className="p-xl">
       <Suspense fallback={null}>
         <PromoHandler />
       </Suspense>
       <div>
-        <h1 className="text-6xl font-serif mb-4">
+        <h1 className="text-6xl font-serif mb-md">
           Explora nuestro catálogo
         </h1>
         <p className="text-lg text-slate-600 max-w-2xl">
@@ -75,14 +75,14 @@ export default async function BooksPage({
         </p>
       </div>
 
-      <div className="my-8">
+      <div className="my-lg">
         <div className="flex flex-col lg:flex-row gap-8">
 
           <aside className="shrink-0 space-y-8 bg-cardDark rounded-2xl h-fit">
-            <form className="space-y-6 p-6 rounded-2xl" action="/books" method="GET">
+            <form className="space-y-6 p-lg rounded-2xl" action="/books" method="GET">
               {promo && <input type="hidden" name="promo" value={promo} />}
               <div>
-                <h3 className="mb-3 text-sm uppercase">Categorías</h3>
+                <h3 className="mb-sm text-sm uppercase">Categorías</h3>
                 <div className="space-y-2">
                   {categories.map((c) => (
                     <label key={c} className="flex items-center space-x-3 cursor-pointer group">
@@ -109,7 +109,7 @@ export default async function BooksPage({
           </aside>
 
           <main className="flex-1">
-            <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-between mb-lg gap-4">
               <p className="text-sm text-slate-500">
                 Mostrando <span className="font-medium text-slate-900">{books?.length || 0}</span> resultados de {count || 0}
               </p>
@@ -124,12 +124,12 @@ export default async function BooksPage({
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-20 text-center bg-white rounded-2xl border border-slate-100 border-dashed">
-                <div className="h-16 w-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+              <div className="flex flex-col items-center justify-center py-xl text-center bg-white rounded-2xl border border-slate-100 border-dashed">
+                <div className="h-16 w-16 bg-slate-100 rounded-full flex items-center justify-center mb-md">
                   <Search className="h-8 w-8 text-slate-400" />
                 </div>
-                <h3 className="text-xl font-bold mb-2">No se encontraron libros</h3>
-                <p className="text-slate-500 mb-6 max-w-sm">
+                <h3 className="text-xl font-bold mb-sm">No se encontraron libros</h3>
+                <p className="text-slate-500 mb-lg max-w-sm">
                   Intenta cambiar los filtros o realizar una búsqueda diferente.
                 </p>
                 <Button asChild variant="primary">
@@ -139,7 +139,7 @@ export default async function BooksPage({
             )}
 
             {count && count > limit && (
-              <div className="mt-12 flex justify-center gap-2">
+              <div className="mt-lg flex justify-center gap-2">
                 {currentPage > 1 && (
                   <Button variant="primary" >
                     <Link href={`/books?page=${currentPage - 1}${search ? `&search=${search}` : ''}${category !== 'Todas' ? `&category=${category}` : ''}${promo ? `&promo=${promo}` : ''}${sortBy ? `&sortBy=${sortBy}` : ''}${sortOrder ? `&sortOrder=${sortOrder}` : ''}`}>Anterior</Link>

@@ -75,7 +75,7 @@ export default function UserAuthState() {
             <DropdownMenuItem>
               <button onClick={removeUser} disabled={isPending}>
                 {isPending ? (
-                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  <Icons.spinner className="mr-sm h-4 w-4 animate-spin" />
                 ) : (
                   "Cerrar sesión"
                 )}
@@ -87,7 +87,7 @@ export default function UserAuthState() {
         <Link href={"/register"}>
           <Button disabled={isPending}>
             {isPending ? (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              <Icons.spinner className="mr-sm h-4 w-4 animate-spin" />
             ) : (
               "Regístrate"
             )}

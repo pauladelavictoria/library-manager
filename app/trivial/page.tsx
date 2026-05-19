@@ -166,7 +166,7 @@ export default function QuizPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-md">
         <div className="text-center space-y-4">
           <Loader2 className="h-12 w-12 text-primary animate-spin mx-auto" />
           <p className="font-black text-slate-400 uppercase tracking-[0.2em] animate-pulse">Cargando preguntas...</p>
@@ -176,12 +176,12 @@ export default function QuizPage() {
   }
 
   return (
-    <div className="p-14 bg-[url(/images/background.jpg)] bg-cover">
-      <div className="container mx-auto px-4 max-w-2xl">
+    <div className="p-xl bg-[url(/images/background.jpg)] bg-cover">
+      <div className="container mx-auto px-md max-w-2xl">
 
         {currentStep === "blocked" && (
           <Card className="rounded-[2.5rem]  overflow-hidden bg-background backdrop-blur-xl animate-in fade-in zoom-in duration-500">
-            <CardContent className="p-12 text-center space-y-8">
+            <CardContent className="p-lg text-center space-y-8">
               <div className="mx-auto w-24 h-24 bg-red-500/10 rounded-full flex items-center justify-center">
                 <Timer className="h-12 w-12 text-red-500" />
               </div>
@@ -191,8 +191,8 @@ export default function QuizPage() {
                   Debes esperar a que pase el tiempo de enfriamiento.
                 </p>
               </div>
-              <div className="bg-slate-100 p-6 rounded-3xl">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">PODRÁS VOLVER A JUGAR EN</p>
+              <div className="bg-slate-100 p-lg rounded-3xl">
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-xs">PODRÁS VOLVER A JUGAR EN</p>
                 <p className="text-4xl font-black text-slate-900">
                   ~ {cooldownRemaining} minutos
                 </p>
@@ -206,7 +206,7 @@ export default function QuizPage() {
 
         {currentStep === "limit" && (
           <Card className="rounded-[2.5rem]  overflow-hidden bg-background animate-in fade-in zoom-in duration-500">
-            <CardContent className="p-12 text-center space-y-8">
+            <CardContent className="p-lg text-center space-y-8">
               <div className="mx-auto w-24 h-24 bg-amber-500/10 rounded-full flex items-center justify-center">
                 <AlertCircle className="h-12 w-12 text-amber-500" />
               </div>
@@ -216,8 +216,8 @@ export default function QuizPage() {
                   Has completado tus 10 partidas de hoy. Vuelve mañana para seguir acumulando puntos.
                 </p>
               </div>
-              <div className="bg-slate-100 p-6 rounded-3xl">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">PARTIDAS HOY</p>
+              <div className="bg-slate-100 p-lg rounded-3xl">
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-xs">PARTIDAS HOY</p>
                 <p className="text-4xl font-black text-slate-900">
                   10 / 10
                 </p>
@@ -231,7 +231,7 @@ export default function QuizPage() {
 
         {currentStep === "intro" && (
           <Card className="rounded-[2.5rem]  overflow-hidden bg-background">
-            <CardContent className="p-12 text-center space-y-8">
+            <CardContent className="p-lg text-center space-y-8">
               <div className="mx-auto w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center animate-bounce">
                 <HelpCircle className="h-12 w-12 text-primary" />
               </div>
@@ -241,14 +241,14 @@ export default function QuizPage() {
               </div>
 
               <div className="grid grid-cols-2 gap-4 text-left">
-                <div className={cn("p-4 rounded-2xl bg-slate-50 border border-slate-100 ", !user && "col-span-2")}>
-                  <Timer className="h-5 w-5 text-primary mb-2" />
+                <div className={cn("p-md rounded-2xl bg-slate-50 border border-slate-100 ", !user && "col-span-2")}>
+                  <Timer className="h-5 w-5 text-primary mb-sm" />
                   <p className="text-xs font-black uppercase tracking-widest text-slate-400">Tiempo</p>
                   <p className="font-bold">15 segundos por pregunta</p>
                 </div>
                 {user && (
-                  <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                    <AlertCircle className="h-5 w-5 text-red-500 mb-2" />
+                  <div className="p-md rounded-2xl bg-slate-50 border border-slate-100">
+                    <AlertCircle className="h-5 w-5 text-red-500 mb-sm" />
                     <p className="text-xs font-black uppercase tracking-widest text-slate-400">Límite</p>
                     <p className="font-bold text-xs">10 partidas cada día</p>
                   </div>
@@ -256,24 +256,24 @@ export default function QuizPage() {
               </div>
 
               {user && (
-                <div className="bg-primary/5 border border-primary/10 rounded-2xl p-4 flex items-center justify-between">
+                <div className="bg-primary/5 border border-primary/10 rounded-2xl p-md flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Star className="h-5 w-5 text-primary fill-primary/20" />
                     <p className="text-sm font-bold">Tus partidas hoy</p>
                   </div>
-                  <Badge className="bg-primary text-white border-none font-black px-3 py-1 rounded-full">
+                  <Badge className="bg-primary text-white border-none font-black px-sm py-xs rounded-full">
                     {dailyAttempts} / 10
                   </Badge>
                 </div>
               )}
 
-              <div className="flex flex-col gap-4 pt-4">
+              <div className="flex flex-col gap-4 pt-md">
                 <Button onClick={startGame}>
                   ¡Empezar a Jugar!
                 </Button>
 
                 {!user ? (
-                  <div className="mt-4 p-6 rounded-[2rem] bg-amber-500/5 border border-amber-500/10 space-y-4">
+                  <div className="mt-md p-lg rounded-[2rem] bg-amber-500/5 border border-amber-500/10 space-y-4">
                     <div className="flex items-center gap-3 justify-center text-amber-600">
                       <AlertCircle className="h-5 w-5" />
                       <p className="text-xs font-black uppercase tracking-widest">Atención: Modo Invitado</p>
@@ -302,12 +302,12 @@ export default function QuizPage() {
 
         {currentStep === "playing" && questions.length > 0 && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="flex items-center justify-between px-4">
-              <Badge className="bg-primary/10 text-primary border-none font-bold px-4 py-1 rounded-full">
+            <div className="flex items-center justify-between px-md">
+              <Badge className="bg-primary/10 text-primary border-none font-bold px-md py-xs rounded-full">
                 Pregunta {currentQuestion + 1} de {questions.length}
               </Badge>
 
-              <div className={cn("flex items-center gap-2 font-black transition-colors px-4 py-1 rounded-full border-2", timeLeft <= 5 ? "text-red-500 border-red-500/20 bg-red-500/5 animate-pulse" : "text-slate-400 border-transparent")}>
+              <div className={cn("flex items-center gap-2 font-black transition-colors px-md py-xs rounded-full border-2", timeLeft <= 5 ? "text-red-500 border-red-500/20 bg-red-500/5 animate-pulse" : "text-slate-400 border-transparent")}>
                 <Timer className="h-4 w-4" />
                 <span>{timeLeft}s</span>
               </div>
@@ -325,7 +325,7 @@ export default function QuizPage() {
                   style={{ width: `${(timeLeft / QUESTION_TIME) * 100}%` }}
                 />
               </div>
-              <CardContent className="p-10 space-y-8">
+              <CardContent className="p-lg space-y-8">
                 <h2 className="text-2xl font-black leading-tight text-center text-slate-900">
                   {questions[currentQuestion].question}
                 </h2>
@@ -340,7 +340,7 @@ export default function QuizPage() {
                         key={idx}
                         onClick={() => handleAnswer(idx)}
                         disabled={selectedOption !== null}
-                        className={cn("w-full p-6 rounded-2xl text-left font-bold transition-all border-2 flex items-center justify-between group", selectedOption === null ? "border-slate-100 hover:border-primary hover:bg-primary/5 text-slate-600 " : isSelected ? isCorrect ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-red-500 bg-red-50 text-red-700" : isCorrectAnswer && selectedOption !== null ? "border-emerald-500 bg-emerald-50 text-emerald-700 opacity-50" : "border-slate-50 opacity-30")}
+                        className={cn("w-full p-lg rounded-2xl text-left font-bold transition-all border-2 flex items-center justify-between group", selectedOption === null ? "border-slate-100 hover:border-primary hover:bg-primary/5 text-slate-600 " : isSelected ? isCorrect ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-red-500 bg-red-50 text-red-700" : isCorrectAnswer && selectedOption !== null ? "border-emerald-500 bg-emerald-50 text-emerald-700 opacity-50" : "border-slate-50 opacity-30")}
                       >
                         <span>{option}</span>
                         {selectedOption !== null && isCorrectAnswer && <CheckCircle2 className="h-6 w-6 text-emerald-500" />}
@@ -356,7 +356,7 @@ export default function QuizPage() {
 
         {currentStep === "results" && (
           <Card className="rounded-[2.5rem] border-none shadow-2xl overflow-hidden bg-white/80 backdrop-blur-xl animate-in zoom-in duration-500">
-            <CardContent className="p-12 text-center space-y-8">
+            <CardContent className="p-lg text-center space-y-8">
               <div className="relative mx-auto w-32 h-32 bg-yellow-500/10 rounded-full flex items-center justify-center">
                 <div className="absolute inset-0 bg-yellow-500/20 rounded-full animate-ping opacity-25" />
                 <Trophy className="h-16 w-16 text-yellow-500" />
@@ -375,7 +375,7 @@ export default function QuizPage() {
 
 
               <Button onClick={restart} variant="ghost">
-                <RotateCcw className="mr-2 h-4 w-4" /> Jugar otra vez
+                <RotateCcw className="mr-sm h-4 w-4" /> Jugar otra vez
               </Button>
             </CardContent>
           </Card>

@@ -56,7 +56,7 @@ export function CreateBookDialog() {
         if (!val) setTimeout(() => setShowSuccess(false), 300);
       }}>
         <DialogContent className="sm:max-w-[400px] border-none bg-white/80 backdrop-blur-xl p-0 overflow-hidden rounded-[2.5rem] shadow-2xl">
-          <div className="p-10 text-center space-y-6">
+          <div className="p-lg text-center space-y-6">
             <DialogTitle className="sr-only">Libro añadido con éxito</DialogTitle>
             <div className="relative mx-auto w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
               <div className="absolute inset-0 bg-emerald-500/20 rounded-full animate-ping opacity-25" />
@@ -77,39 +77,39 @@ export function CreateBookDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
-          <Plus className="mr-2 h-4 w-4" />
+          <Plus className="mr-sm h-4 w-4" />
           Añadir Libro
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[550px] rounded-[2.5rem] border-slate-200 p-0 overflow-hidden">
-        <DialogHeader className="p-8 pb-4">
+        <DialogHeader className="p-lg pb-md">
           <DialogTitle className="text-2xl font-black flex items-center gap-2">
             <Plus className="h-6 w-6 text-primary" />
             Nuevo Título
           </DialogTitle>
           <DialogDescription className="font-medium text-slate-500">Completa los datos para registrar un nuevo libro en el inventario.</DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="p-8 pt-0 space-y-6">
+        <form onSubmit={handleSubmit} className="p-lg pt-0 space-y-6">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2 col-span-2">
               <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Título del Libro</Label>
               <div className="relative">
                 <Book className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="title" placeholder="Ej: Cien años de soledad" className="pl-10 h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                <Input name="title" placeholder="Ej: Cien años de soledad" className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
               </div>
             </div>
             <div className="space-y-2">
               <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Autor</Label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="author" placeholder="Nombre completo" className="pl-10 h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                <Input name="author" placeholder="Nombre completo" className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
               </div>
             </div>
             <div className="space-y-2">
               <Label className="text-xs font-black uppercase tracking-widest text-slate-400">ISBN</Label>
               <div className="relative">
                 <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="isbn" placeholder="978-..." className="pl-10 h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                <Input name="isbn" placeholder="978-..." className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
               </div>
             </div>
             <div className="space-y-2">
@@ -124,25 +124,25 @@ export function CreateBookDialog() {
               <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Stock Inicial</Label>
               <div className="relative">
                 <Database className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="stock" type="number" min="0" defaultValue="1" className="pl-10 h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                <Input name="stock" type="number" min="0" defaultValue="1" className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
               </div>
             </div>
             <div className="space-y-2">
               <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Precio de Venta</Label>
               <div className="relative">
                 <Euro className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="price" type="number" step="0.01" min="0" placeholder="0.00" className="pl-10 h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                <Input name="price" type="number" step="0.01" min="0" placeholder="0.00" className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
               </div>
             </div>
             <div className="space-y-2 col-span-2">
               <Label className="text-xs font-black uppercase tracking-widest text-slate-400">URL de Portada</Label>
               <div className="relative">
                 <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="cover_url" placeholder="https://..." className="pl-10 h-11 rounded-xl bg-slate-50 border-none font-bold" />
+                <Input name="cover_url" placeholder="https://..." className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" />
               </div>
             </div>
           </div>
-          <DialogFooter className="pt-4">
+          <DialogFooter className="pt-md">
             <Button type="button" variant="ghost" onClick={() => setOpen(false)}>Cancelar</Button>
             <Button type="submit" disabled={isLoading}>
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Registrar Libro"}
