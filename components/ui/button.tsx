@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-black  w-3xs h-12 text-white rounded-full px-4 text-base text-background",
+          "bg-black  w-3xs h-12 text-white rounded-full px-4 text-base text-background flex justify-center items-center",
         destructive:
           "bg-transparent  w-3xs h-12 text-black rounded-full px-4 text-base ",
         // outline:
@@ -19,7 +19,7 @@ const buttonVariants = cva(
         //   "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:underline underline-offset-[80%]",
         link: "text-black h-[20px] hover:underline",
-        icon: "rounded-full border-1 flex justify-center items-center border-black h-10 w-10 shadow-md shadow-primary/20 hover:scale-105 transition-transform"
+        icon: "rounded-full border-1  border-black h-10 w-10 shadow-md shadow-primary/20 hover:scale-105 transition-transform"
       },
     },
 

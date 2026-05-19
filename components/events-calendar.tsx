@@ -172,7 +172,7 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
                     onClick={() => handleBooking(event)}
                     disabled={isLoading || isBooked}
                     className={cn(
-                      "w-full rounded-xl font-bold transition-all duration-300 shadow-lg",
+                      "w-full rounded-xl font-bold transition-all duration-300 shadow-lg flex items-center justify-center",
                       isBooked
                         ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
                         : isLoading

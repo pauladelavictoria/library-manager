@@ -79,10 +79,7 @@ export default function RegisterForm() {
   return (
     <div className="w-full max-w-md mx-auto space-y-6">
       <div className="grid gap-6">
-        <Button variant="default" type="button" disabled={isPending}>
-          <Icons.google className="mr-2 h-4 w-4" />
-          Sign up with Google
-        </Button>
+
         <Separator />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -170,10 +167,14 @@ export default function RegisterForm() {
           </form>
         </Form>
       </div>
-      <div className="text-center">
+      <div className="text-center flex justify-between  gap-6">
+        <Button variant="default" type="button" disabled={isPending}>
+          <Icons.google className="h-4 w-4" />
+          Google
+        </Button>
         <Link href="/login" className="w-full">
           <Button variant="default">
-            Back to Login
+            Ya tengo cuenta
           </Button>
         </Link>
       </div>

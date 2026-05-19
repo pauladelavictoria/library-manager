@@ -67,7 +67,7 @@ export default function LoginForm() {
   return (
     <div className="grid gap-6">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
             <FormField
               control={form.control}
@@ -91,7 +91,7 @@ export default function LoginForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Contraseña</FormLabel>
                   <FormControl>
                     <PasswordInput
                       placeholder="password"
@@ -104,47 +104,38 @@ export default function LoginForm() {
               )}
             />
           </div>
-          <Button type="submit" disabled={isPending}>
+          <Button type="submit" variant="ghost" disabled={isPending}>
             {isPending ? (
               <div className="flex items-center justify-center gap-1">
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                <span>verifing...</span>
+                <span>Verificando...</span>
               </div>
             ) : (
-              "Verify Now"
+              "Verificar Ahora"
             )}
           </Button>
         </form>
       </Form>
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
+          <span className="w-full h-[1px] bg-black" />
         </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">Or</span>
-        </div>
+
       </div>
-      <Button variant="default" asChild>
-        <Link href="/register">Create an account</Link>
-      </Button>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Social Login
-          </span>
-        </div>
+      <div className="flex gap-2 items-center justify-center">
+        <Button variant="default">
+          <Link href="/register">Registrarse</Link>
+        </Button>
+
+        <Button variant="default" disabled={isPending}>
+          {isPending ? (
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Icons.google className="mr-2 h-4 w-4" />
+          )}
+          Google
+        </Button>
       </div>
-      <Button variant="default" disabled={isPending}>
-        {isPending ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.google className="mr-2 h-4 w-4" />
-        )}{" "}
-        Google
-      </Button>
     </div>
   );
 }

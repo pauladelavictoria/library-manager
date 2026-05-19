@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import UserAuthState from "./user-auth-state";
 import { useCart } from "@/hooks/use-cart";
 import { useAuth } from "@/lib/auth-context";
-import FuzzySearch from "./fuzzy-search";
-import { Button } from "./ui/button";
+import FuzzySearch from "@/components/global/fuzzy-search";
+import { Button } from "@/components/ui/button";
+import UserAuthState from "../user-auth-state";
 
 
 export default function Hero() {

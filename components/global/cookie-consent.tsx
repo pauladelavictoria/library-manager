@@ -29,7 +29,7 @@ export function CookieConsent() {
 
   return (
     <div className="fixed bottom-6 left-6 right-6 md:left-auto md:max-w-md z-[100] animate-in fade-in slide-in-from-bottom-10 duration-700 ease-out">
-      <div className="relative overflow-hidden rounded-[2.5rem] border border-white/20 dark:border-slate-800/50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] p-6 md:p-8">
+      <div className="relative overflow-hidden rounded-[2.5rem] border border-white/20 bg-white/70 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-6 md:p-8">
 
         <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
@@ -44,27 +44,26 @@ export function CookieConsent() {
             </div>
             <button
               onClick={() => setIsVisible(false)}
-              className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-full hover:bg-slate-100 transition-colors"
             >
               <X className="h-4 w-4 text-slate-400" />
             </button>
           </div>
 
-          <p className="text-sm font-medium text-slate-600 dark:text-slate-400 leading-relaxed">
+          <p className="text-sm font-medium text-slate-600">
             Utilizamos cookies para mejorar tu experiencia, analizar el tráfico y recordar tus preferencias. Al aceptar, nos ayudas a ofrecerte un servicio más personalizado y eficiente.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col sm:flex-row gap-8">
             <Button
+              variant="default"
               onClick={handleAccept}
-              className="flex-1 h-12 rounded-xl bg-slate-900 dark:bg-white dark:text-slate-900 font-bold shadow-lg shadow-slate-900/10 dark:shadow-white/5 hover:scale-[1.02] active:scale-[0.98] transition-all"
             >
               Aceptar Todo
             </Button>
             <Button
               variant="ghost"
               onClick={handleDecline}
-              className="flex-1 h-12 rounded-xl font-bold hover:bg-slate-100 dark:hover:bg-slate-800"
             >
               Solo Necesarias
             </Button>

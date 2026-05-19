@@ -1,34 +1,29 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Search, X, Loader2 } from "lucide-react";
+import { X } from "lucide-react";
 import Fuse from "fuse.js";
-import { createClient } from "@/supabase/client";
 import { Book } from "@/lib/types";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import PriceTag from "./ui/price-tag";
+import PriceTag from "../ui/price-tag";
+import { createClient } from "@/supabase/client";
 
 export default function FuzzySearch() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Book[]>([]);
   const [allBooks, setAllBooks] = useState<Book[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const supabase = createClient();
-  const router = useRouter();
 
   useEffect(() => {
     async function fetchBooks() {
-      setIsLoading(true);
       const { data } = await supabase
         .from("books")
         .select("id, title, cover_url, selling_price")
         .limit(500);
 
       if (data) setAllBooks(data as Book[]);
-      setIsLoading(false);
     }
     fetchBooks();
   }, []);
@@ -69,7 +64,7 @@ export default function FuzzySearch() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query.length > 1 && setIsOpen(true)}
-          className="font-serif bg-transparent rounded-full p-[8px] border pl-[16px]"
+          className="font-serif bg-white rounded-full p-[8px] border pl-[16px]"
         />
         {query && (
           <button

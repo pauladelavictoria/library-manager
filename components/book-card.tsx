@@ -1,20 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import PriceTag from "@/components/ui/price-tag";
 import { Book } from "@/lib/types";
-import { useCart } from "@/hooks/use-cart";
+import AddToCartButton from "./global/add-to-cart-button";
 
 interface BookCardProps {
   book: Book;
 }
 
 export function BookCard({ book }: BookCardProps) {
-  const { addToCart } = useCart();
   const authorName = book.authors && book.authors.length > 0 ? book.authors[0] : "Autor desconocido";
-  const category = book.categories && book.categories.length > 0 ? book.categories[0] : "General";
 
   const originalPrice = book.selling_price || 0;
 
@@ -43,13 +39,7 @@ export function BookCard({ book }: BookCardProps) {
 
         <div className="mt-auto flex items-center justify-between">
           <PriceTag price={originalPrice} size="lg" showDiscountBadge />
-          <Button
-            variant="icon"
-            aria-label="Añadir al carrito"
-            onClick={() => addToCart(book)}
-          >
-            <ShoppingCart className="h-4 w-4" />
-          </Button>
+          <AddToCartButton book={book} />
         </div>
       </div>
     </div>

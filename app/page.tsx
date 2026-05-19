@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { BookOpen, ArrowRight, Star } from "lucide-react";
-import { EventsCalendar } from "@/components/home/events-calendar";
+import { BookOpen } from "lucide-react";
+import { EventsCalendar } from "@/components/events-calendar";
 import { getRecommendedBooks } from "@/app/actions/books";
 import { createClient } from "@/supabase/server";
 import { Event } from "@/lib/types";
