@@ -164,15 +164,11 @@ export default async function AdminInventoryPage({
   });
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pt-xl pb-lg">
+    <div className="hero-container">
       <div className="container mx-auto px-md sm:px-lg lg:px-lg">
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-lg">
           <div>
-            <div className="inline-flex items-center gap-2 px-sm py-xs rounded-full bg-primary/10 text-primary text-sm font-medium mb-md">
-              <Package2 className="h-4 w-4" />
-              <span>Administración</span>
-            </div>
             <h1 className="text-4xl font-black tracking-tight mb-sm">Gestión de la Librería</h1>
             <p className="text-slate-500">Supervisa el rendimiento y gestiona el inventario.</p>
           </div>
@@ -361,7 +357,7 @@ export default async function AdminInventoryPage({
                       eventPerformance.map((event) => (
                         <TableRow
                           key={event.id}
-                          className={cn( "group border-slate-100 transition-colors", event.isPast ? "bg-slate-50/30 opacity-60" : "hover:bg-slate-50/50 " )}
+                          className={cn("group border-slate-100 transition-colors", event.isPast ? "bg-slate-50/30 opacity-60" : "hover:bg-slate-50/50 ")}
                         >
                           <TableCell className="pl-lg py-md">
                             <div className="flex items-center gap-2">
@@ -458,7 +454,7 @@ export default async function AdminInventoryPage({
                         return (
                           <TableRow
                             key={book.id}
-                            className={cn( "group transition-colors border-slate-50 ", isLowStock ? "bg-red-50/50 hover:bg-red-100/50 " : "hover:bg-slate-50 " )}
+                            className={cn("group transition-colors border-slate-50 ", isLowStock ? "bg-red-50/50 hover:bg-red-100/50 " : "hover:bg-slate-50 ")}
                           >
                             <TableCell className="pl-lg py-lg">
                               <div className="flex items-center gap-4">
@@ -503,7 +499,7 @@ export default async function AdminInventoryPage({
                             </TableCell>
                             <TableCell>
                               <div className="flex items-center gap-2">
-                                <span className={cn( "font-black text-xl", isLowStock ? "text-red-600" : "text-slate-700 " )}>
+                                <span className={cn("font-black text-xl", isLowStock ? "text-red-600" : "text-slate-700 ")}>
                                   {book.stock_quantity}
                                 </span>
                                 {isLowStock && <AlertTriangle className="h-4 w-4 text-red-500" />}
@@ -528,7 +524,7 @@ export default async function AdminInventoryPage({
                     <div className="flex items-center gap-2">
                       <Link
                         href={`?${new URLSearchParams({ ...params, page: (currentPage - 1).toString() }).toString()}`}
-                        className={cn( "p-sm rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-sm", currentPage === 1 && "pointer-events-none opacity-50" )}
+                        className={cn("p-sm rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-sm", currentPage === 1 && "pointer-events-none opacity-50")}
                       >
                         <ChevronLeft className="h-5 w-5" />
                       </Link>
@@ -539,7 +535,7 @@ export default async function AdminInventoryPage({
                             <Link
                               key={pageNum}
                               href={`?${new URLSearchParams({ ...params, page: pageNum.toString() }).toString()}`}
-                              className={cn( "w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm transition-all", currentPage === pageNum ? "bg-primary text-white shadow-lg shadow-primary/30" : "hover:bg-slate-200 " )}
+                              className={cn("w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm transition-all", currentPage === pageNum ? "bg-primary text-white shadow-lg shadow-primary/30" : "hover:bg-slate-200 ")}
                             >
                               {pageNum}
                             </Link>
@@ -549,7 +545,7 @@ export default async function AdminInventoryPage({
                       </div>
                       <Link
                         href={`?${new URLSearchParams({ ...params, page: (currentPage + 1).toString() }).toString()}`}
-                        className={cn( "p-sm rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-sm", currentPage === totalPages && "pointer-events-none opacity-50" )}
+                        className={cn("p-sm rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-sm", currentPage === totalPages && "pointer-events-none opacity-50")}
                       >
                         <ChevronRight className="h-5 w-5" />
                       </Link>

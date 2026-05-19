@@ -22,7 +22,7 @@ export default function Hero() {
   const navItems = [
     { name: "Libros", href: "/books" },
     { name: "Trivial", href: "/trivial" },
-    isMounted && user && profile?.is_admin && { name: "Gestión", href: "/admin/inventory" },
+    isMounted && user && profile?.is_admin && { name: "Gestión", href: "/inventory" },
     isMounted && user && { name: "Carrito", href: "/cart" },
   ].filter(Boolean) as { name: string; href: string; }[];
 

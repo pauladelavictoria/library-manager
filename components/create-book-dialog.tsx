@@ -76,7 +76,7 @@ export function CreateBookDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button variant="primary">
           <Plus className="mr-sm h-4 w-4" />
           Añadir Libro
         </Button>

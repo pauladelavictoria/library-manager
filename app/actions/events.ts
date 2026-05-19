@@ -38,7 +38,7 @@ export async function createEvent(data: {
 
     if (error) throw error;
 
-    revalidatePath("/admin/inventory");
+    revalidatePath("/inventory");
     return { success: true };
   } catch (error: any) {
     console.error("Error creating event:", error);
@@ -58,7 +58,7 @@ export async function deleteEvent(id: string) {
     const { error } = await supabase.from("events").delete().eq("id", id);
     if (error) throw error;
 
-    revalidatePath("/admin/inventory");
+    revalidatePath("/inventory");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -83,7 +83,7 @@ export async function updateEvent(id: string, data: {
     const { error } = await supabase.from("events").update(data).eq("id", id);
     if (error) throw error;
 
-    revalidatePath("/admin/inventory");
+    revalidatePath("/inventory");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };

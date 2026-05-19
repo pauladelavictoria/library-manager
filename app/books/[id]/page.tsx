@@ -40,7 +40,7 @@ export default async function BookDetailPage({
   const authorName = book.authors && book.authors.length > 0 ? book.authors[0] : "Autor desconocido";
 
   return (
-    <div className="p-xl bg-[url(/images/background.jpg)] bg-contain bg-no-repeat">
+    <div className="hero-container">
       <div className="container mx-auto px-md py-lg lg:py-xl">
         <Link
           href="/books"

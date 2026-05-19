@@ -16,7 +16,7 @@ export default function DashboardPage() {
             <h1 className="text-4xl font-black tracking-tight mb-sm">Mi Dashboard</h1>
             <p className="text-muted-foreground text-lg">Bienvenido de nuevo a tu biblioteca personal.</p>
           </div>
-          <Button asChild variant="outline">
+          <Button asChild variant="primary">
             <Link href="/" className="inline-flex items-center">
               <Home className="mr-sm h-4 w-4" />
               Volver al Inicio
@@ -205,7 +205,7 @@ async function UserOrders() {
 
 
   return (
-    <div className="space-y-8">
+    <div className="hero-container">
       {orders.map((order) => (
         <div
           key={order.id}
@@ -266,7 +266,7 @@ async function UserOrders() {
                       <div className="text-right flex-shrink-0">
                         <p className="text-sm font-bold">€{item.price_at_purchase.toFixed(2)}</p>
                         <p className="text-xs text-muted-foreground font-medium mb-sm">Cant: {item.quantity}</p>
-                        <Button asChild variant="ghost" size="sm" >
+                        <Button asChild variant="ghost" >
                           <Link href={`/books/${item.book_id}`}>
                             <BookOpen className="h-3 w-3" />
                             Detalles

@@ -46,7 +46,7 @@ export async function createPromoCode(formData: {
       throw error;
     }
 
-    revalidatePath("/admin/inventory");
+    revalidatePath("/inventory");
     return { success: true };
   } catch (error: any) {
     console.error("Error creating promo code:", error);
@@ -66,7 +66,7 @@ export async function deletePromoCode(id: string) {
     const { error } = await supabase.from("promo_codes").delete().eq("id", id);
     if (error) throw error;
 
-    revalidatePath("/admin/inventory");
+    revalidatePath("/inventory");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -89,7 +89,7 @@ export async function updatePromoCode(id: string, data: {
     const { error } = await supabase.from("promo_codes").update(data).eq("id", id);
     if (error) throw error;
 
-    revalidatePath("/admin/inventory");
+    revalidatePath("/inventory");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };

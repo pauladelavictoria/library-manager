@@ -62,7 +62,7 @@ export default async function BooksPage({
 
 
   return (
-    <div className="p-xl">
+    <div className="hero-container">
       <Suspense fallback={null}>
         <PromoHandler />
       </Suspense>

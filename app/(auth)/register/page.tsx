@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function SignupPage() {
   return (
-    <div className="p-xl bg-[url(/images/background.jpg)] bg-cover">
+    <div className="hero-container">
       <div className="space-y-2 bg-background rounded-lg w-full max-w-md mx-auto p-lg">
         <h1 className="text-2xl font-semibold tracking-tight">
           Crear una cuenta

@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 
 export default {
-	darkMode: ["class"],
 	content: [
 		"./pages/**/*.{js,ts,jsx,tsx,mdx}",
 		"./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -38,8 +37,12 @@ export default {
 			fontFamily: {
 				sans: ['var(--font-inter)', 'sans-serif'],
 				serif: ['var(--font-cormorantGaramond)', 'serif'],
+			},
+			backgroundImage: {
+				'hero-pattern': "url('/images/background.jpg')",
 			}
 		}
 	},
+
 	plugins: [require("tailwindcss-animate")],
 } satisfies Config;

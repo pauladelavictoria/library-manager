@@ -31,7 +31,7 @@ export default async function Home({
   const { data: recommendedBooks } = await getRecommendedBooks();
 
   return (
-    <div className="p-xl bg-[url(/images/background.jpg)] bg-contain bg-no-repeat">
+    <div className="hero-container">
 
       <div className="ml-xl my-lg">
         <h1 className="text-[120px] font-serif leading-[100px] mb-lg">

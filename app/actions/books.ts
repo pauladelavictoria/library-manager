@@ -25,7 +25,7 @@ export async function createBook(data: {
     const { error } = await supabase.from("books").insert(data);
     if (error) throw error;
 
-    revalidatePath("/admin/inventory");
+    revalidatePath("/inventory");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -53,7 +53,7 @@ export async function updateBook(id: string, data: Partial<{
     const { error } = await supabase.from("books").update(data).eq("id", id);
     if (error) throw error;
 
-    revalidatePath("/admin/inventory");
+    revalidatePath("/inventory");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -72,7 +72,7 @@ export async function deleteBook(id: string) {
     const { error } = await supabase.from("books").delete().eq("id", id);
     if (error) throw error;
 
-    revalidatePath("/admin/inventory");
+    revalidatePath("/inventory");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -205,7 +205,7 @@ export async function toggleRecommendation(bookId: string) {
 
     console.log("Successfully updated book recommendation state:", updatedData[0]);
 
-    revalidatePath("/admin/inventory");
+    revalidatePath("/inventory");
     revalidatePath("/");
     return { success: true };
   } catch (error: any) {
