@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/lib/auth-context";
-import React, { useTransition } from "react";
+import React, { useTransition, useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 
@@ -24,6 +24,15 @@ export default function UserAuthState() {
   const [isPending, startTransision] = useTransition();
   const { notify } = useNotification();
   const queryClient = useQueryClient();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return <div className="w-[100px] h-[40px]" />;
+  }
 
   async function removeUser() {
     startTransision(async () => {

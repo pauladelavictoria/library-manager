@@ -36,8 +36,13 @@ const eventTypeColors: Record<string, string> = {
 export function EventsCalendar({ events, userId }: EventsCalendarProps) {
   const [loadingEventId, setLoadingEventId] = useState<string | null>(null);
   const [bookedEventIds, setBookedEventIds] = useState<Set<string>>(new Set());
+  const [isMounted, setIsMounted] = useState(false);
   const supabase = createClient();
   const { notify } = useNotification();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     const fetchUserBookings = async () => {
@@ -138,8 +143,8 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
               <CardContent className="p-0">
                 <div className="relative p-6">
                   <div className="absolute top-6 right-6 flex flex-col items-center justify-center w-14 h-14 rounded-1xl bg-cardDark rounded-lg">
-                    <span className="text-xs font-black leading-none">{day}</span>
-                    <span className="text-xs font-bold text-primary mt-1">{month}</span>
+                    <span className="text-xs font-black leading-none">{isMounted ? day : ""}</span>
+                    <span className="text-xs font-bold text-primary mt-1">{isMounted ? month : ""}</span>
                   </div>
 
                   <Badge className={cn("mb-4 rounded-lg px-2.5 py-1 font-bold border", eventTypeColors[event.type])} variant="outline">
@@ -155,7 +160,7 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
                     <div className="space-y-2 mb-6">
                       <div className="flex items-center">
                         <Clock className="mr-2 h-4 w-4" />
-                        {time}h
+                        {isMounted ? time : ""}h
                       </div>
                       <div className="flex items-center">
                         <MapPin className="mr-2 h-4 w-4" />

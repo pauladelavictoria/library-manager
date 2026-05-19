@@ -8,15 +8,22 @@ import { Button } from "@/components/ui/button";
 import UserAuthState from "../user-auth-state";
 
 
+import { useState, useEffect } from "react";
+
 export default function Hero() {
   const { totalItems } = useCart();
   const { user, profile } = useAuth();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const navItems = [
     { name: "Libros", href: "/books" },
     { name: "Trivial", href: "/trivial" },
-    user && profile?.is_admin && { name: "Gestión", href: "/admin/inventory" },
-    user && { name: "Carrito", href: "/cart" },
+    isMounted && user && profile?.is_admin && { name: "Gestión", href: "/admin/inventory" },
+    isMounted && user && { name: "Carrito", href: "/cart" },
   ].filter(Boolean) as { name: string; href: string; }[];
 
   return (
@@ -41,7 +48,7 @@ export default function Hero() {
               <Button variant="ghost">
                 {item.name}
                 {
-                  item.href === "/cart" && totalItems > 0 && (
+                  item.href === "/cart" && isMounted && totalItems > 0 && (
                     <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px]">
                       {totalItems}
                     </span>
