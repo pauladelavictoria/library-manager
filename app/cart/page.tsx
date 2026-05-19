@@ -65,20 +65,18 @@ export default function CartPage() {
   if (cart.length === 0) {
     return (
       <div className="container mx-auto px-4 py-20 text-center">
-        <div className="max-w-md mx-auto">
-          <div className="bg-primary/10 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8 animate-pulse">
-            <ShoppingBag className="h-12 w-12 text-primary" />
-          </div>
-          <h1 className="text-4xl font-black mb-4 tracking-tight">Tu carrito está vacío</h1>
-          <p className="text-lg text-muted-foreground mb-10 leading-relaxed">
-            Parece que aún no has añadido ningún libro a tu colección. ¡Explora nuestro catálogo y descubre tu próxima aventura literaria!
-          </p>
-          <Link href="/books">
-            <Button size="lg">
-              Explorar Catálogo
-            </Button>
-          </Link>
+        <div className="bg-primary/10 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8 animate-pulse">
+          <ShoppingBag className="h-12 w-12 text-primary" />
         </div>
+        <h1 className="text-4xl font-black mb-4 tracking-tight">Tu carrito está vacío</h1>
+        <p className="text-lg text-muted-foreground mb-10 leading-relaxed">
+          Parece que aún no has añadido ningún libro a tu colección. ¡Explora nuestro catálogo y descubre tu próxima aventura literaria!
+        </p>
+        <Link href="/books">
+          <Button variant="default">
+            Explorar Catálogo
+          </Button>
+        </Link>
       </div>
     );
   }
@@ -129,7 +127,6 @@ export default function CartPage() {
                     <div className="flex items-center gap-4 bg-background/80 backdrop-blur-sm rounded-full border border-slate-200 dark:border-slate-800 p-1.5 shadow-sm">
                       <Button
                         variant="ghost"
-                        size="icon"
                         className="h-9 w-9 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                       >
@@ -138,7 +135,6 @@ export default function CartPage() {
                       <span className="text-lg font-bold w-6 text-center">{item.quantity}</span>
                       <Button
                         variant="ghost"
-                        size="icon"
                         className="h-9 w-9 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                       >
@@ -225,7 +221,7 @@ export default function CartPage() {
                           />
                         </div>
                         <Button
-                          variant="secondary"
+                          variant="default"
                           className="rounded-xl px-4"
                           onClick={handleApplyPromo}
                           disabled={isApplying || !promoInput.trim()}
@@ -241,7 +237,6 @@ export default function CartPage() {
                         </div>
                         <Button
                           variant="ghost"
-                          size="sm"
                           className="h-8 text-xs hover:bg-green-100 dark:hover:bg-green-800"
                           onClick={removePromo}
                         >
@@ -264,7 +259,6 @@ export default function CartPage() {
                 </div>
 
                 <Button
-                  size="lg"
                   className="w-full rounded-2xl py-8 text-xl font-black shadow-xl shadow-primary/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] group"
                   onClick={handleCheckout}
                   disabled={isCheckingOut}

@@ -6,6 +6,7 @@ import { Book } from "@/lib/types";
 import PriceDisplay from "../../../components/global/price-display";
 import AddToCartButton from "@/components/global/add-to-cart-button";
 import PaymentConditions from "@/components/global/payment-conditions";
+import { SynopsisToggle } from "@/components/synopsis-toggle";
 
 export default async function BookDetailPage({
   params,
@@ -72,30 +73,28 @@ export default async function BookDetailPage({
 
           </div>
 
-          <div className="h-[300px] overflow-hidden my-10">
-            {book.cover_url ? (
-              <img
-                src={book.cover_url}
-                alt={book.title}
-                className="object-cover transition-transform duration-1000 group-hover:scale-105"
-              />
-            ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 gap-4">
-                <p className="font-bold">Sin portada disponible</p>
-              </div>
-            )}
-          </div>
+          <div className="grid grid-cols-2 gap-10 my-10">
+            <div className="overflow-hidden">
+              {book.cover_url ? (
+                <img
+                  src={book.cover_url}
+                  alt={book.title}
+                  className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 gap-4">
+                  <p className="font-bold">Sin portada disponible</p>
+                </div>
+              )}
+            </div>
+            <div>
+              <h3 className="text-2xl">Sinopsis</h3>
+              <SynopsisToggle description={book.description} />
+            </div>
 
-          <div>
-            <h3 className="text-2xl mb-4">Sinopsis</h3>
-            <p className="text-xl ">
-              {book.description || "Este libro no cuenta con una descripción detallada en este momento. Sin embargo, es una de las obras más buscadas de su categoría."}
-            </p>
           </div>
           <PriceDisplay book={book} />
         </div>
-
-
 
         <PaymentConditions />
 

@@ -8,9 +8,10 @@ import { Book } from "@/lib/types";
 interface AddToCartButtonProps {
   book: Book;
   variant?: "default" | "icon" | "ghost";
+  text?: boolean;
 }
 
-export default function AddToCartButton({ book, variant }: AddToCartButtonProps) {
+export default function AddToCartButton({ book, variant, text = false }: AddToCartButtonProps) {
   const { addToCart } = useCart();
 
   return (
@@ -20,6 +21,7 @@ export default function AddToCartButton({ book, variant }: AddToCartButtonProps)
       onClick={() => addToCart(book)}
     >
       <ShoppingCart className="h-4 w-4" />
+      {text && <span className="ml-2"> Añadir al carrito</span>}
     </Button>
   );
 }

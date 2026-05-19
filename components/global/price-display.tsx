@@ -10,6 +10,7 @@ interface PriceDisplayProps {
 }
 
 import PriceTag from "@/components/ui/price-tag";
+import AddToCartButton from "./add-to-cart-button";
 
 interface PriceDisplayProps {
   book: Book;
@@ -27,6 +28,9 @@ export default function PriceDisplay({ book }: PriceDisplayProps) {
             {appliedPromo ? "Precio con Descuento" : "Precio Especial"}
           </p>
           <PriceTag price={originalPrice} size="xl" />
+          <div className="mt-6">
+            <AddToCartButton book={book} variant="default" text />
+          </div>
         </div>
         <div className="h-16 w-px bg-slate-200 dark:bg-white/10" />
         <div>
@@ -45,6 +49,7 @@ export default function PriceDisplay({ book }: PriceDisplayProps) {
           </div>
           <p className="text-xs text-muted-foreground mt-1 font-medium">{book.stock_quantity} unidades restantes</p>
         </div>
+
       </div>
 
       {appliedPromo && (
