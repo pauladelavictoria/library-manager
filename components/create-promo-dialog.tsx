@@ -66,7 +66,7 @@ export function CreatePromoDialog() {
         setOpen(val);
         if (!val) setTimeout(() => setShowSuccess(false), 300);
       }}>
-        <DialogContent className="sm:max-w-[400px] border-none bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-0 overflow-hidden rounded-[2.5rem] shadow-2xl">
+        <DialogContent className="sm:max-w-[400px] border-none bg-white/80 backdrop-blur-xl p-0 overflow-hidden rounded-[2.5rem] shadow-2xl">
           <div className="p-10 text-center space-y-6">
             <DialogTitle className="sr-only">Cupón creado con éxito</DialogTitle>
             <div className="relative mx-auto w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
@@ -75,11 +75,11 @@ export function CreatePromoDialog() {
             </div>
             <div className="space-y-2">
               <h3 className="text-2xl font-black tracking-tight">¡Todo listo!</h3>
-              <p className="text-slate-500 dark:text-slate-400 font-medium">
+              <p className="text-slate-500 font-medium">
                 El cupón ha sido activado correctamente.
               </p>
             </div>
-            <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
+            <div className="bg-slate-50 p-4 rounded-2xl border border-dashed border-slate-200">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">CÓDIGO ACTIVO</p>
               <p className="text-3xl font-black text-primary tracking-widest">{createdCode}</p>
             </div>
@@ -88,7 +88,7 @@ export function CreatePromoDialog() {
                 setOpen(false);
                 setTimeout(() => setShowSuccess(false), 300);
               }}
-              className="w-full h-14 rounded-2xl bg-slate-900 dark:bg-white dark:text-slate-900 hover:bg-slate-800 font-bold text-lg shadow-xl"
+              className="w-full h-14 rounded-2xl bg-slate-900 hover:bg-slate-800 font-bold text-lg shadow-xl"
             >
               Cerrar
             </Button>
@@ -106,7 +106,7 @@ export function CreatePromoDialog() {
           Nuevo Cupón
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] rounded-[2rem] border-slate-200 dark:border-slate-800">
+      <DialogContent className="sm:max-w-[425px] rounded-[2rem] border-slate-200">
         <DialogHeader>
           <DialogTitle className="text-2xl font-black flex items-center gap-2">
             <Tag className="h-6 w-6 text-primary" />
@@ -167,7 +167,7 @@ export function CreatePromoDialog() {
               </div>
             </div>
           </div>
-          <div className="flex items-center space-x-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+          <div className="flex items-center space-x-3 p-4 rounded-2xl bg-slate-50 border border-slate-100">
             <input
               type="checkbox"
               id="is_one_time"

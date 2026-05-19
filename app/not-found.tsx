@@ -19,13 +19,13 @@ export default function NotFound() {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild variant="default">
+          <Button asChild variant="primary">
             <Link href="/" className="inline-flex items-center">
               <ChevronLeft className="mr-2 h-4 w-4" />
               Volver
             </Link>
           </Button>
-          <Button asChild>
+          <Button asChild variant="ghost">
             <Link href="/" className="inline-flex items-center">
               <Home className="mr-2 h-4 w-4" />
               Inicio

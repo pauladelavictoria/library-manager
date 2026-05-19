@@ -9,7 +9,7 @@ import { ProfileCard } from "@/components/profile-card";
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
+    <div className="min-h-screen bg-slate-50 pb-20">
       <div className="container mx-auto px-4 py-12">
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
           <div>
@@ -193,7 +193,7 @@ async function UserOrders() {
 
   if (!orders || orders.length === 0) {
     return (
-      <div className="bg-white/40 dark:bg-slate-900/40 rounded-[2.5rem] p-12 text-center border border-dashed border-slate-300 dark:border-slate-700">
+      <div className="bg-white/40 rounded-[2.5rem] p-12 text-center border border-dashed border-slate-300">
         <ShoppingBag className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-20" />
         <p className="text-xl font-bold text-muted-foreground">Aún no has realizado ninguna compra</p>
         <Button asChild variant="secondary">
@@ -209,9 +209,9 @@ async function UserOrders() {
       {orders.map((order) => (
         <div
           key={order.id}
-          className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-all hover:shadow-md"
+          className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm overflow-hidden transition-all hover:shadow-md"
         >
-          <div className="p-8 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex flex-wrap items-center justify-between gap-4">
+          <div className="p-8 border-b border-slate-100 bg-slate-50/50 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-6">
               <div className="space-y-1">
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Pedido ID</p>
@@ -244,7 +244,7 @@ async function UserOrders() {
             <div className="space-y-6">
               {order.order_items.map((item: any) => (
                 <div key={item.id} className="flex gap-6 group">
-                  <div className="h-24 w-16 bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm flex-shrink-0">
+                  <div className="h-24 w-16 bg-slate-100 rounded-xl overflow-hidden shadow-sm flex-shrink-0">
                     {item.cover_url ? (
                       <img src={item.cover_url} alt={item.title} className="h-full w-full object-cover transition-transform group-hover:scale-110" />
                     ) : (
@@ -257,7 +257,7 @@ async function UserOrders() {
                         <h4 className="font-bold text-lg leading-tight group-hover:text-primary transition-colors line-clamp-1">{item.title}</h4>
                         <div className="flex flex-wrap gap-2 mt-2">
                           {item.categories?.map((cat: string) => (
-                            <span key={cat} className="text-[10px] font-bold px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-muted-foreground rounded-full">
+                            <span key={cat} className="text-[10px] font-bold px-2 py-0.5 bg-slate-100 text-muted-foreground rounded-full">
                               {cat}
                             </span>
                           ))}

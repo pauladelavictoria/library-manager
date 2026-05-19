@@ -37,7 +37,7 @@ export function SalesChart({ data }: SalesChartProps) {
   };
 
   return (
-    <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm overflow-hidden h-full">
+    <Card className="rounded-[2rem] border-slate-200 shadow-xl bg-white/50 backdrop-blur-sm overflow-hidden h-full">
       <CardHeader>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -49,26 +49,16 @@ export function SalesChart({ data }: SalesChartProps) {
           </div>
           
           <div className="flex items-center gap-4">
-            <div className="flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl">
+            <div className="flex p-1 bg-slate-100 rounded-xl">
               <button
                 onClick={() => handlePeriodChange("week")}
-                className={cn(
-                  "px-3 py-1.5 rounded-lg text-xs font-bold transition-all",
-                  currentPeriod === "week" 
-                    ? "bg-white dark:bg-slate-700 shadow-sm text-primary" 
-                    : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
-                )}
+                className={cn( "px-3 py-1.5 rounded-lg text-xs font-bold transition-all", currentPeriod === "week" ? "bg-white shadow-sm text-primary" : "text-slate-500 hover:text-slate-700 " )}
               >
                 Semana
               </button>
               <button
                 onClick={() => handlePeriodChange("month")}
-                className={cn(
-                  "px-3 py-1.5 rounded-lg text-xs font-bold transition-all",
-                  currentPeriod === "month" 
-                    ? "bg-white dark:bg-slate-700 shadow-sm text-primary" 
-                    : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
-                )}
+                className={cn( "px-3 py-1.5 rounded-lg text-xs font-bold transition-all", currentPeriod === "month" ? "bg-white shadow-sm text-primary" : "text-slate-500 hover:text-slate-700 " )}
               >
                 Mes
               </button>

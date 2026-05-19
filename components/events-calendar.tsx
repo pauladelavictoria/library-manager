@@ -26,11 +26,11 @@ const eventTypeIcons: Record<string, any> = {
 };
 
 const eventTypeColors: Record<string, string> = {
-  presentation: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
-  workshop: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
-  club: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
-  signing: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
-  generic: "bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20",
+  presentation: "bg-blue-500/10 text-blue-600  border-blue-500/20",
+  workshop: "bg-purple-500/10 text-purple-600  border-purple-500/20",
+  club: "bg-emerald-500/10 text-emerald-600  border-emerald-500/20",
+  signing: "bg-amber-500/10 text-amber-600  border-amber-500/20",
+  generic: "bg-slate-500/10 text-slate-600  border-slate-500/20",
 };
 
 export function EventsCalendar({ events, userId }: EventsCalendarProps) {
@@ -137,7 +137,7 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
             <Card key={event.id} className="rounded-[2rem] overflow-hidden min-w-[320px]">
               <CardContent className="p-0">
                 <div className="relative p-6">
-                  <div className="absolute top-6 right-6 flex flex-col items-center justify-center w-14 h-14 rounded-1xl bg-slate-50">
+                  <div className="absolute top-6 right-6 flex flex-col items-center justify-center w-14 h-14 rounded-1xl bg-cardDark rounded-lg">
                     <span className="text-xs font-black leading-none">{day}</span>
                     <span className="text-xs font-bold text-primary mt-1">{month}</span>
                   </div>
@@ -163,7 +163,7 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
                       </div>
                     </div>
 
-                    <p className="text-sm  line-clamp-2 mb-6 h-10">
+                    <p className="text-sm line-clamp-2 mb-6 h-10">
                       {event.description}
                     </p>
                   </div>
@@ -171,14 +171,7 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
                   <Button
                     onClick={() => handleBooking(event)}
                     disabled={isLoading || isBooked}
-                    className={cn(
-                      "w-full rounded-xl font-bold transition-all duration-300 shadow-lg flex items-center justify-center",
-                      isBooked
-                        ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
-                        : isLoading
-                          ? "bg-slate-100 dark:bg-slate-800"
-                          : "bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:bg-primary hover:text-white"
-                    )}
+                    className={cn( "p-2 w-full rounded-xl font-bold transition-all duration-300 flex items-center justify-center", isBooked ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" : isLoading ? "bg-slate-100 " : "bg-slate-900 text-white hover:bg-primary hover:text-white" )}
                   >
                     {isLoading ? (
                       <Loader2 className="h-4 w-4 animate-spin" />

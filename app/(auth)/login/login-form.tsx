@@ -123,11 +123,11 @@ export default function LoginForm() {
 
       </div>
       <div className="flex gap-2 items-center justify-center">
-        <Button variant="default">
+        <Button variant="primary">
           <Link href="/register">Registrarse</Link>
         </Button>
 
-        <Button variant="default" disabled={isPending}>
+        <Button variant="primary" disabled={isPending}>
           {isPending ? (
             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
           ) : (

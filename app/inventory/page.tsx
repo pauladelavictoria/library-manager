@@ -164,7 +164,7 @@ export default async function AdminInventoryPage({
   });
 
   return (
-    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950/50 pt-24 pb-12">
+    <div className="min-h-screen bg-slate-50/50 pt-24 pb-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
@@ -174,12 +174,12 @@ export default async function AdminInventoryPage({
               <span>Administración</span>
             </div>
             <h1 className="text-4xl font-black tracking-tight mb-2">Gestión de la Librería</h1>
-            <p className="text-slate-500 dark:text-slate-400">Supervisa el rendimiento y gestiona el inventario.</p>
+            <p className="text-slate-500">Supervisa el rendimiento y gestiona el inventario.</p>
           </div>
         </div>
 
         <Tabs defaultValue="dashboard" className="w-full">
-          <TabsList className="mb-8 w-fit bg-slate-100/50 dark:bg-slate-900/50 backdrop-blur-sm border border-slate-200/50 dark:border-slate-800/50">
+          <TabsList className="mb-8 w-fit bg-slate-100/50 backdrop-blur-sm border border-slate-200/50">
             <TabsTrigger value="dashboard" className="gap-2">
               <LayoutDashboard className="h-4 w-4" />
               Vista General
@@ -202,7 +202,7 @@ export default async function AdminInventoryPage({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
               <SalesChart data={salesChartData} />
 
-              <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm overflow-hidden">
+              <Card className="rounded-[2rem] border-slate-200 shadow-xl bg-white/50 backdrop-blur-sm overflow-hidden">
                 <CardHeader className="pb-4">
                   <div className="flex flex-col gap-6">
                     <div className="flex items-center justify-between">
@@ -224,7 +224,7 @@ export default async function AdminInventoryPage({
                   {sortedBestSellers.length > 0 ? (
                     <BestSellersBubbles data={sortedBestSellers} />
                   ) : (
-                    <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl">
+                    <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-slate-200 rounded-3xl">
                       <Trophy className="h-12 w-12 text-slate-300 mb-3" />
                       <p className="text-slate-500 font-medium">No hay ventas registradas para este filtro</p>
                     </div>
@@ -247,25 +247,25 @@ export default async function AdminInventoryPage({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg bg-emerald-500/5 border-emerald-500/10">
+                <Card className="rounded-3xl border-slate-200 shadow-lg bg-emerald-500/5 border-emerald-500/10">
                   <CardHeader className="pb-2">
                     <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Ahorro Total Clientes</CardDescription>
-                    <CardTitle className="text-3xl font-black text-emerald-600 dark:text-emerald-400">€{totalDiscountGiven.toFixed(2)}</CardTitle>
+                    <CardTitle className="text-3xl font-black text-emerald-600">€{totalDiscountGiven.toFixed(2)}</CardTitle>
                   </CardHeader>
                 </Card>
-                <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg">
+                <Card className="rounded-3xl border-slate-200 shadow-lg">
                   <CardHeader className="pb-2">
                     <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Cupones Activos</CardDescription>
                     <CardTitle className="text-3xl font-black">{activePromosCount}</CardTitle>
                   </CardHeader>
                 </Card>
-                <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg">
+                <Card className="rounded-3xl border-slate-200 shadow-lg">
                   <CardHeader className="pb-2">
                     <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Pedidos con Cupón</CardDescription>
                     <CardTitle className="text-3xl font-black">{promoPerformance.reduce((sum, p) => sum + (p.usage_count || 0), 0)}</CardTitle>
                   </CardHeader>
                 </Card>
-                <Card className="rounded-3xl border-slate-200 dark:border-slate-800 shadow-lg">
+                <Card className="rounded-3xl border-slate-200 shadow-lg">
                   <CardHeader className="pb-2">
                     <CardDescription className="font-bold uppercase tracking-widest text-[10px]">Ingresos vía Promo</CardDescription>
                     <CardTitle className="text-3xl font-black text-primary">€{promoPerformance.reduce((sum, p) => sum + (p.total_revenue || 0), 0).toFixed(2)}</CardTitle>
@@ -273,10 +273,10 @@ export default async function AdminInventoryPage({
                 </Card>
               </div>
 
-              <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
+              <Card className="rounded-[2rem] border-slate-200 shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
                 <Table>
                   <TableHeader>
-                    <TableRow className="hover:bg-transparent border-slate-100 dark:border-slate-800">
+                    <TableRow className="hover:bg-transparent border-slate-100">
                       <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Código</TableHead>
                       <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Descuento</TableHead>
                       <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Usos</TableHead>
@@ -287,7 +287,7 @@ export default async function AdminInventoryPage({
                   </TableHeader>
                   <TableBody>
                     {promoPerformance.map((promo) => (
-                      <TableRow key={promo.code} className="group border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+                      <TableRow key={promo.code} className="group border-slate-100 hover:bg-slate-50/50 transition-colors">
                         <TableCell className="pl-8 py-4">
                           <div className="flex items-center gap-3">
                             <div className="p-2 rounded-lg bg-primary/10 text-primary">
@@ -301,7 +301,7 @@ export default async function AdminInventoryPage({
                                   {promo.isActive ? "Activo" : (promo.is_one_time && promo.usage_count > 0 ? "Usado" : "Inactivo")}
                                 </p>
                                 {promo.is_one_time && (
-                                  <Badge variant="secondary" className="text-[8px] h-3.5 px-1 rounded bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-none font-black uppercase">
+                                  <Badge variant="secondary" className="text-[8px] h-3.5 px-1 rounded bg-amber-100 text-amber-700 border-none font-black uppercase">
                                     Único
                                   </Badge>
                                 )}
@@ -315,10 +315,10 @@ export default async function AdminInventoryPage({
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <p className="font-bold text-slate-600 dark:text-slate-400">{promo.usage_count}</p>
+                          <p className="font-bold text-slate-600">{promo.usage_count}</p>
                         </TableCell>
                         <TableCell>
-                          <p className="font-bold text-red-600 dark:text-red-400/80">-€{(promo.total_discount || 0).toFixed(2)}</p>
+                          <p className="font-bold text-red-600">-€{(promo.total_discount || 0).toFixed(2)}</p>
                         </TableCell>
                         <TableCell className="text-center">
                           <p className="font-black text-lg tracking-tight">€{(promo.total_revenue || 0).toFixed(2)}</p>
@@ -344,10 +344,10 @@ export default async function AdminInventoryPage({
                 <CreateEventDialog />
               </div>
 
-              <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
+              <Card className="rounded-[2rem] border-slate-200 shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
                 <Table>
                   <TableHeader>
-                    <TableRow className="hover:bg-transparent border-slate-100 dark:border-slate-800">
+                    <TableRow className="hover:bg-transparent border-slate-100">
                       <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Evento</TableHead>
                       <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Tipo</TableHead>
                       <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Fecha y Hora</TableHead>
@@ -361,25 +361,20 @@ export default async function AdminInventoryPage({
                       eventPerformance.map((event) => (
                         <TableRow
                           key={event.id}
-                          className={cn(
-                            "group border-slate-100 dark:border-slate-800 transition-colors",
-                            event.isPast
-                              ? "bg-slate-50/30 dark:bg-slate-900/10 opacity-60"
-                              : "hover:bg-slate-50/50 dark:hover:bg-slate-900/50"
-                          )}
+                          className={cn( "group border-slate-100 transition-colors", event.isPast ? "bg-slate-50/30 opacity-60" : "hover:bg-slate-50/50 " )}
                         >
                           <TableCell className="pl-8 py-4">
                             <div className="flex items-center gap-2">
                               <p className="font-black tracking-tight">{event.title}</p>
                               {event.isPast && (
-                                <Badge variant="secondary" className="text-[9px] h-4 rounded-sm bg-slate-200 dark:bg-slate-800 text-slate-500 font-bold border-none px-1 uppercase tracking-tighter">
+                                <Badge variant="secondary" className="text-[9px] h-4 rounded-sm bg-slate-200 text-slate-500 font-bold border-none px-1 uppercase tracking-tighter">
                                   Finalizado
                                 </Badge>
                               )}
                             </div>
                           </TableCell>
                           <TableCell>
-                            <Badge variant="outline" className="rounded-md font-black border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex w-fit items-center gap-1.5 capitalize">
+                            <Badge variant="outline" className="rounded-md font-black border-slate-200 bg-slate-50 flex w-fit items-center gap-1.5 capitalize">
                               {event.type === 'signing' && <PenTool className="h-3 w-3" />}
                               {event.type === 'workshop' && <BookOpen className="h-3 w-3" />}
                               {event.type === 'club' && <UsersIcon className="h-3 w-3" />}
@@ -389,7 +384,7 @@ export default async function AdminInventoryPage({
                             </Badge>
                           </TableCell>
                           <TableCell>
-                            <p className="text-sm font-bold text-slate-600 dark:text-slate-400">
+                            <p className="text-sm font-bold text-slate-600">
                               {new Date(event.event_date).toLocaleString('es-ES', {
                                 day: 'numeric',
                                 month: 'short',
@@ -405,7 +400,7 @@ export default async function AdminInventoryPage({
                             </div>
                           </TableCell>
                           <TableCell className="text-center">
-                            <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 font-black text-sm">
+                            <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 font-black text-sm">
                               {event.attendees}
                             </div>
                           </TableCell>
@@ -429,8 +424,8 @@ export default async function AdminInventoryPage({
 
           <TabsContent value="catalog">
             <main className="w-full">
-              <Card className="rounded-[2rem] border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
-                <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-6 bg-white dark:bg-slate-900 px-8 py-8">
+              <Card className="rounded-[2rem] border-slate-200 shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
+                <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-6 bg-white px-8 py-8">
                   <div>
                     <CardTitle className="text-3xl font-black">Catálogo de Inventario</CardTitle>
                     <CardDescription className="font-medium">Gestión total de los libros y existencias de la librería.</CardDescription>
@@ -438,7 +433,7 @@ export default async function AdminInventoryPage({
                   <CreateBookDialog />
                 </CardHeader>
                 <CardContent className="p-0">
-                  <div className="p-8 border-b border-slate-100 dark:border-slate-800">
+                  <div className="p-8 border-b border-slate-100">
                     <InventoryFilters
                       authors={filterOptions.authors}
                       categories={filterOptions.categories}
@@ -447,7 +442,7 @@ export default async function AdminInventoryPage({
                   </div>
                   <Table>
                     <TableHeader>
-                      <TableRow className="hover:bg-transparent border-slate-100 dark:border-slate-800">
+                      <TableRow className="hover:bg-transparent border-slate-100">
                         <TableHead className="pl-8 font-bold uppercase text-[10px] tracking-widest text-slate-400 py-6">Libro</TableHead>
                         <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Estado</TableHead>
                         <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Reco</TableHead>
@@ -463,21 +458,16 @@ export default async function AdminInventoryPage({
                         return (
                           <TableRow
                             key={book.id}
-                            className={cn(
-                              "group transition-colors border-slate-50 dark:border-slate-800",
-                              isLowStock
-                                ? "bg-red-50/50 dark:bg-red-900/10 hover:bg-red-100/50 dark:hover:bg-red-900/20"
-                                : "hover:bg-slate-50 dark:hover:bg-slate-800/50"
-                            )}
+                            className={cn( "group transition-colors border-slate-50 ", isLowStock ? "bg-red-50/50 hover:bg-red-100/50 " : "hover:bg-slate-50 " )}
                           >
                             <TableCell className="pl-8 py-6">
                               <div className="flex items-center gap-4">
                                 <Link href={`/books/${book.id}`}>
-                                  <div className="w-12 h-16 cursor-pointer rounded-lg overflow-hidden shrink-0 shadow-sm border border-slate-100 dark:border-slate-800">
+                                  <div className="w-12 h-16 cursor-pointer rounded-lg overflow-hidden shrink-0 shadow-sm border border-slate-100">
                                     {book.cover_url ? (
                                       <img src={book.cover_url} alt={book.title} className="w-full h-full object-cover" />
                                     ) : (
-                                      <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[8px]">No img</div>
+                                      <div className="w-full h-full bg-slate-100 flex items-center justify-center text-[8px]">No img</div>
                                     )}
                                   </div>
                                 </Link>
@@ -507,22 +497,19 @@ export default async function AdminInventoryPage({
                             </TableCell>
                             <TableCell className="text-center">
                               <div className="inline-flex flex-col items-center">
-                                <span className="text-xl font-black text-slate-900 dark:text-white">{book.sold_count}</span>
+                                <span className="text-xl font-black text-slate-900">{book.sold_count}</span>
                                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">unidades</span>
                               </div>
                             </TableCell>
                             <TableCell>
                               <div className="flex items-center gap-2">
-                                <span className={cn(
-                                  "font-black text-xl",
-                                  isLowStock ? "text-red-600" : "text-slate-700 dark:text-slate-300"
-                                )}>
+                                <span className={cn( "font-black text-xl", isLowStock ? "text-red-600" : "text-slate-700 " )}>
                                   {book.stock_quantity}
                                 </span>
                                 {isLowStock && <AlertTriangle className="h-4 w-4 text-red-500" />}
                               </div>
                             </TableCell>
-                            <TableCell className="font-bold text-base text-slate-600 dark:text-slate-400">
+                            <TableCell className="font-bold text-base text-slate-600">
                               €{book.selling_price || '0.00'}
                             </TableCell>
                             <TableCell className="pr-8 text-right">
@@ -534,17 +521,14 @@ export default async function AdminInventoryPage({
                     </TableBody>
                   </Table>
 
-                  <div className="p-8 bg-slate-50/50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                  <div className="p-8 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
                     <p className="text-sm font-medium text-slate-500">
-                      Mostrando <span className="font-bold text-slate-900 dark:text-white">{(currentPage - 1) * itemsPerPage + 1}</span> a <span className="font-bold text-slate-900 dark:text-white">{Math.min(currentPage * itemsPerPage, totalItems)}</span> de <span className="font-bold text-slate-900 dark:text-white">{totalItems}</span> libros
+                      Mostrando <span className="font-bold text-slate-900">{(currentPage - 1) * itemsPerPage + 1}</span> a <span className="font-bold text-slate-900">{Math.min(currentPage * itemsPerPage, totalItems)}</span> de <span className="font-bold text-slate-900">{totalItems}</span> libros
                     </p>
                     <div className="flex items-center gap-2">
                       <Link
                         href={`?${new URLSearchParams({ ...params, page: (currentPage - 1).toString() }).toString()}`}
-                        className={cn(
-                          "p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 transition-colors shadow-sm",
-                          currentPage === 1 && "pointer-events-none opacity-50"
-                        )}
+                        className={cn( "p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-sm", currentPage === 1 && "pointer-events-none opacity-50" )}
                       >
                         <ChevronLeft className="h-5 w-5" />
                       </Link>
@@ -555,12 +539,7 @@ export default async function AdminInventoryPage({
                             <Link
                               key={pageNum}
                               href={`?${new URLSearchParams({ ...params, page: pageNum.toString() }).toString()}`}
-                              className={cn(
-                                "w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm transition-all",
-                                currentPage === pageNum
-                                  ? "bg-primary text-white shadow-lg shadow-primary/30"
-                                  : "hover:bg-slate-200 dark:hover:bg-slate-800"
-                              )}
+                              className={cn( "w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm transition-all", currentPage === pageNum ? "bg-primary text-white shadow-lg shadow-primary/30" : "hover:bg-slate-200 " )}
                             >
                               {pageNum}
                             </Link>
@@ -570,10 +549,7 @@ export default async function AdminInventoryPage({
                       </div>
                       <Link
                         href={`?${new URLSearchParams({ ...params, page: (currentPage + 1).toString() }).toString()}`}
-                        className={cn(
-                          "p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 transition-colors shadow-sm",
-                          currentPage === totalPages && "pointer-events-none opacity-50"
-                        )}
+                        className={cn( "p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-sm", currentPage === totalPages && "pointer-events-none opacity-50" )}
                       >
                         <ChevronRight className="h-5 w-5" />
                       </Link>

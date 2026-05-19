@@ -70,7 +70,7 @@ export default async function BooksPage({
         <h1 className="text-6xl font-serif mb-4">
           Explora nuestro catálogo
         </h1>
-        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
+        <p className="text-lg text-slate-600 max-w-2xl">
           Encuentra tu próxima gran lectura entre nuestros más de {count || 0} títulos disponibles. Las mejores historias a un clic de distancia.
         </p>
       </div>
@@ -78,11 +78,11 @@ export default async function BooksPage({
       <div className="my-8">
         <div className="flex flex-col lg:flex-row gap-8">
 
-          <aside className="w-full lg:w-64 shrink-0 space-y-8">
-            <form className="space-y-6 bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800" action="/books" method="GET">
+          <aside className="shrink-0 space-y-8 bg-cardDark rounded-2xl h-fit">
+            <form className="space-y-6 p-6 rounded-2xl" action="/books" method="GET">
               {promo && <input type="hidden" name="promo" value={promo} />}
               <div>
-                <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-slate-500">Categorías</h3>
+                <h3 className="mb-3 text-sm uppercase">Categorías</h3>
                 <div className="space-y-2">
                   {categories.map((c) => (
                     <label key={c} className="flex items-center space-x-3 cursor-pointer group">
@@ -91,9 +91,9 @@ export default async function BooksPage({
                         name="category"
                         value={c}
                         defaultChecked={category === c}
-                        className="form-radio text-primary focus:ring-primary h-4 w-4 border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800"
+                        className="form-radio text-primary focus:ring-primary h-4 w-4 border-slate-300 bg-slate-50"
                       />
-                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-primary transition-colors">{c}</span>
+                      <span className="text-sm font-medium text-slate-700 group-hover:text-primary transition-colors">{c}</span>
                     </label>
                   ))}
                 </div>
@@ -101,7 +101,7 @@ export default async function BooksPage({
 
               <Button type="submit" variant="ghost">Aplicar Filtros</Button>
               {(search || category !== 'Todas') && (
-                <Button variant="default" asChild title="Limpiar Filtros">
+                <Button variant="primary" asChild title="Limpiar Filtros">
                   <Link href={`/books${promo ? `?promo=${promo}` : ''}`}><FilterX className="h-4 w-4" /></Link>
                 </Button>
               )}
@@ -110,7 +110,7 @@ export default async function BooksPage({
 
           <main className="flex-1">
             <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
-              <p className="text-sm text-slate-500 dark:text-slate-400">
+              <p className="text-sm text-slate-500">
                 Mostrando <span className="font-medium text-slate-900">{books?.length || 0}</span> resultados de {count || 0}
               </p>
 
@@ -124,15 +124,15 @@ export default async function BooksPage({
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-20 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 border-dashed">
-                <div className="h-16 w-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
+              <div className="flex flex-col items-center justify-center py-20 text-center bg-white rounded-2xl border border-slate-100 border-dashed">
+                <div className="h-16 w-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
                   <Search className="h-8 w-8 text-slate-400" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">No se encontraron libros</h3>
-                <p className="text-slate-500 dark:text-slate-400 mb-6 max-w-sm">
+                <p className="text-slate-500 mb-6 max-w-sm">
                   Intenta cambiar los filtros o realizar una búsqueda diferente.
                 </p>
-                <Button asChild variant="default">
+                <Button asChild variant="primary">
                   <Link href={`/books${promo ? `?promo=${promo}` : ''}`}>Limpiar Filtros</Link>
                 </Button>
               </div>
@@ -141,12 +141,12 @@ export default async function BooksPage({
             {count && count > limit && (
               <div className="mt-12 flex justify-center gap-2">
                 {currentPage > 1 && (
-                  <Button variant="default" >
+                  <Button variant="primary" >
                     <Link href={`/books?page=${currentPage - 1}${search ? `&search=${search}` : ''}${category !== 'Todas' ? `&category=${category}` : ''}${promo ? `&promo=${promo}` : ''}${sortBy ? `&sortBy=${sortBy}` : ''}${sortOrder ? `&sortOrder=${sortOrder}` : ''}`}>Anterior</Link>
                   </Button>
                 )}
                 {(currentPage * limit) < count && (
-                  <Button variant="default" >
+                  <Button variant="primary" >
                     <Link href={`/books?page=${currentPage + 1}${search ? `&search=${search}` : ''}${category !== 'Todas' ? `&category=${category}` : ''}${promo ? `&promo=${promo}` : ''}${sortBy ? `&sortBy=${sortBy}` : ''}${sortOrder ? `&sortOrder=${sortOrder}` : ''}`}>Siguiente</Link>
                   </Button>
                 )}

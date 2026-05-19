@@ -32,12 +32,7 @@ export function RecommendationToggle({ bookId, isRecommended: initialIsRecommend
     <button
       onClick={handleToggle}
       disabled={isLoading}
-      className={cn(
-        "p-2 rounded-full transition-all duration-300",
-        isRecommended 
-          ? "text-yellow-500 bg-yellow-50 dark:bg-yellow-900/20" 
-          : "text-slate-300 hover:text-yellow-500 hover:bg-yellow-50 dark:hover:bg-yellow-900/20"
-      )}
+      className={cn( "p-2 rounded-full transition-all duration-300", isRecommended ? "text-yellow-500 bg-yellow-50 " : "text-slate-300 hover:text-yellow-500 hover:bg-yellow-50 " )}
       title={isRecommended ? "Quitar de recomendados" : "Marcar como recomendado (Máx 3)"}
     >
       {isLoading ? (

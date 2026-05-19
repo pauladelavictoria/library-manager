@@ -31,7 +31,7 @@ export default function Hero() {
           </span>
         </Link>
 
-        <nav className="md:flex items-center space-x-1 gap-[32px]">
+        <nav className="md:flex items-center space-x-1 gap-[32px] pt-4">
 
           {navItems.map((item) => (
             <Link

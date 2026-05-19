@@ -7,7 +7,7 @@ import { Book } from "@/lib/types";
 
 interface AddToCartButtonProps {
   book: Book;
-  variant?: "default" | "icon" | "ghost";
+  variant?: "primary" | "icon" | "ghost";
   text?: boolean;
 }
 

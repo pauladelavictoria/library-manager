@@ -64,7 +64,7 @@ export default function FuzzySearch() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query.length > 1 && setIsOpen(true)}
-          className="font-serif bg-white rounded-full p-[8px] border pl-[16px]"
+          className="font-serif bg-transparent rounded-full p-[8px] border pl-[16px]"
         />
         {query && (
           <button

@@ -55,7 +55,7 @@ export function CreateBookDialog() {
         setOpen(val);
         if (!val) setTimeout(() => setShowSuccess(false), 300);
       }}>
-        <DialogContent className="sm:max-w-[400px] border-none bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-0 overflow-hidden rounded-[2.5rem] shadow-2xl">
+        <DialogContent className="sm:max-w-[400px] border-none bg-white/80 backdrop-blur-xl p-0 overflow-hidden rounded-[2.5rem] shadow-2xl">
           <div className="p-10 text-center space-y-6">
             <DialogTitle className="sr-only">Libro añadido con éxito</DialogTitle>
             <div className="relative mx-auto w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
@@ -64,7 +64,7 @@ export function CreateBookDialog() {
             </div>
             <div className="space-y-2">
               <h3 className="text-2xl font-black tracking-tight">¡Catálogo Actualizado!</h3>
-              <p className="text-slate-500 dark:text-slate-400 font-medium">El nuevo título ya está disponible para la venta.</p>
+              <p className="text-slate-500 font-medium">El nuevo título ya está disponible para la venta.</p>
             </div>
             <Button onClick={() => setOpen(false)}>Cerrar</Button>
           </div>
@@ -81,7 +81,7 @@ export function CreateBookDialog() {
           Añadir Libro
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[550px] rounded-[2.5rem] border-slate-200 dark:border-slate-800 p-0 overflow-hidden">
+      <DialogContent className="sm:max-w-[550px] rounded-[2.5rem] border-slate-200 p-0 overflow-hidden">
         <DialogHeader className="p-8 pb-4">
           <DialogTitle className="text-2xl font-black flex items-center gap-2">
             <Plus className="h-6 w-6 text-primary" />
@@ -95,50 +95,50 @@ export function CreateBookDialog() {
               <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Título del Libro</Label>
               <div className="relative">
                 <Book className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="title" placeholder="Ej: Cien años de soledad" className="pl-10 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-bold" required />
+                <Input name="title" placeholder="Ej: Cien años de soledad" className="pl-10 h-11 rounded-xl bg-slate-50 border-none font-bold" required />
               </div>
             </div>
             <div className="space-y-2">
               <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Autor</Label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="author" placeholder="Nombre completo" className="pl-10 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-bold" required />
+                <Input name="author" placeholder="Nombre completo" className="pl-10 h-11 rounded-xl bg-slate-50 border-none font-bold" required />
               </div>
             </div>
             <div className="space-y-2">
               <Label className="text-xs font-black uppercase tracking-widest text-slate-400">ISBN</Label>
               <div className="relative">
                 <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="isbn" placeholder="978-..." className="pl-10 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-bold" required />
+                <Input name="isbn" placeholder="978-..." className="pl-10 h-11 rounded-xl bg-slate-50 border-none font-bold" required />
               </div>
             </div>
             <div className="space-y-2">
               <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Categoría</Label>
-              <Input name="category" placeholder="Ej: Novela" className="h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-bold" />
+              <Input name="category" placeholder="Ej: Novela" className="h-11 rounded-xl bg-slate-50 border-none font-bold" />
             </div>
             <div className="space-y-2">
               <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Editorial</Label>
-              <Input name="publisher" placeholder="Ej: Alfaguara" className="h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-bold" />
+              <Input name="publisher" placeholder="Ej: Alfaguara" className="h-11 rounded-xl bg-slate-50 border-none font-bold" />
             </div>
             <div className="space-y-2">
               <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Stock Inicial</Label>
               <div className="relative">
                 <Database className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="stock" type="number" min="0" defaultValue="1" className="pl-10 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-bold" required />
+                <Input name="stock" type="number" min="0" defaultValue="1" className="pl-10 h-11 rounded-xl bg-slate-50 border-none font-bold" required />
               </div>
             </div>
             <div className="space-y-2">
               <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Precio de Venta</Label>
               <div className="relative">
                 <Euro className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="price" type="number" step="0.01" min="0" placeholder="0.00" className="pl-10 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-bold" required />
+                <Input name="price" type="number" step="0.01" min="0" placeholder="0.00" className="pl-10 h-11 rounded-xl bg-slate-50 border-none font-bold" required />
               </div>
             </div>
             <div className="space-y-2 col-span-2">
               <Label className="text-xs font-black uppercase tracking-widest text-slate-400">URL de Portada</Label>
               <div className="relative">
                 <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="cover_url" placeholder="https://..." className="pl-10 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-bold" />
+                <Input name="cover_url" placeholder="https://..." className="pl-10 h-11 rounded-xl bg-slate-50 border-none font-bold" />
               </div>
             </div>
           </div>

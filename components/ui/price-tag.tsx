@@ -10,14 +10,14 @@ interface PriceTagProps {
   showDiscountBadge?: boolean;
 }
 
-export default function PriceTag({ 
-  price, 
-  className, 
+export default function PriceTag({
+  price,
+  className,
   size = "md",
-  showDiscountBadge = false 
+  showDiscountBadge = false
 }: PriceTagProps) {
   const { appliedPromo } = useCart();
-  
+
   const discountAmount = appliedPromo ? (price * (appliedPromo.discount_amount / 100)) : 0;
   const finalPrice = Math.max(0, price - discountAmount);
   const hasDiscount = discountAmount > 0;
@@ -41,25 +41,17 @@ export default function PriceTag({
       <div className="flex items-baseline gap-2">
         <div className="flex flex-col">
           {hasDiscount && (
-            <span className={cn(
-              "font-bold text-muted-foreground line-through opacity-50 leading-none mb-1",
-              originalSizeClasses[size]
-            )}>
+            <span className={cn("font-bold text-muted-foreground line-through opacity-50 leading-none mb-1", originalSizeClasses[size])}>
               €{price.toFixed(2)}
             </span>
           )}
-          <span className={cn(
-            "font-black tracking-tight leading-none",
-            hasDiscount ? "text-primary" : "text-foreground",
-            size === "xl" && "bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60",
-            sizeClasses[size]
-          )}>
+          <span className={cn("font-black tracking-tight leading-none", hasDiscount ? "text-primary" : "text-foreground", size === "xl" && "bg-clip-text bg-gradient-to-r from-primary to-primary/60", sizeClasses[size])}>
             €{finalPrice.toFixed(2)}
           </span>
         </div>
-        
+
         {hasDiscount && showDiscountBadge && (
-          <span className="ml-2 px-2 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-wider rounded-md border border-emerald-500/20">
+          <span className="ml-2 px-2 py-0.5 bg-emerald-500/10 text-emerald-600 text-[10px] font-black uppercase tracking-wider rounded-md border border-emerald-500/20">
             -{appliedPromo?.discount_amount}%
           </span>
         )}

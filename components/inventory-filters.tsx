@@ -71,7 +71,7 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
             placeholder="Título o ISBN..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-9 rounded-xl border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 w-full"
+            className="pl-9 rounded-xl border-slate-200 bg-slate-50 w-full"
           />
         </div>
 
@@ -83,7 +83,7 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
             <SelectTrigger className="rounded-xl border-primary/20 bg-primary/5 text-primary font-bold w-full">
               <SelectValue placeholder="Ordenar" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-slate-200 dark:border-slate-800">
+            <SelectContent className="rounded-xl border-slate-200">
               <SelectItem value="title">Título (A-Z)</SelectItem>
               <SelectItem value="sales">Más Vendidos</SelectItem>
               <SelectItem value="stock">Reponer Primero</SelectItem>
@@ -96,10 +96,10 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
             value={searchParams.get("category") || "all"}
             onValueChange={(v) => handleFilterChange("category", v)}
           >
-            <SelectTrigger className="rounded-xl border-slate-200 dark:border-slate-800 w-full bg-white/50 dark:bg-slate-900/50">
+            <SelectTrigger className="rounded-xl border-slate-200 w-full bg-white/50">
               <SelectValue placeholder="Género" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-slate-200 dark:border-slate-800">
+            <SelectContent className="rounded-xl border-slate-200">
               <SelectItem value="all">Géneros</SelectItem>
               {categories.map((c) => (
                 <SelectItem key={c} value={c}>{c}</SelectItem>
@@ -113,10 +113,10 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
             value={searchParams.get("author") || "all"}
             onValueChange={(v) => handleFilterChange("author", v)}
           >
-            <SelectTrigger className="rounded-xl border-slate-200 dark:border-slate-800 w-full bg-white/50 dark:bg-slate-900/50">
+            <SelectTrigger className="rounded-xl border-slate-200 w-full bg-white/50">
               <SelectValue placeholder="Autor" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl border-slate-200 dark:border-slate-800">
+            <SelectContent className="rounded-xl border-slate-200">
               <SelectItem value="all">Autores</SelectItem>
               {authors.map((a) => (
                 <SelectItem key={a} value={a}>{a}</SelectItem>
@@ -130,7 +130,7 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
             variant="ghost"
             size="sm"
             onClick={clearFilters}
-            className="rounded-full text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-800"
+            className="rounded-full text-xs font-bold hover:bg-slate-200"
           >
             <X className="mr-1 h-3 w-3" />
             Limpiar

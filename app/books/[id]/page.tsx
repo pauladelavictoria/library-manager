@@ -69,7 +69,7 @@ export default async function BookDetailPage({
                 {authorName}
               </p>
             </div>
-            <AddToCartButton book={book} variant="default" />
+            <AddToCartButton book={book} variant="primary" />
 
           </div>
 
@@ -91,12 +91,12 @@ export default async function BookDetailPage({
               <h3 className="text-2xl">Sinopsis</h3>
               <SynopsisToggle description={book.description} />
             </div>
-
           </div>
-          <PriceDisplay book={book} />
+          <div className="grid grid-cols-2 gap-10 my-10">
+            <PriceDisplay book={book} />
+            <PaymentConditions />
+          </div>
         </div>
-
-        <PaymentConditions />
 
       </div>
     </div >

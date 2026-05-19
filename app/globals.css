@@ -10,8 +10,9 @@ body {
   :root {
     --background: 60 100% 92%;
     --card-background: 60 80% 88%;
+    --card-background-dark: 60 65% 80%;
     --foreground: 240 10% 3.9%;
-    --transparent: 0 4% 62%/37%;
+    --black-transparent: 0 0% 0%/10%;
     --popover: 0 0% 100%;
     --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;

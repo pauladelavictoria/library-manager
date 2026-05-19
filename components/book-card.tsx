@@ -15,7 +15,7 @@ export function BookCard({ book }: BookCardProps) {
   const originalPrice = book.selling_price || 0;
 
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-2xl bg-white/50 dark:bg-slate-900/50">
+    <div className="group relative flex flex-col overflow-hidden rounded-2xl bg-white/50">
       <Link href={`/books/${book.id}`}>
         {book.cover_url ? (
           <img

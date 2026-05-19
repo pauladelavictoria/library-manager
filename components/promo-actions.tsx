@@ -74,7 +74,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
       <Button
         variant="ghost"
         size="icon"
-        className="h-8 w-8 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+        className="h-8 w-8 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
         onClick={() => setIsEditing(true)}
       >
         <Edit2 className="h-4 w-4" />
@@ -83,7 +83,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
       <Button
         variant="ghost"
         size="icon"
-        className="h-8 w-8 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+        className="h-8 w-8 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
         onClick={() => setShowDeleteConfirm(true)}
       >
         <Trash2 className="h-4 w-4" />
@@ -96,19 +96,19 @@ export function PromoActions({ promo }: PromoActionsProps) {
       }}>
         <DialogContent className="sm:max-w-[425px] rounded-[2.5rem] border-none shadow-2xl overflow-hidden p-0">
           {showEditSuccess ? (
-            <div className="p-10 text-center space-y-6 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl">
+            <div className="p-10 text-center space-y-6 bg-white/90 backdrop-blur-xl">
               <div className="relative mx-auto w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
                 <CheckCircle2 className="h-10 w-10 text-blue-500" />
               </div>
               <div className="space-y-1">
                 <h3 className="text-xl font-black">Cupón Actualizado</h3>
                 <p className="text-sm text-slate-500 font-medium text-balance">
-                  Los cambios en <span className="font-bold text-slate-900 dark:text-white">{promo.code}</span> se han guardado.
+                  Los cambios en <span className="font-bold text-slate-900">{promo.code}</span> se han guardado.
                 </p>
               </div>
               <Button
                 onClick={() => setIsEditing(false)}
-                className="w-full h-12 rounded-xl bg-slate-900 dark:bg-white dark:text-slate-900 font-bold"
+                className="w-full h-12 rounded-xl bg-slate-900 font-bold"
               >
                 Cerrar
               </Button>
@@ -129,7 +129,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
                     type="number"
                     step="0.01"
                     defaultValue={promo.discount_amount}
-                    className="h-12 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-bold text-lg"
+                    className="h-12 rounded-xl bg-slate-50 border-none font-bold text-lg"
                     required
                   />
                 </div>
@@ -139,7 +139,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
                     name="expiry"
                     type="datetime-local"
                     defaultValue={new Date(promo.expiry_date).toISOString().slice(0, 16)}
-                    className="h-12 rounded-xl bg-slate-50 dark:bg-slate-800 border-none font-bold"
+                    className="h-12 rounded-xl bg-slate-50 border-none font-bold"
                     required
                   />
                 </div>
@@ -162,7 +162,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
       }}>
         <DialogContent className="sm:max-w-[400px] rounded-[2.5rem] border-none shadow-2xl overflow-hidden p-0">
           {showDeleteSuccess ? (
-            <div className="p-10 text-center space-y-6 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl">
+            <div className="p-10 text-center space-y-6 bg-white/90 backdrop-blur-xl">
               <div className="relative mx-auto w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
                 <Trash2 className="h-10 w-10 text-red-500" />
               </div>
@@ -180,7 +180,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
               <div className="space-y-2">
                 <h3 className="text-2xl font-black">¿Estás seguro?</h3>
                 <p className="text-sm text-slate-500 font-medium leading-relaxed">
-                  Estás a punto de borrar el cupón <span className="font-bold text-slate-900 dark:text-white">{promo.code}</span>. Esta acción no se puede deshacer.
+                  Estás a punto de borrar el cupón <span className="font-bold text-slate-900">{promo.code}</span>. Esta acción no se puede deshacer.
                 </p>
               </div>
               <div className="flex flex-col gap-3">

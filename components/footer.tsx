@@ -44,21 +44,21 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className=" font-bold uppercase text-xs mb-6">Navegación</h4>
+            <h4 className="font-bold uppercase text-xs mb-6">Navegación</h4>
             <ul className="space-y-4 text-sm">
-              <li><Link href="/" className="hover:underline ">Inicio</Link></li>
-              <li><Link href="/books" className="hover:underline ">Catálogo Completo</Link></li>
-              <li><Link href="/trivial" className="hover:underline ">Desafío Trivial</Link></li>
-              <li><Link href="/dashboard" className="hover:underline ">Mi Perfil</Link></li>
+              <li><Link href="/" className="hover:underline">Inicio</Link></li>
+              <li><Link href="/books" className="hover:underline">Catálogo Completo</Link></li>
+              <li><Link href="/trivial" className="hover:underline">Desafío Trivial</Link></li>
+              <li><Link href="/dashboard" className="hover:underline">Mi Perfil</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className=" font-bold uppercase tracking-widest text-xs mb-6">Información</h4>
+            <h4 className="font-bold uppercase tracking-widest text-xs mb-6">Información</h4>
             <ul className="space-y-4 text-sm">
               <li className="flex items-start gap-3">
                 <div>
-                  <p className=" font-medium">Horario de Ensueño</p>
+                  <p className="font-medium">Horario de Ensueño</p>
                   <p className="text-xs">Lunes a Sábado: 10:00 - 21:00</p>
                   <p className="text-xs italic text-slate-500">Domingos: Solo lectura en la cama</p>
                 </div>
@@ -73,7 +73,7 @@ export function Footer() {
           </div>
 
           <div className="bg-slate-900/30 p-8 rounded-3xl border border-slate-800">
-            <h4 className=" font-bold mb-2">¿Buscas algo especial?</h4>
+            <h4 className="font-bold mb-2">¿Buscas algo especial?</h4>
             <p className="text-xs mb-6 text-slate-500">Únete a nuestro club de lectura y recibe novedades semanales.</p>
             <Link href="/register">
               <Button variant="ghost">

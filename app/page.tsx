@@ -34,7 +34,7 @@ export default async function Home({
     <div className="p-14 bg-[url(/images/background.jpg)] bg-contain bg-no-repeat">
 
       <div className="ml-30 my-10">
-        <h1 className=" text-[120px] font-serif leading-[100px] mb-8">
+        <h1 className="text-[120px] font-serif leading-[100px] mb-8">
           Tu próxima gran aventura comienza aquí.
         </h1>
         <p className="">
@@ -42,12 +42,12 @@ export default async function Home({
         </p>
         <div className="mt-10 flex items-center gap-x-6">
           <Link href="/books">
-            <Button variant="default">
+            <Button variant="primary">
               EXPLORAR LIBROS
             </Button>
           </Link>
           <Link href="/trivial">
-            <Button variant="destructive">
+            <Button variant="secondary">
               JUGAR TRIVIAL
             </Button>
           </Link>
@@ -65,7 +65,7 @@ export default async function Home({
             </div>
 
             <Link href="/books">
-              <Button variant="destructive">
+              <Button variant="secondary">
                 VER CATÁLOGO COMPLETO
               </Button>
             </Link>
@@ -79,7 +79,7 @@ export default async function Home({
                   {book.cover_url ? (
                     <img src={book.cover_url} alt={book.title} className="object-cover cursor-pointer mb-4 h-[300px]" />
                   ) : (
-                    <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                    <div className="w-full h-full bg-slate-100 flex items-center justify-center">
                       <BookOpen className="h-12 w-12 text-slate-300" />
                     </div>
                   )}

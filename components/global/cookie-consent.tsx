@@ -56,7 +56,7 @@ export function CookieConsent() {
 
           <div className="flex flex-col sm:flex-row gap-8">
             <Button
-              variant="default"
+              variant="primary"
               onClick={handleAccept}
             >
               Aceptar Todo
