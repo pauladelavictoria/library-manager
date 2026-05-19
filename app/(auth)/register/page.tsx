@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import RegisterForm from "./register-form";
 
 export const metadata: Metadata = {
-  title: "Sign Up",
-  description: "Create a new account",
+  title: "Registro",
+  description: "Crea una nueva cuenta",
 };
 
 export default function SignupPage() {
@@ -11,16 +11,15 @@ export default function SignupPage() {
     <div className="p-xl bg-[url(/images/background.jpg)] bg-cover">
       <div className="space-y-2 bg-background rounded-lg w-full max-w-md mx-auto p-lg">
         <h1 className="text-2xl font-semibold tracking-tight">
-          Create an account
+          Crear una cuenta
         </h1>
         <p className="text-sm text-muted-foreground">
-          Sign up for a new account to get started
+          Regístrate para comenzar
         </p>
         <RegisterForm />
       </div>
       <p className="px-lg text-center text-sm text-muted-foreground">
-        By clicking continue, you agree to our terms of service and privacy
-        policy.
+        Al continuar, aceptas nuestros términos de servicio y política de privacidad.
       </p>
     </div>
   );

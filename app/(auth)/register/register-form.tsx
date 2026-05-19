@@ -21,6 +21,7 @@ import {
 import { PasswordInput } from "@/components/ui/password-input";
 import { useNotification } from "@/lib/notification-context";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/supabase/client";
 
 const signupSchema = z.object({
   name: z
@@ -53,6 +54,23 @@ export default function RegisterForm() {
   const router = useRouter();
   const { notify } = useNotification();
 
+  const handleGoogleSignIn = async () => {
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    if (error) {
+      notify({
+        type: "error",
+        title: "Error de registro",
+        message: "No se pudo iniciar sesión con Google: " + error.message,
+      });
+    }
+  };
+
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -82,14 +100,14 @@ export default function RegisterForm() {
 
         <Separator />
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-4">
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Nombre Completo</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="my name is..."
@@ -123,7 +141,7 @@ export default function RegisterForm() {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Pnone</FormLabel>
+                    <FormLabel>Teléfono</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="+123456789"
@@ -140,7 +158,7 @@ export default function RegisterForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Contraseña</FormLabel>
                     <FormControl>
                       <PasswordInput
                         placeholder="password"
@@ -154,23 +172,25 @@ export default function RegisterForm() {
                 )}
               />
             </div>
-            <Button>
+
+            <Button variant="ghost" type="submit" disabled={isPending}>
               {isPending ? (
                 <div className="flex items-center justify-center gap-1">
                   <Icons.spinner className="mr-sm h-4 w-4 animate-spin" />
-                  <span>Becomming a member...</span>
+                  <span>Unirse...</span>
                 </div>
               ) : (
-                "Become a member"
+                "Unirse"
               )}
             </Button>
           </form>
+
         </Form>
       </div>
       <div className="text-center flex justify-between gap-6">
-        <Button variant="primary" type="button" disabled={isPending}>
+        <Button variant="primary" type="button" disabled={isPending} onClick={handleGoogleSignIn}>
           <Icons.google className="h-4 w-4" />
-          Google
+          <p className="ml-sm"> Google</p>
         </Button>
         <Link href="/login" className="w-full">
           <Button variant="primary">

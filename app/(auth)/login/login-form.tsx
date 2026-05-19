@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/form";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useNotification } from "@/lib/notification-context";
+import { createClient } from "@/supabase/client";
 
 const loginSchema = z.object({
   email: z
@@ -40,6 +41,23 @@ export default function LoginForm() {
   const { notify } = useNotification();
   const queryClient = useQueryClient();
   const redirectTo = searchParams.get("redirect") || "/";
+
+  const handleGoogleSignIn = async () => {
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
+      },
+    });
+    if (error) {
+      notify({
+        type: "error",
+        title: "Error de acceso",
+        message: "No se pudo iniciar sesión con Google: " + error.message,
+      });
+    }
+  };
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -127,7 +145,7 @@ export default function LoginForm() {
           <Link href="/register">Registrarse</Link>
         </Button>
 
-        <Button variant="primary" disabled={isPending}>
+        <Button variant="primary" disabled={isPending} onClick={handleGoogleSignIn}>
           {isPending ? (
             <Icons.spinner className="mr-sm h-4 w-4 animate-spin" />
           ) : (

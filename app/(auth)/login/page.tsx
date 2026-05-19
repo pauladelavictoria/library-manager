@@ -3,8 +3,8 @@ import LoginForm from "./login-form";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Login",
-  description: "Login to your account",
+  title: "Iniciar Sesión",
+  description: "Inicia sesión para entrar en tu cuenta",
 };
 
 export default function LoginPage() {
