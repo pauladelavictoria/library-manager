@@ -15,7 +15,6 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           cookiesToSet.forEach(({ name, value, options }) =>
             request.cookies.set(name, value)
           );
@@ -30,11 +29,6 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // Do not run code between createServerClient and
-  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
-
-  // IMPORTANT: DO NOT REMOVE auth.getUser()
 
   const {
     data: { user },
@@ -47,11 +41,11 @@ export async function updateSession(request: NextRequest) {
     !request.nextUrl.pathname.startsWith("/register") &&
     !request.nextUrl.pathname.startsWith("/error") &&
     !request.nextUrl.pathname.startsWith("/api/books") &&
+    !request.nextUrl.pathname.startsWith("/api/categories") &&
     !request.nextUrl.pathname.startsWith("/books") &&
     !request.nextUrl.pathname.startsWith("/trivial") &&
     request.nextUrl.pathname !== "/"
   ) {
-    // no user, potentially respond by redirecting the user to the login page
     const redirectUrl = new URL("/login", request.url);
     redirectUrl.searchParams.set("redirect", request.nextUrl.pathname);
     return NextResponse.redirect(redirectUrl);

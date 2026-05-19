@@ -48,7 +48,17 @@ export default async function BooksPage({
   const limit = meta?.limit || 20;
   const currentPage = parseInt(page, 10);
 
-  const categories = ["Fiction", "Fantasy", "Science", "History", "Romance", "Thriller", "Todas"];
+  const categoriesApiUrl = new URL(`${protocol}://${host}/api/categories`);
+  let categories = ["Fiction", "Fantasy", "Science", "History", "Romance", "Thriller", "Todas"]; // Fallback
+  try {
+    const categoriesRes = await fetch(categoriesApiUrl.toString(), { cache: 'no-store' });
+    const { data: fetchedCategories } = await categoriesRes.json();
+    if (fetchedCategories && Array.isArray(fetchedCategories)) {
+      categories = [...fetchedCategories, "Todas"];
+    }
+  } catch (error) {
+    console.error("Error fetching categories frontend:", error);
+  }
 
 
   return (
