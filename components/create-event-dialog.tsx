@@ -80,16 +80,15 @@ export function CreateEventDialog() {
       }}>
         <DialogContent className="sm:max-w-[400px] border-none bg-white/80 backdrop-blur-xl p-0 overflow-hidden rounded-[2.5rem] shadow-2xl">
           <div className="p-lg text-center space-y-6">
-            <DialogTitle className="sr-only">Evento programado con éxito</DialogTitle>
             <div className="relative mx-auto w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
               <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping opacity-25" />
               <Calendar className="h-12 w-12 text-primary" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-2xl font-black tracking-tight">¡Evento Programado!</h3>
-              <p className=" font-medium">
+              <DialogTitle className="text-2xl font-black tracking-tight">¡Evento Programado!</DialogTitle>
+              <DialogDescription className="font-medium">
                 Ya está disponible en la agenda cultural de la librería.
-              </p>
+              </DialogDescription>
             </div>
             <Button
               onClick={() => {
@@ -109,7 +108,7 @@ export function CreateEventDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">
+        <Button variant="ghost">
           <Calendar className="mr-sm h-4 w-4" />
           Nuevo Evento
         </Button>

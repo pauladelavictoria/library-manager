@@ -88,13 +88,12 @@ export function BookActions({ book }: BookActionsProps) {
         <DialogContent className="sm:max-w-[500px] rounded-[2.5rem] border-none shadow-2xl overflow-hidden p-0">
           {showEditSuccess ? (
             <div className="p-lg text-center space-y-6 bg-white/90 backdrop-blur-xl">
-              <DialogTitle className="sr-only">Libro actualizado con éxito</DialogTitle>
               <div className="relative mx-auto w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
                 <CheckCircle2 className="h-10 w-10 text-emerald-500" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-xl font-black">Libro Actualizado</h3>
-                <p className="text-sm  font-medium text-balance">Los cambios en el catálogo se han guardado correctamente.</p>
+                <DialogTitle className="text-xl font-black">Libro Actualizado</DialogTitle>
+                <DialogDescription className="text-sm font-medium text-balance">Los cambios en el catálogo se han guardado correctamente.</DialogDescription>
               </div>
               <Button onClick={() => setIsEditing(false)}>Cerrar</Button>
             </div>
@@ -154,13 +153,12 @@ export function BookActions({ book }: BookActionsProps) {
         <DialogContent className="sm:max-w-[400px] rounded-[2.5rem] border-none shadow-2xl overflow-hidden p-0">
           {showDeleteSuccess ? (
             <div className="p-lg text-center space-y-6 bg-white/90 backdrop-blur-xl">
-              <DialogTitle className="sr-only">Libro eliminado con éxito</DialogTitle>
               <div className="relative mx-auto w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
                 <Trash2 className="h-10 w-10 text-red-500" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-xl font-black tracking-tight">Eliminado</h3>
-                <p className="text-sm  font-medium text-balance">El título ha sido borrado del catálogo permanentemente.</p>
+                <DialogTitle className="text-xl font-black tracking-tight">Eliminado</DialogTitle>
+                <DialogDescription className="text-sm font-medium text-balance">El título ha sido borrado del catálogo permanentemente.</DialogDescription>
               </div>
               <Button onClick={() => setShowDeleteConfirm(false)}>Cerrar</Button>
             </div>
@@ -171,9 +169,9 @@ export function BookActions({ book }: BookActionsProps) {
               </div>
               <div className="space-y-2">
                 <DialogTitle className="text-2xl font-black text-slate-900">¿Estás seguro?</DialogTitle>
-                <p className="text-sm  font-medium leading-relaxed">
+                <DialogDescription className="text-sm font-medium leading-relaxed">
                   Estás a punto de borrar <span className="font-bold text-slate-900">{book.title}</span>. Esta acción no se puede deshacer.
-                </p>
+                </DialogDescription>
               </div>
               <div className="flex flex-col gap-3">
                 <Button onClick={handleDelete} disabled={isLoading}>

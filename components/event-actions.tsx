@@ -93,15 +93,14 @@ export function EventActions({ event }: { event: Event }) {
         <DialogContent className="sm:max-w-[500px] rounded-[2.5rem] border-none shadow-2xl overflow-hidden p-0">
           {showEditSuccess ? (
             <div className="p-lg text-center space-y-6 bg-white/90 backdrop-blur-xl">
-              <DialogTitle className="sr-only">Evento actualizado con éxito</DialogTitle>
               <div className="relative mx-auto w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
                 <CheckCircle2 className="h-10 w-10 text-emerald-500" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-xl font-black">Evento Actualizado</h3>
-                <p className="text-sm  font-medium">
+                <DialogTitle className="text-xl font-black">Evento Actualizado</DialogTitle>
+                <DialogDescription className="text-sm font-medium">
                   Los cambios en el evento se han guardado correctamente.
-                </p>
+                </DialogDescription>
               </div>
               <Button onClick={() => setIsEditing(false)}>Cerrar</Button>
             </div>
@@ -167,12 +166,11 @@ export function EventActions({ event }: { event: Event }) {
           {showDeleteSuccess ? (
             <div className="p-lg text-center space-y-6 bg-white/90 backdrop-blur-xl">
               <div className="relative mx-auto w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
-                <DialogTitle className="sr-only">Evento eliminado con éxito</DialogTitle>
                 <Trash2 className="h-10 w-10 text-red-500" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-xl font-black tracking-tight">Eliminado</h3>
-                <p className="text-sm  font-medium text-balance">El evento ha sido cancelado y borrado de la agenda.</p>
+                <DialogTitle className="text-xl font-black tracking-tight">Eliminado</DialogTitle>
+                <DialogDescription className="text-sm font-medium text-balance">El evento ha sido cancelado y borrado de la agenda.</DialogDescription>
               </div>
               <Button onClick={() => setShowDeleteConfirm(false)}>Cerrar</Button>
             </div>
@@ -183,9 +181,9 @@ export function EventActions({ event }: { event: Event }) {
               </div>
               <div className="space-y-2">
                 <DialogTitle className="text-2xl font-black">¿Cancelar evento?</DialogTitle>
-                <p className="text-sm  font-medium leading-relaxed">
+                <DialogDescription className="text-sm font-medium leading-relaxed">
                   Estás a punto de borrar <span className="font-bold text-slate-900">{event.title}</span>. Se perderán todas las reservas asociadas.
-                </p>
+                </DialogDescription>
               </div>
               <div className="flex flex-col gap-3">
                 <Button onClick={handleDelete} disabled={isLoading}>

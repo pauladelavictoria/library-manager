@@ -26,7 +26,6 @@ interface PromoActionsProps {
 }
 
 export function PromoActions({ promo }: PromoActionsProps) {
-  const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
 
@@ -73,8 +72,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
     <div className="flex items-center gap-2">
       <Button
         variant="ghost"
-        size="icon"
-        className="h-8 w-8 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+        className="h-8 w-8 rounded-lg hover:text-blue-600 hover:bg-blue-50 transition-colors"
         onClick={() => setIsEditing(true)}
       >
         <Edit2 className="h-4 w-4" />
@@ -82,14 +80,12 @@ export function PromoActions({ promo }: PromoActionsProps) {
 
       <Button
         variant="ghost"
-        size="icon"
-        className="h-8 w-8 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+        className="h-8 w-8 rounded-lg hover:text-red-600 hover:bg-red-50 transition-colors"
         onClick={() => setShowDeleteConfirm(true)}
       >
         <Trash2 className="h-4 w-4" />
       </Button>
 
-      {/* DIÁLOGO DE EDICIÓN */}
       <Dialog open={isEditing} onOpenChange={(val) => {
         setIsEditing(val);
         if (!val) setTimeout(() => setShowEditSuccess(false), 300);
@@ -123,29 +119,29 @@ export function PromoActions({ promo }: PromoActionsProps) {
               </DialogHeader>
               <form onSubmit={handleUpdate} className="space-y-6">
                 <div className="space-y-2">
-                  <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Descuento (%)</Label>
+                  <Label className="text-xs font-black uppercase tracking-widest">Descuento (%)</Label>
                   <Input
                     name="discount"
                     type="number"
                     step="0.01"
                     defaultValue={promo.discount_amount}
-                    className="h-12 rounded-xl bg-slate-50 border-none font-bold text-lg"
+                    className="h-12 rounded-xl border border-cardDark font-bold text-lg"
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Expiración</Label>
+                  <Label className="text-xs font-black uppercase tracking-widest">Expiración</Label>
                   <Input
                     name="expiry"
                     type="datetime-local"
                     defaultValue={new Date(promo.expiry_date).toISOString().slice(0, 16)}
-                    className="h-12 rounded-xl bg-slate-50 border-none font-bold"
+                    className="h-12 rounded-xl border border-cardDark font-bold"
                     required
                   />
                 </div>
                 <DialogFooter className="pt-sm gap-2">
                   <Button type="button" variant="ghost" onClick={() => setIsEditing(false)} >Cancelar</Button>
-                  <Button type="submit" disabled={isLoading} >
+                  <Button type="submit" disabled={isLoading} variant="ghost">
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Guardar"}
                   </Button>
                 </DialogFooter>
@@ -155,7 +151,6 @@ export function PromoActions({ promo }: PromoActionsProps) {
         </DialogContent>
       </Dialog>
 
-      {/* DIÁLOGO DE BORRADO */}
       <Dialog open={showDeleteConfirm} onOpenChange={(val) => {
         setShowDeleteConfirm(val);
         if (!val) setTimeout(() => setShowDeleteSuccess(false), 300);
@@ -167,8 +162,8 @@ export function PromoActions({ promo }: PromoActionsProps) {
                 <Trash2 className="h-10 w-10 text-red-500" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-xl font-black tracking-tight">Eliminado</h3>
-                <p className="text-sm  font-medium">El cupón ha sido borrado del sistema.</p>
+                <DialogTitle className="text-xl font-black tracking-tight">Eliminado</DialogTitle>
+                <DialogDescription className="text-sm font-medium">El cupón ha sido borrado del sistema.</DialogDescription>
               </div>
               <Button onClick={() => setShowDeleteConfirm(false)} >Cerrar</Button>
             </div>
@@ -178,10 +173,10 @@ export function PromoActions({ promo }: PromoActionsProps) {
                 <AlertTriangle className="h-10 w-10 text-red-500" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-2xl font-black">¿Estás seguro?</h3>
-                <p className="text-sm  font-medium leading-relaxed">
+                <DialogTitle className="text-2xl font-black">¿Estás seguro?</DialogTitle>
+                <DialogDescription className="text-sm font-medium leading-relaxed">
                   Estás a punto de borrar el cupón <span className="font-bold text-slate-900">{promo.code}</span>. Esta acción no se puede deshacer.
-                </p>
+                </DialogDescription>
               </div>
               <div className="flex flex-col gap-3">
                 <Button
