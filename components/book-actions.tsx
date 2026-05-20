@@ -94,7 +94,7 @@ export function BookActions({ book }: BookActionsProps) {
               </div>
               <div className="space-y-1">
                 <h3 className="text-xl font-black">Libro Actualizado</h3>
-                <p className="text-sm text-slate-500 font-medium text-balance">Los cambios en el catálogo se han guardado correctamente.</p>
+                <p className="text-sm  font-medium text-balance">Los cambios en el catálogo se han guardado correctamente.</p>
               </div>
               <Button onClick={() => setIsEditing(false)}>Cerrar</Button>
             </div>
@@ -102,7 +102,7 @@ export function BookActions({ book }: BookActionsProps) {
             <div className="p-lg space-y-6">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-black">Editar Libro</DialogTitle>
-                <DialogDescription className="font-medium text-slate-500">Ajusta los detalles de este título en el inventario.</DialogDescription>
+                <DialogDescription className="font-medium ">Ajusta los detalles de este título en el inventario.</DialogDescription>
               </DialogHeader>
               <form onSubmit={handleUpdate} className="space-y-4">
                 <div className="space-y-2">
@@ -160,7 +160,7 @@ export function BookActions({ book }: BookActionsProps) {
               </div>
               <div className="space-y-1">
                 <h3 className="text-xl font-black tracking-tight">Eliminado</h3>
-                <p className="text-sm text-slate-500 font-medium text-balance">El título ha sido borrado del catálogo permanentemente.</p>
+                <p className="text-sm  font-medium text-balance">El título ha sido borrado del catálogo permanentemente.</p>
               </div>
               <Button onClick={() => setShowDeleteConfirm(false)}>Cerrar</Button>
             </div>
@@ -171,7 +171,7 @@ export function BookActions({ book }: BookActionsProps) {
               </div>
               <div className="space-y-2">
                 <DialogTitle className="text-2xl font-black text-slate-900">¿Estás seguro?</DialogTitle>
-                <p className="text-sm text-slate-500 font-medium leading-relaxed">
+                <p className="text-sm  font-medium leading-relaxed">
                   Estás a punto de borrar <span className="font-bold text-slate-900">{book.title}</span>. Esta acción no se puede deshacer.
                 </p>
               </div>

@@ -60,7 +60,7 @@ export function Footer() {
                 <div>
                   <p className="font-medium">Horario de Ensueño</p>
                   <p className="text-xs">Lunes a Sábado: 10:00 - 21:00</p>
-                  <p className="text-xs italic text-slate-500">Domingos: Solo lectura en la cama</p>
+                  <p className="text-xs italic ">Domingos: Solo lectura en la cama</p>
                 </div>
               </li>
               <li className="flex items-center gap-3">
@@ -74,7 +74,7 @@ export function Footer() {
 
           <div className="bg-slate-900/30 p-lg rounded-3xl border border-slate-800">
             <h4 className="font-bold mb-sm">¿Buscas algo especial?</h4>
-            <p className="text-xs mb-lg text-slate-500">Únete a nuestro club de lectura y recibe novedades semanales.</p>
+            <p className="text-xs mb-lg ">Únete a nuestro club de lectura y recibe novedades semanales.</p>
             <Link href="/register">
               <Button variant="ghost">
                 Registrarme Gratis

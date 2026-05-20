@@ -64,7 +64,7 @@ export function CreateBookDialog() {
             </div>
             <div className="space-y-2">
               <h3 className="text-2xl font-black tracking-tight">¡Catálogo Actualizado!</h3>
-              <p className="text-slate-500 font-medium">El nuevo título ya está disponible para la venta.</p>
+              <p className=" font-medium">El nuevo título ya está disponible para la venta.</p>
             </div>
             <Button onClick={() => setOpen(false)}>Cerrar</Button>
           </div>
@@ -87,7 +87,7 @@ export function CreateBookDialog() {
             <Plus className="h-6 w-6 text-primary" />
             Nuevo Título
           </DialogTitle>
-          <DialogDescription className="font-medium text-slate-500">Completa los datos para registrar un nuevo libro en el inventario.</DialogDescription>
+          <DialogDescription className="font-medium ">Completa los datos para registrar un nuevo libro en el inventario.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="p-lg pt-0 space-y-6">
           <div className="grid grid-cols-2 gap-4">

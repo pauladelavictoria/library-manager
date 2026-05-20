@@ -99,7 +99,7 @@ export function EventActions({ event }: { event: Event }) {
               </div>
               <div className="space-y-1">
                 <h3 className="text-xl font-black">Evento Actualizado</h3>
-                <p className="text-sm text-slate-500 font-medium">
+                <p className="text-sm  font-medium">
                   Los cambios en el evento se han guardado correctamente.
                 </p>
               </div>
@@ -109,7 +109,7 @@ export function EventActions({ event }: { event: Event }) {
             <div className="p-lg space-y-6">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-black">Editar Evento</DialogTitle>
-                <DialogDescription className="font-medium text-slate-500">Ajusta los detalles de la actividad.</DialogDescription>
+                <DialogDescription className="font-medium ">Ajusta los detalles de la actividad.</DialogDescription>
               </DialogHeader>
               <form onSubmit={handleUpdate} className="space-y-4">
                 <div className="space-y-2">
@@ -172,7 +172,7 @@ export function EventActions({ event }: { event: Event }) {
               </div>
               <div className="space-y-1">
                 <h3 className="text-xl font-black tracking-tight">Eliminado</h3>
-                <p className="text-sm text-slate-500 font-medium text-balance">El evento ha sido cancelado y borrado de la agenda.</p>
+                <p className="text-sm  font-medium text-balance">El evento ha sido cancelado y borrado de la agenda.</p>
               </div>
               <Button onClick={() => setShowDeleteConfirm(false)}>Cerrar</Button>
             </div>
@@ -183,7 +183,7 @@ export function EventActions({ event }: { event: Event }) {
               </div>
               <div className="space-y-2">
                 <DialogTitle className="text-2xl font-black">¿Cancelar evento?</DialogTitle>
-                <p className="text-sm text-slate-500 font-medium leading-relaxed">
+                <p className="text-sm  font-medium leading-relaxed">
                   Estás a punto de borrar <span className="font-bold text-slate-900">{event.title}</span>. Se perderán todas las reservas asociadas.
                 </p>
               </div>

@@ -1,6 +1,6 @@
 import { createClient } from "@/supabase/server";
 import { redirect } from "next/navigation";
-import { Package2, AlertTriangle, Trophy, Tag, ChevronRight, ChevronLeft } from "lucide-react";
+import { AlertTriangle, Trophy, Tag, ChevronRight, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -97,7 +97,6 @@ export default async function AdminInventoryPage({
   });
   const sortedBestSellers = (topSellers || []) as BookType[];
 
-  const enrichedBooks = paginatedBooks;
   const recommendedCount = paginatedBooks.filter(b => (b as any).is_recommended).length;
 
   const period = params.period || "week";
@@ -273,12 +272,12 @@ export default async function AdminInventoryPage({
                 <Table>
                   <TableHeader>
                     <TableRow className="hover:bg-transparent border-slate-100">
-                      <TableHead className="pl-lg font-bold uppercase text-[10px] tracking-widest text-slate-400 py-lg">Código</TableHead>
-                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Descuento</TableHead>
-                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Usos</TableHead>
-                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Total Descontado</TableHead>
-                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Ingresos (Neto)</TableHead>
-                      <TableHead className="pr-lg text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
+                      <TableHead className="pl-lg font-bold uppercase text-[10px] tracking-widest  py-lg">Código</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest ">Descuento</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest ">Usos</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest ">Total Descontado</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest ">Ingresos (Neto)</TableHead>
+                      <TableHead className="pr-lg text-right font-bold uppercase text-[10px] tracking-widest ">Acciones</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -293,7 +292,7 @@ export default async function AdminInventoryPage({
                               <p className="font-black tracking-tight">{promo.code}</p>
                               <div className="flex items-center gap-1.5">
                                 <div className={cn("h-1.5 w-1.5 rounded-full", promo.isActive ? "bg-emerald-500" : "bg-slate-300")} />
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                                <p className="text-[10px] font-bold  uppercase tracking-tighter">
                                   {promo.isActive ? "Activo" : (promo.is_one_time && promo.usage_count > 0 ? "Usado" : "Inactivo")}
                                 </p>
                                 {promo.is_one_time && (
@@ -344,12 +343,12 @@ export default async function AdminInventoryPage({
                 <Table>
                   <TableHeader>
                     <TableRow className="hover:bg-transparent border-slate-100">
-                      <TableHead className="pl-lg font-bold uppercase text-[10px] tracking-widest text-slate-400 py-lg">Evento</TableHead>
-                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Tipo</TableHead>
-                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Fecha y Hora</TableHead>
-                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Ubicación</TableHead>
-                      <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Asistentes</TableHead>
-                      <TableHead className="pr-lg text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
+                      <TableHead className="pl-lg font-bold uppercase text-[10px] tracking-widest  py-lg">Evento</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest ">Tipo</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest ">Fecha y Hora</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest ">Ubicación</TableHead>
+                      <TableHead className="font-bold uppercase text-[10px] tracking-widest  text-center">Asistentes</TableHead>
+                      <TableHead className="pr-lg text-right font-bold uppercase text-[10px] tracking-widest ">Acciones</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -421,7 +420,7 @@ export default async function AdminInventoryPage({
           <TabsContent value="catalog">
             <main className="w-full">
               <Card className="rounded-[2rem] border-slate-200 shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
-                <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-lg bg-white px-lg py-lg">
+                <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-lg bg-back px-lg py-lg">
                   <div>
                     <CardTitle className="text-3xl font-black">Catálogo de Inventario</CardTitle>
                     <CardDescription className="font-medium">Gestión total de los libros y existencias de la librería.</CardDescription>
@@ -429,23 +428,22 @@ export default async function AdminInventoryPage({
                   <CreateBookDialog />
                 </CardHeader>
                 <CardContent className="p-0">
-                  <div className="p-lg border-b border-slate-100">
+                  <div className="p-lg  pt-0 border-b border-slate-100">
                     <InventoryFilters
                       authors={filterOptions.authors}
                       categories={filterOptions.categories}
-                      publishers={filterOptions.publishers}
                     />
                   </div>
                   <Table>
                     <TableHeader>
                       <TableRow className="hover:bg-transparent border-slate-100">
-                        <TableHead className="pl-lg font-bold uppercase text-[10px] tracking-widest text-slate-400 py-lg">Libro</TableHead>
-                        <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Estado</TableHead>
-                        <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Reco</TableHead>
-                        <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400 text-center">Ventas</TableHead>
-                        <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Stock</TableHead>
-                        <TableHead className="font-bold uppercase text-[10px] tracking-widest text-slate-400">Precio</TableHead>
-                        <TableHead className="pr-lg text-right font-bold uppercase text-[10px] tracking-widest text-slate-400">Acciones</TableHead>
+                        <TableHead className="pl-lg font-bold uppercase text-[10px] tracking-widest py-lg">Libro</TableHead>
+                        <TableHead className="font-bold uppercase text-[10px] tracking-widest">Estado</TableHead>
+                        <TableHead className="font-bold uppercase text-[10px] tracking-widest text-center">Reco</TableHead>
+                        <TableHead className="font-bold uppercase text-[10px] tracking-widest text-center">Ventas</TableHead>
+                        <TableHead className="font-bold uppercase text-[10px] tracking-widest">Stock</TableHead>
+                        <TableHead className="font-bold uppercase text-[10px] tracking-widest">Precio</TableHead>
+                        <TableHead className="pr-lg text-right font-bold uppercase text-[10px] tracking-widest">Acciones</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -469,7 +467,7 @@ export default async function AdminInventoryPage({
                                 </Link>
                                 <div className="min-w-0">
                                   <p className="font-bold text-base line-clamp-1 group-hover:text-primary transition-colors">{book.title}</p>
-                                  <p className="text-sm text-slate-400 truncate max-w-[200px]">{book.isbn}</p>
+                                  <p className="text-sm  truncate max-w-[200px]">{book.isbn}</p>
                                 </div>
                               </div>
                             </TableCell>
@@ -494,7 +492,7 @@ export default async function AdminInventoryPage({
                             <TableCell className="text-center">
                               <div className="inline-flex flex-col items-center">
                                 <span className="text-xl font-black text-slate-900">{book.sold_count}</span>
-                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">unidades</span>
+                                <span className="text-[10px] font-bold  uppercase tracking-tighter">unidades</span>
                               </div>
                             </TableCell>
                             <TableCell>

@@ -17,10 +17,9 @@ import { useDebounce } from "@/hooks/use-debounce";
 interface InventoryFiltersProps {
   authors: string[];
   categories: string[];
-  publishers: string[];
 }
 
-export function InventoryFilters({ authors, categories, publishers }: InventoryFiltersProps) {
+export function InventoryFilters({ authors, categories }: InventoryFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -63,7 +62,7 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
   };
 
   return (
-    <div className="space-y-4">
+    <div>
       <div className="flex flex-wrap items-center gap-4">
         <div className="relative w-full sm:w-[250px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -71,7 +70,7 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
             placeholder="Título o ISBN..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-lg rounded-xl border-slate-200 bg-slate-50 w-full"
+            className="pl-lg rounded-xl border-slate-200 bg-background w-full"
           />
         </div>
 
@@ -80,7 +79,7 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
             value={searchParams.get("sort") || "title"}
             onValueChange={(v) => handleFilterChange("sort", v)}
           >
-            <SelectTrigger className="rounded-xl border-primary/20 bg-primary/5 text-primary font-bold w-full">
+            <SelectTrigger className="rounded-xl w-full">
               <SelectValue placeholder="Ordenar" />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-slate-200">
@@ -96,7 +95,7 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
             value={searchParams.get("category") || "all"}
             onValueChange={(v) => handleFilterChange("category", v)}
           >
-            <SelectTrigger className="rounded-xl border-slate-200 w-full bg-white/50">
+            <SelectTrigger className="rounded-xl border-slate-200 w-full bg-background">
               <SelectValue placeholder="Género" />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-slate-200">
@@ -113,7 +112,7 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
             value={searchParams.get("author") || "all"}
             onValueChange={(v) => handleFilterChange("author", v)}
           >
-            <SelectTrigger className="rounded-xl border-slate-200 w-full bg-white/50">
+            <SelectTrigger className="rounded-xl border-slate-200 w-full bg-background">
               <SelectValue placeholder="Autor" />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-slate-200">
@@ -128,7 +127,6 @@ export function InventoryFilters({ authors, categories, publishers }: InventoryF
         {hasFilters && (
           <Button
             variant="ghost"
-            size="sm"
             onClick={clearFilters}
             className="rounded-full text-xs font-bold hover:bg-slate-200"
           >

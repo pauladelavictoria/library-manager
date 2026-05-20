@@ -12,6 +12,7 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useNotification } from "@/lib/notification-context";
+import { Button } from "./ui/button";
 
 export default function GlobalNotification() {
   const { notification, closeNotification } = useNotification();
@@ -54,8 +55,8 @@ export default function GlobalNotification() {
   };
 
   return (
-    <div className={cn( "fixed bottom-6 right-6 z-[100] w-full transition-all duration-500 ease-out", isLarge ? "max-w-2xl" : "max-w-sm", isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-12 opacity-0 scale-95 pointer-events-none" )}>
-      <div className={cn( "relative overflow-hidden rounded-[2.5rem] bg-white/90 border backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] ",
+    <div className={cn("fixed bottom-6 right-6 z-[100] w-full transition-all duration-500 ease-out", isLarge ? "max-w-2xl" : "max-w-sm", isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-12 opacity-0 scale-95 pointer-events-none")}>
+      <div className={cn("relative overflow-hidden rounded-[2.5rem] bg-white/90 border backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] ",
         isLarge ? "p-lg" : "p-lg",
         bgColors[type] || bgColors.info
       )}>
@@ -66,7 +67,7 @@ export default function GlobalNotification() {
                 <img src={data.cover_url} alt={data.title} className="w-full h-full object-cover" />
               </div>
             ) : (
-              <div className={cn( "rounded-2xl flex items-center justify-center", isLarge ? "w-20 h-20" : "w-12 h-12", type === 'success' ? "bg-green-100 " : type === 'error' ? "bg-red-100 " : type === 'info' ? "bg-blue-100 " : "bg-primary/10" )}>
+              <div className={cn("rounded-2xl flex items-center justify-center", isLarge ? "w-20 h-20" : "w-12 h-12", type === 'success' ? "bg-green-100 " : type === 'error' ? "bg-red-100 " : type === 'info' ? "bg-blue-100 " : "bg-primary/10")}>
                 {icons[type] || icons.info}
               </div>
             )}
@@ -74,20 +75,20 @@ export default function GlobalNotification() {
 
           <div className="flex-1 min-w-0">
             <div className="flex justify-between items-start mb-sm">
-              <h4 className={cn( "font-black uppercase tracking-widest", isLarge ? "text-sm" : "text-[10px]", tagColors[type] || tagColors.info )}>
+              <h4 className={cn("font-black uppercase tracking-widest", isLarge ? "text-sm" : "text-[10px]", tagColors[type] || tagColors.info)}>
                 {title}
               </h4>
-              <button
+              <Button
                 onClick={closeNotification}
-                className="text-slate-400 hover:text-slate-600 transition-colors p-xs"
+                variant="icon"
               >
                 <X className={isLarge ? "h-6 w-6" : "h-4 w-4"} />
-              </button>
+              </Button>
             </div>
-            <h3 className={cn( "font-black text-slate-900 leading-tight mb-sm", isLarge ? "text-3xl" : "text-base" )}>
+            <h3 className={cn("font-black text-slate-900 leading-tight mb-sm", isLarge ? "text-3xl" : "text-base")}>
               {type === 'cart' ? data?.title : (activeNotification.title === 'Cupón aplicado' ? `¡Código ${data?.code || ''}!` : message)}
             </h3>
-            <p className={cn( "text-slate-500 font-medium", isLarge ? "text-lg mb-lg" : "text-sm mb-md" )}>
+            <p className={cn(" font-medium", isLarge ? "text-lg mb-lg" : "text-sm mb-md")}>
               {type === 'cart'
                 ? (data?.quantity === 1 ? 'Nuevo ejemplar añadido' : `Ahora tienes ${data?.quantity} unidades`)
                 : (activeNotification.title === 'Cupón aplicado' ? message : '')}
@@ -97,10 +98,9 @@ export default function GlobalNotification() {
             {(type === 'cart' || (type === 'success' && activeNotification.title === 'Cupón aplicado')) && (
               <div className="flex gap-3">
                 <Link href="/cart" className="flex-1" onClick={closeNotification}>
-                  <button >
+                  <Button variant="ghost">
                     Ver Carrito
-                    <ArrowRight className={isLarge ? "h-5 w-5" : "h-3 w-3"} />
-                  </button>
+                  </Button>
                 </Link>
               </div>
             )}
@@ -108,14 +108,14 @@ export default function GlobalNotification() {
             {data?.showAuth && (
               <div className={cn("flex", isLarge ? "gap-4" : "gap-2")}>
                 <Link href="/login" className="flex-1" onClick={closeNotification}>
-                  <button >
+                  <Button variant="primary">
                     Iniciar Sesión
-                  </button>
+                  </Button>
                 </Link>
                 <Link href="/register" className="flex-1" onClick={closeNotification}>
-                  <button>
+                  <Button variant="primary">
                     Crear Cuenta
-                  </button>
+                  </Button>
                 </Link>
               </div>
             )}

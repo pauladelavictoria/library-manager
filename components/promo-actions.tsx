@@ -102,7 +102,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
               </div>
               <div className="space-y-1">
                 <h3 className="text-xl font-black">Cupón Actualizado</h3>
-                <p className="text-sm text-slate-500 font-medium text-balance">
+                <p className="text-sm  font-medium text-balance">
                   Los cambios en <span className="font-bold text-slate-900">{promo.code}</span> se han guardado.
                 </p>
               </div>
@@ -117,7 +117,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
             <div className="p-lg space-y-6">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-black">Editar Cupón</DialogTitle>
-                <DialogDescription className="font-medium text-slate-500">
+                <DialogDescription className="font-medium ">
                   Modifica los detalles del código <span className="text-primary font-bold">{promo.code}</span>.
                 </DialogDescription>
               </DialogHeader>
@@ -168,7 +168,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
               </div>
               <div className="space-y-1">
                 <h3 className="text-xl font-black tracking-tight">Eliminado</h3>
-                <p className="text-sm text-slate-500 font-medium">El cupón ha sido borrado del sistema.</p>
+                <p className="text-sm  font-medium">El cupón ha sido borrado del sistema.</p>
               </div>
               <Button onClick={() => setShowDeleteConfirm(false)} >Cerrar</Button>
             </div>
@@ -179,7 +179,7 @@ export function PromoActions({ promo }: PromoActionsProps) {
               </div>
               <div className="space-y-2">
                 <h3 className="text-2xl font-black">¿Estás seguro?</h3>
-                <p className="text-sm text-slate-500 font-medium leading-relaxed">
+                <p className="text-sm  font-medium leading-relaxed">
                   Estás a punto de borrar el cupón <span className="font-bold text-slate-900">{promo.code}</span>. Esta acción no se puede deshacer.
                 </p>
               </div>

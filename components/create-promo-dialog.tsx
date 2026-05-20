@@ -75,7 +75,7 @@ export function CreatePromoDialog() {
             </div>
             <div className="space-y-2">
               <h3 className="text-2xl font-black tracking-tight">¡Todo listo!</h3>
-              <p className="text-slate-500 font-medium">
+              <p className=" font-medium">
                 El cupón ha sido activado correctamente.
               </p>
             </div>
@@ -112,7 +112,7 @@ export function CreatePromoDialog() {
             <Tag className="h-6 w-6 text-primary" />
             Crear Código Promocional
           </DialogTitle>
-          <DialogDescription className="font-medium text-slate-500">
+          <DialogDescription className="font-medium ">
             Define un nuevo cupón de descuento para tus clientes.
           </DialogDescription>
         </DialogHeader>
@@ -176,7 +176,7 @@ export function CreatePromoDialog() {
             />
             <div className="space-y-0.5">
               <Label htmlFor="is_one_time" className="text-sm font-bold cursor-pointer">Cupón de un solo uso</Label>
-              <p className="text-[10px] text-slate-500 font-medium">El código se desactivará tras la primera compra.</p>
+              <p className="text-[10px]  font-medium">El código se desactivará tras la primera compra.</p>
             </div>
           </div>
           <DialogFooter>

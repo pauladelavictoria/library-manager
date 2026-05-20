@@ -87,7 +87,7 @@ export function CreateEventDialog() {
             </div>
             <div className="space-y-2">
               <h3 className="text-2xl font-black tracking-tight">¡Evento Programado!</h3>
-              <p className="text-slate-500 font-medium">
+              <p className=" font-medium">
                 Ya está disponible en la agenda cultural de la librería.
               </p>
             </div>
@@ -120,7 +120,7 @@ export function CreateEventDialog() {
             <Plus className="h-6 w-6 text-primary" />
             Programar Evento
           </DialogTitle>
-          <DialogDescription className="font-medium text-slate-500">
+          <DialogDescription className="font-medium ">
             Añade una nueva actividad a la agenda de la librería.
           </DialogDescription>
         </DialogHeader>

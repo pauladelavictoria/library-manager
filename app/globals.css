@@ -47,6 +47,6 @@ body {
 
 @layer utilities {
   .hero-container {
-    @apply p-xl bg-hero-pattern bg-cover bg-no-repeat;
+    @apply p-xl bg-hero-pattern w-full bg-no-repeat;
   }
 }

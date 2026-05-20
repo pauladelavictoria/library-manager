@@ -27,7 +27,7 @@ export function SalesChart({ data }: SalesChartProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPeriod = searchParams.get("period") || "week";
-  
+
   const totalSales = data.reduce((sum, item) => sum + item.amount, 0);
 
   const handlePeriodChange = (period: string) => {
@@ -47,23 +47,23 @@ export function SalesChart({ data }: SalesChartProps) {
             </CardTitle>
             <CardDescription className="font-medium">Ventas de {currentPeriod === "week" ? "la última semana" : "los últimos 30 días"}.</CardDescription>
           </div>
-          
+
           <div className="flex items-center gap-4">
             <div className="flex p-xs bg-slate-100 rounded-xl">
               <button
                 onClick={() => handlePeriodChange("week")}
-                className={cn( "px-sm py-xs.5 rounded-lg text-xs font-bold transition-all", currentPeriod === "week" ? "bg-white shadow-sm text-primary" : "text-slate-500 hover:text-slate-700 " )}
+                className={cn("px-sm py-xs.5 rounded-lg text-xs font-bold transition-all", currentPeriod === "week" ? "bg-white shadow-sm text-primary" : " hover:text-slate-700 ")}
               >
                 Semana
               </button>
               <button
                 onClick={() => handlePeriodChange("month")}
-                className={cn( "px-sm py-xs.5 rounded-lg text-xs font-bold transition-all", currentPeriod === "month" ? "bg-white shadow-sm text-primary" : "text-slate-500 hover:text-slate-700 " )}
+                className={cn("px-sm py-xs.5 rounded-lg text-xs font-bold transition-all", currentPeriod === "month" ? "bg-white shadow-sm text-primary" : " hover:text-slate-700 ")}
               >
                 Mes
               </button>
             </div>
-            
+
             <div className="text-right hidden sm:block">
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-xs">Total Periodo</p>
               <p className="text-xl font-black text-primary leading-none">€{totalSales.toFixed(2)}</p>
@@ -77,30 +77,30 @@ export function SalesChart({ data }: SalesChartProps) {
             <AreaChart data={data}>
               <defs>
                 <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
-              <XAxis 
-                dataKey="date" 
+              <XAxis
+                dataKey="date"
                 axisLine={false}
                 tickLine={false}
                 tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }}
                 dy={10}
                 interval={currentPeriod === "month" ? 5 : 0}
               />
-              <YAxis 
+              <YAxis
                 axisLine={false}
                 tickLine={false}
                 tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }}
                 tickFormatter={(value) => `€${value}`}
               />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)', 
-                  borderRadius: '1rem', 
-                  border: 'none', 
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                  borderRadius: '1rem',
+                  border: 'none',
                   boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
                   backdropFilter: 'blur(8px)'
                 }}
@@ -108,13 +108,13 @@ export function SalesChart({ data }: SalesChartProps) {
                 labelStyle={{ fontWeight: 800, marginBottom: '4px' }}
                 formatter={(value: number | string) => [`€${Number(value).toFixed(2)}`, 'Ventas']}
               />
-              <Area 
-                type="monotone" 
-                dataKey="amount" 
-                stroke="hsl(var(--primary))" 
+              <Area
+                type="monotone"
+                dataKey="amount"
+                stroke="hsl(var(--primary))"
                 strokeWidth={3}
-                fillOpacity={1} 
-                fill="url(#colorSales)" 
+                fillOpacity={1}
+                fill="url(#colorSales)"
                 animationDuration={1000}
               />
             </AreaChart>

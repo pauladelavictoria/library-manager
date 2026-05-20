@@ -110,7 +110,7 @@ export default async function BooksPage({
 
           <main className="flex-1">
             <div className="flex flex-col sm:flex-row items-center justify-between mb-lg gap-4">
-              <p className="text-sm text-slate-500">
+              <p className="text-sm">
                 Mostrando <span className="font-medium text-slate-900">{books?.length || 0}</span> resultados de {count || 0}
               </p>
 
@@ -129,7 +129,7 @@ export default async function BooksPage({
                   <Search className="h-8 w-8 text-slate-400" />
                 </div>
                 <h3 className="text-xl font-bold mb-sm">No se encontraron libros</h3>
-                <p className="text-slate-500 mb-lg max-w-sm">
+                <p className=" mb-lg max-w-sm">
                   Intenta cambiar los filtros o realizar una búsqueda diferente.
                 </p>
                 <Button asChild variant="primary">

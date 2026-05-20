@@ -17,11 +17,11 @@ export function BookSort({ currentSort }: { currentSort: string }) {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm font-medium text-slate-500">Ordenar por:</span>
+      <span className="text-sm font-medium">Ordenar por:</span>
       <select
         defaultValue={currentSort}
         onChange={(e) => handleSortChange(e.target.value)}
-        className="text-sm border-slate-200 bg-white rounded-lg focus:ring-primary focus:border-primary p-sm pr-lg outline-none cursor-pointer hover:border-primary/50 transition-colors"
+        className="text-sm border-slate-200 bg-background rounded-sm p-xs"
       >
         <option value="created_at">Novedades</option>
         <option value="price">Precio</option>
