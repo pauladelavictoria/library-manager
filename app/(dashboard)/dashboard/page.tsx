@@ -40,7 +40,7 @@ export default function DashboardPage() {
               <ShoppingBag className="h-6 w-6 text-primary" />
               Mis Compras Recientes
             </h2>
-            <Suspense fallback={<div className="space-y-4"><div className="h-40 bg-slate-100 rounded-3xl animate-pulse" /></div>}>
+            <Suspense fallback={<div className="space-y-4"><div className="h-40  rounded-3xl animate-pulse" /></div>}>
               <UserOrders />
             </Suspense>
           </div>
@@ -244,7 +244,7 @@ async function UserOrders() {
             <div className="space-y-6">
               {order.order_items.map((item: any) => (
                 <div key={item.id} className="flex gap-6 group">
-                  <div className="h-24 w-16 bg-slate-100 rounded-xl overflow-hidden shadow-sm flex-shrink-0">
+                  <div className="h-24 w-16  rounded-xl overflow-hidden shadow-sm flex-shrink-0">
                     {item.cover_url ? (
                       <img src={item.cover_url} alt={item.title} className="h-full w-full object-cover transition-transform group-hover:scale-110" />
                     ) : (
@@ -257,7 +257,7 @@ async function UserOrders() {
                         <h4 className="font-bold text-lg leading-tight group-hover:text-primary transition-colors line-clamp-1">{item.title}</h4>
                         <div className="flex flex-wrap gap-2 mt-sm">
                           {item.categories?.map((cat: string) => (
-                            <span key={cat} className="text-[10px] font-bold px-sm py-0.5 bg-slate-100 text-muted-foreground rounded-full">
+                            <span key={cat} className="text-[10px] font-bold px-sm py-0.5  text-muted-foreground rounded-full">
                               {cat}
                             </span>
                           ))}

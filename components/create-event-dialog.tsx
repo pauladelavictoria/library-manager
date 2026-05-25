@@ -108,7 +108,7 @@ export function CreateEventDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost">
+        <Button variant="primary">
           <Calendar className="mr-sm h-4 w-4" />
           Nuevo Evento
         </Button>

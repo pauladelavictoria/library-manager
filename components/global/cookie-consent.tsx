@@ -44,7 +44,7 @@ export function CookieConsent() {
             </div>
             <button
               onClick={() => setIsVisible(false)}
-              className="p-sm rounded-full hover:bg-slate-100 transition-colors"
+              className="p-sm rounded-full hover: transition-colors"
             >
               <X className="h-4 w-4 text-slate-400" />
             </button>

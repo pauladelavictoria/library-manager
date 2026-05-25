@@ -125,7 +125,7 @@ export default async function BooksPage({
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-xl text-center bg-white rounded-2xl border border-slate-100 border-dashed">
-                <div className="h-16 w-16 bg-slate-100 rounded-full flex items-center justify-center mb-md">
+                <div className="h-16 w-16  rounded-full flex items-center justify-center mb-md">
                   <Search className="h-8 w-8 text-slate-400" />
                 </div>
                 <h3 className="text-xl font-bold mb-sm">No se encontraron libros</h3>

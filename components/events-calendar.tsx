@@ -36,13 +36,8 @@ const eventTypeColors: Record<string, string> = {
 export function EventsCalendar({ events, userId }: EventsCalendarProps) {
   const [loadingEventId, setLoadingEventId] = useState<string | null>(null);
   const [bookedEventIds, setBookedEventIds] = useState<Set<string>>(new Set());
-  const [isMounted, setIsMounted] = useState(false);
   const supabase = createClient();
   const { notify } = useNotification();
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   useEffect(() => {
     const fetchUserBookings = async () => {
@@ -141,16 +136,17 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
           return (
             <Card key={event.id} className="rounded-[2rem] overflow-hidden min-w-[320px]">
               <CardContent className="p-0">
-                <div className="relative p-lg">
-                  <div className="absolute top-6 right-6 flex flex-col items-center justify-center w-14 h-14 rounded-1xl bg-cardDark rounded-lg">
-                    <span className="text-xs font-black leading-none">{isMounted ? day : ""}</span>
-                    <span className="text-xs font-bold text-primary mt-xs">{isMounted ? month : ""}</span>
+                <div>
+                  <div className="flex justify-between items-center">
+                    <Badge className={cn("mb-md rounded-lg px-sm.5 p-sm font-bold border", eventTypeColors[event.type])} variant="outline">
+                      <Icon className="mr-xs h-3.5 w-3.5" />
+                      {event.type.toUpperCase()}
+                    </Badge>
+                    <div className="flex flex-col items-center justify-center rounded-1xl bg-cardDark rounded-lg w-fit p-sm">
+                      <span className="text-xs font-black">{day}</span>
+                      <span className="text-xs font-bold text-primary mt-xs">{month}</span>
+                    </div>
                   </div>
-
-                  <Badge className={cn("mb-md rounded-lg px-sm.5 py-xs font-bold border", eventTypeColors[event.type])} variant="outline">
-                    <Icon className="mr-xs.5 h-3.5 w-3.5" />
-                    {event.type.toUpperCase()}
-                  </Badge>
 
                   <div>
                     <h3 className="text-xl font-bold my-md">
@@ -160,7 +156,7 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
                     <div className="space-y-2 mb-lg">
                       <div className="flex items-center">
                         <Clock className="mr-sm h-4 w-4" />
-                        {isMounted ? time : ""}h
+                        {time}h
                       </div>
                       <div className="flex items-center">
                         <MapPin className="mr-sm h-4 w-4" />
@@ -176,7 +172,7 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
                   <Button
                     onClick={() => handleBooking(event)}
                     disabled={isLoading || isBooked}
-                    className={cn( "p-sm w-full rounded-xl font-bold transition-all duration-300 flex items-center justify-center", isBooked ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" : isLoading ? "bg-slate-100 " : "bg-slate-900 text-white hover:bg-primary hover:text-white" )}
+                    className={cn("p-sm w-full rounded-xl font-bold transition-all duration-300 flex items-center justify-center", isBooked ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" : isLoading ? " " : "bg-slate-900 text-white hover:bg-primary hover:text-white")}
                   >
                     {isLoading ? (
                       <Loader2 className="h-4 w-4 animate-spin" />

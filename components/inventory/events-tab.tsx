@@ -1,10 +1,5 @@
 import {
-  Calendar as CalendarIcon,
-  Users as UsersIcon,
   MapPin,
-  PenTool,
-  BookOpen,
-  Presentation,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -19,6 +14,15 @@ interface EventsTabProps {
 }
 
 export function EventsTab({ eventPerformance }: EventsTabProps) {
+
+  const eventTypeColors: Record<string, string> = {
+    presentation: "bg-blue-500/10 text-blue-600  border-blue-500/20",
+    workshop: "bg-purple-500/10 text-purple-600  border-purple-500/20",
+    club: "bg-emerald-500/10 text-emerald-600  border-emerald-500/20",
+    signing: "bg-amber-500/10 text-amber-600  border-amber-500/20",
+    generic: "bg-slate-500/10 text-slate-600  border-slate-500/20",
+  };
+
   return (
     <div className="mb-lg">
       <div className="flex items-center justify-between mb-lg">
@@ -29,10 +33,10 @@ export function EventsTab({ eventPerformance }: EventsTabProps) {
         <CreateEventDialog />
       </div>
 
-      <Card className="rounded-[2rem] border-slate-200 shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
+      <Card className="rounded-[2rem]  shadow-xl overflow-hidden backdrop-blur-sm">
         <Table>
           <TableHeader>
-            <TableRow className="hover:bg-transparent border-slate-100">
+            <TableRow className="hover:bg-transparent ">
               <TableHead className="pl-lg font-bold uppercase text-[10px] tracking-widest py-lg">
                 Evento
               </TableHead>
@@ -57,7 +61,7 @@ export function EventsTab({ eventPerformance }: EventsTabProps) {
                 <TableRow
                   key={event.id}
                   className={cn(
-                    "group border-slate-100 transition-colors",
+                    "group  transition-colors",
                     event.isPast ? "bg-slate-50/30 opacity-60" : "hover:bg-slate-50/50 "
                   )}
                 >
@@ -67,7 +71,7 @@ export function EventsTab({ eventPerformance }: EventsTabProps) {
                       {event.isPast && (
                         <Badge
                           variant="secondary"
-                          className="text-[9px] h-4 rounded-sm bg-slate-200 text-slate-500 font-bold border-none px-xs uppercase tracking-tighter"
+                          className="text-[9px] h-4 rounded-sm font-bold border-none px-xs uppercase tracking-tighter"
                         >
                           Finalizado
                         </Badge>
@@ -75,16 +79,8 @@ export function EventsTab({ eventPerformance }: EventsTabProps) {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge
-                      variant="outline"
-                      className="rounded-md font-black border-slate-200 bg-slate-50 flex w-fit items-center gap-1.5 capitalize"
-                    >
-                      {event.type === "signing" && <PenTool className="h-3 w-3" />}
-                      {event.type === "workshop" && <BookOpen className="h-3 w-3" />}
-                      {event.type === "club" && <UsersIcon className="h-3 w-3" />}
-                      {event.type === "presentation" && <Presentation className="h-3 w-3" />}
-                      {event.type === "generic" && <CalendarIcon className="h-3 w-3" />}
-                      {event.type}
+                    <Badge className={cn("mb-md rounded-lg px-sm.5 p-sm font-bold border", eventTypeColors[event.type])} variant="outline">
+                      {event.type.toUpperCase()}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -98,7 +94,7 @@ export function EventsTab({ eventPerformance }: EventsTabProps) {
                     </p>
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-1.5 text-slate-500">
+                    <div className="flex items-center gap-1.">
                       <MapPin className="h-3 w-3" />
                       <span className="text-xs font-medium">{event.location || "N/A"}</span>
                     </div>
@@ -117,7 +113,7 @@ export function EventsTab({ eventPerformance }: EventsTabProps) {
               <TableRow>
                 <TableCell
                   colSpan={6}
-                  className="h-24 text-center text-slate-500 font-medium italic"
+                  className="h-24 text-cente font-medium italic"
                 >
                   No hay eventos programados.
                 </TableCell>

@@ -79,7 +79,7 @@ export default async function Home({
                   {book.cover_url ? (
                     <img src={book.cover_url} alt={book.title} className="object-cover cursor-pointer mb-md h-[300px]" />
                   ) : (
-                    <div className="w-full h-full bg-slate-100 flex items-center justify-center">
+                    <div className="w-full h-full  flex items-center justify-center">
                       <BookOpen className="h-12 w-12 text-slate-300" />
                     </div>
                   )}

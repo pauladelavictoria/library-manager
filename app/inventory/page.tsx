@@ -155,12 +155,12 @@ export default async function AdminInventoryPage({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-lg">
           <div>
             <h1 className="text-4xl font-black tracking-tight mb-sm">Gestión de la Librería</h1>
-            <p className="text-slate-500">Supervisa el rendimiento y gestiona el inventario.</p>
+            <p>Supervisa el rendimiento y gestiona el inventario.</p>
           </div>
         </div>
 
         <Tabs defaultValue="dashboard" className="w-full">
-          <TabsList className="mb-lg w-fit bg-slate-100/50 backdrop-blur-sm border border-slate-200/50">
+          <TabsList className="mb-lg w-fit backdrop-blur-sm">
             <TabsTrigger value="dashboard" className="gap-2">
               <LayoutDashboard className="h-4 w-4" />
               Vista General

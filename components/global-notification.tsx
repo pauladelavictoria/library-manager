@@ -80,9 +80,9 @@ export default function GlobalNotification() {
               </h4>
               <Button
                 onClick={closeNotification}
-                variant="icon"
+                variant="ghost"
               >
-                <X className={isLarge ? "h-6 w-6" : "h-4 w-4"} />
+                <X />
               </Button>
             </div>
             <h3 className={cn("font-black text-slate-900 leading-tight mb-sm", isLarge ? "text-3xl" : "text-base")}>

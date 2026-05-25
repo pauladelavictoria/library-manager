@@ -49,7 +49,7 @@ export function SalesChart({ data }: SalesChartProps) {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex p-xs bg-slate-100 rounded-xl">
+            <div className="flex p-xs  rounded-xl">
               <button
                 onClick={() => handlePeriodChange("week")}
                 className={cn("px-sm py-xs.5 rounded-lg text-xs font-bold transition-all", currentPeriod === "week" ? "bg-white shadow-sm text-primary" : " hover:text-slate-700 ")}

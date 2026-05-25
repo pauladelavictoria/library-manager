@@ -86,7 +86,7 @@ export default function CartPage() {
       <div className="max-w-6xl mx-auto">
         <header className="flex items-end gap-4 mb-lg">
           <h1 className="text-5xl font-black tracking-tighter">Tu Carrito</h1>
-          <span className="text-2xl text-muted-foreground font-medium mb-xs">({totalItems} {totalItems === 1 ? 'item' : 'items'})</span>
+          <span className="text-2xl text-muted-foreground font-medium mb-xs">({totalItems} {totalItems === 1 ? 'libro' : 'libros'})</span>
         </header>
 
         <div className="grid lg:grid-cols-3 gap-16">
@@ -94,9 +94,9 @@ export default function CartPage() {
             {cart.map((item) => (
               <div
                 key={item.id}
-                className="group flex flex-col sm:flex-row gap-6 p-lg rounded-3xl bg-white/40 backdrop-blur-md border border-slate-200/50 shadow-sm transition-all duration-300 hover:shadow-xl hover:bg-white/60"
+                className="group flex flex-col sm:flex-row gap-6 p-lg rounded-3xl card-background transition-all duration-300 hover:shadow-xl hover:bg-white/60"
               >
-                <div className="w-full sm:w-32 h-48 flex-shrink-0 overflow-hidden rounded-2xl bg-slate-100 shadow-inner">
+                <div className="w-full sm:w-32 h-48 flex-shrink-0 overflow-hidden rounded-2xl  shadow-inner">
                   {item.cover_url ? (
                     <img
                       src={item.cover_url}
@@ -116,29 +116,27 @@ export default function CartPage() {
                     </div>
                     <button
                       onClick={() => removeFromCart(item.id)}
-                      className="p-sm.5 rounded-full bg-slate-100 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200"
+                      className="p-sm.5 rounded-full  text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200"
                       aria-label="Eliminar producto"
                     >
                       <Trash2 className="h-5 w-5" />
                     </button>
                   </div>
 
-                  <div className="mt-auto flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 bg-background/80 backdrop-blur-sm rounded-full border border-slate-200 p-xs.5 shadow-sm">
+                  <div className="flex items-end justify-between gap-4">
+                    <div className="flex justify-center items-center gap-4 p-sm bg-background/80 backdrop-blur-sm rounded-full border border-slate-200 shadow-sm">
                       <Button
                         variant="ghost"
-                        className="h-9 w-9 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                       >
-                        <Minus className="h-4 w-4" />
+                        <Minus />
                       </Button>
                       <span className="text-lg font-bold w-6 text-center">{item.quantity}</span>
                       <Button
                         variant="ghost"
-                        className="h-9 w-9 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                       >
-                        <Plus className="h-4 w-4" />
+                        <Plus />
                       </Button>
                     </div>
 
@@ -157,7 +155,7 @@ export default function CartPage() {
 
             <div className="pt-md">
               <Link href="/books">
-                <Button variant="ghost">
+                <Button variant="primary">
                   <ArrowRight className="mr-sm h-4 w-4 rotate-180 transition-transform group-hover:-translate-x-1" />
                   Continuar Comprando
                 </Button>
@@ -166,8 +164,8 @@ export default function CartPage() {
           </div>
 
           <div className="lg:col-span-1">
-            <div className="sticky top-24 overflow-hidden rounded-[2.5rem] bg-slate-50 border border-slate-200 shadow-2xl p-xs">
-              <div className="bg-white rounded-[2.2rem] p-lg">
+            <div className="sticky top-24 overflow-hidden rounded-[2.5rem] card-background p-xs">
+              <div className=" rounded-[2.2rem] p-lg">
                 <h2 className="text-2xl font-bold mb-lg flex items-center gap-2">
                   <ShoppingBag className="h-6 w-6 text-primary" />
                   Resumen
@@ -183,16 +181,11 @@ export default function CartPage() {
                     <div className="flex justify-between text-lg text-green-600 font-medium">
                       <div className="flex items-center gap-2">
                         <Tag className="h-4 w-4" />
-                        <span>Descuento ({appliedPromo.code})</span>
+                        <span>{appliedPromo.code}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span>-€{discount.toFixed(2)}</span>
-                        <button
-                          onClick={removePromo}
-                          className="text-muted-foreground hover:text-destructive transition-colors"
-                        >
-                          <XCircle className="h-4 w-4" />
-                        </button>
+
                       </div>
                     </div>
                   )}
@@ -211,17 +204,15 @@ export default function CartPage() {
                     {!appliedPromo ? (
                       <div className="flex gap-2">
                         <div className="relative flex-1">
-                          <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                           <Input
                             placeholder="Código promo"
-                            className="pl-lg rounded-xl bg-slate-100 border-none focus-visible:ring-primary"
                             value={promoInput}
                             onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
                             onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
                           />
                         </div>
                         <Button
-                          variant="primary"
+                          variant="ghost"
                           className="rounded-xl px-md"
                           onClick={handleApplyPromo}
                           disabled={isApplying || !promoInput.trim()}
@@ -233,7 +224,7 @@ export default function CartPage() {
                       <div className="bg-green-50 border border-green-200 rounded-2xl p-sm flex items-center justify-between">
                         <div className="flex items-center gap-2 text-green-700 text-sm font-bold">
                           <CheckCircle2 className="h-4 w-4" />
-                          Código {appliedPromo.code} aplicado
+                          Código aplicado
                         </div>
                         <Button
                           variant="ghost"
@@ -259,7 +250,7 @@ export default function CartPage() {
                 </div>
 
                 <Button
-                  className="w-full rounded-2xl py-lg text-xl font-black shadow-xl shadow-primary/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] group"
+                  variant="primary"
                   onClick={handleCheckout}
                   disabled={isCheckingOut}
                 >

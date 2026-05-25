@@ -72,7 +72,7 @@ export function EventActions({ event }: { event: Event }) {
     <div className="flex items-center gap-2">
       <Button
         variant="ghost"
-        className="h-8 w-8 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+        className="h-8 w-8 rounded-lg hover:text-blue-600 hover:bg-blue-50 transition-colors"
         onClick={() => setIsEditing(true)}
       >
         <Edit2 className="h-4 w-4" />
@@ -80,7 +80,7 @@ export function EventActions({ event }: { event: Event }) {
 
       <Button
         variant="ghost"
-        className="h-8 w-8 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+        className="h-8 w-8 rounded-lg hover:text-red-600 hover:bg-red-50 transition-colors"
         onClick={() => setShowDeleteConfirm(true)}
       >
         <Trash2 className="h-4 w-4" />
@@ -112,15 +112,15 @@ export function EventActions({ event }: { event: Event }) {
               </DialogHeader>
               <form onSubmit={handleUpdate} className="space-y-4">
                 <div className="space-y-2">
-                  <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Título</Label>
+                  <Label className="text-xs font-black uppercase tracking-widest">Título</Label>
                   <div className="relative">
-                    <Type className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <Type className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
                     <Input name="title" defaultValue={event.title} className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Tipo</Label>
+                    <Label className="text-xs font-black uppercase tracking-widest">Tipo</Label>
                     <Select name="type" defaultValue={event.type}>
                       <SelectTrigger className="h-11 rounded-xl bg-slate-50 border-none font-bold">
                         <SelectValue />
@@ -135,14 +135,14 @@ export function EventActions({ event }: { event: Event }) {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Fecha</Label>
+                    <Label className="text-xs font-black uppercase tracking-widest">Fecha</Label>
                     <Input name="event_date" type="datetime-local" defaultValue={new Date(event.event_date).toISOString().slice(0, 16)} className="h-11 rounded-xl bg-slate-50 border-none font-bold" required />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Ubicación</Label>
+                  <Label className="text-xs font-black uppercase tracking-widest">Ubicación</Label>
                   <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
                     <Input name="location" defaultValue={event.location} className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" />
                   </div>
                 </div>

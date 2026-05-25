@@ -119,7 +119,7 @@ export function CatalogTab({
                                 className="w-full h-full object-cover"
                               />
                             ) : (
-                              <div className="w-full h-full bg-slate-100 flex items-center justify-center text-[8px]">
+                              <div className="w-full h-full  flex items-center justify-center text-[8px]">
                                 No img
                               </div>
                             )}
@@ -192,17 +192,17 @@ export function CatalogTab({
             </TableBody>
           </Table>
 
-          <div className="p-lg bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
-            <p className="text-sm font-medium text-slate-500">
+          <div className="p-lg border-t border-cardDark flex items-center justify-between">
+            <p className="text-sm font-medium">
               Mostrando{" "}
-              <span className="font-bold text-slate-900">
+              <span className="font-bold">
                 {(currentPage - 1) * itemsPerPage + 1}
               </span>{" "}
               a{" "}
-              <span className="font-bold text-slate-900">
+              <span className="font-bold">
                 {Math.min(currentPage * itemsPerPage, totalItems)}
               </span>{" "}
-              de <span className="font-bold text-slate-900">{totalItems}</span> libros
+              de <span className="font-bold">{totalItems}</span> libros
             </p>
             <div className="flex items-center gap-2">
               <Link
@@ -224,7 +224,7 @@ export function CatalogTab({
                       className={cn(
                         "w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm transition-all",
                         currentPage === pageNum
-                          ? "bg-primary text-white shadow-lg shadow-primary/30"
+                          ? "bg-primary shadow-lg shadow-primary/30"
                           : "hover:bg-slate-200 "
                       )}
                     >
