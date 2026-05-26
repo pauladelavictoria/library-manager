@@ -9,12 +9,12 @@ import { ProfileCard } from "@/components/profile-card";
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-slate-50 pb-xl">
+    <div className="min-h-screen bg-background pb-xl">
       <div className="container mx-auto px-md py-lg">
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-lg">
           <div>
-            <h1 className="text-4xl font-black tracking-tight mb-sm">Mi Dashboard</h1>
-            <p className="text-muted-foreground text-lg">Bienvenido de nuevo a tu biblioteca personal.</p>
+            <h1 className="text-4xl font-serif tracking-tight mb-sm">Mi Dashboard</h1>
+            <p className="text-lg">Bienvenido de nuevo a tu biblioteca personal.</p>
           </div>
           <Button asChild variant="primary">
             <Link href="/" className="inline-flex items-center">
@@ -111,63 +111,63 @@ async function TriviaStats() {
   }
 
   return (
-    <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-slate-900 text-white">
+    <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-foreground text-background">
       <CardContent className="p-lg space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center">
-              <Trophy className="h-6 w-6 text-primary" />
+            <div className="w-10 h-10 bg-background/20 rounded-xl flex items-center justify-center">
+              <Trophy className="h-6 w-6 text-background" />
             </div>
             <div>
               <h3 className="font-black text-xl tracking-tight">Rango Literario</h3>
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Puntos Trivial</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-background/50">Puntos Trivial</p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-3xl font-black text-primary">{totalPoints}</p>
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">/ 100 puntos</p>
+            <p className="text-3xl font-black text-background">{totalPoints}</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-background/50">/ 100 puntos</p>
           </div>
         </div>
 
         <div className="space-y-2">
-          <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400 px-xs">
+          <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-background/50 px-xs">
             <span>Progreso Premio</span>
             <span>{Math.round(progress)}%</span>
           </div>
-          <div className="h-3 bg-slate-800 rounded-full overflow-hidden p-0.5 border border-slate-700">
+          <div className="h-3 bg-foreground/80 rounded-full overflow-hidden p-0.5 border border-background/10">
             <div
-              className="h-full bg-gradient-to-r from-primary to-primary/60 rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(var(--primary),0.5)]"
+              className="h-full bg-gradient-to-r from-background to-background/60 rounded-full transition-all duration-1000 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
         </div>
 
         {rewardReached ? (
-          <div className="p-md rounded-3xl bg-emerald-500/10 border border-emerald-500/20 animate-in zoom-in duration-500">
+          <div className="p-md rounded-3xl bg-background/10 border border-background/20 animate-in zoom-in duration-500">
             <div className="flex items-center gap-3 mb-sm">
-              <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
-                <Gift className="h-4 w-4 text-white" />
+              <div className="w-8 h-8 bg-background rounded-full flex items-center justify-center">
+                <Gift className="h-4 w-4 text-foreground" />
               </div>
               <div>
-                <p className="text-xs font-black uppercase tracking-widest text-emerald-500">¡Premio Conseguido!</p>
+                <p className="text-xs font-black uppercase tracking-widest text-background">¡Premio Conseguido!</p>
                 <p className="font-bold text-sm">Cupón de 3€ disponible</p>
               </div>
             </div>
-            <div className="bg-slate-800/80 p-sm rounded-xl border border-slate-700 flex items-center justify-between">
-              <code className="text-xl font-black tracking-widest text-primary">{rewardCode}</code>
-              <Badge className="bg-emerald-500/20 text-emerald-500 border-none text-[8px] font-black uppercase">Válido</Badge>
+            <div className="bg-foreground/80 p-sm rounded-xl border border-background/10 flex items-center justify-between">
+              <code className="text-xl font-black tracking-widest text-background">{rewardCode}</code>
+              <Badge className="bg-background/20 text-background border-none text-[8px] font-black uppercase">Válido</Badge>
             </div>
           </div>
         ) : (
-          <div className="flex items-start gap-3 p-md rounded-3xl bg-slate-800/30 border border-slate-800 text-xs text-slate-400 font-medium leading-relaxed">
-            <HelpCircle className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+          <div className="flex items-start gap-3 p-md rounded-3xl bg-background/10 border border-background/10 text-xs text-background/60 font-medium leading-relaxed">
+            <HelpCircle className="h-4 w-4 text-background flex-shrink-0 mt-0.5" />
             <p>Consigue 100 puntos para desbloquear un cupón de 3€. Obtienes 10 puntos por cada partida perfecta (10/10).</p>
           </div>
         )}
 
         <Button asChild >
           <Link href="/trivial">
-            <Star className="mr-sm h-4 w-4 fill-primary text-primary" />
+            <Star className="mr-sm h-4 w-4 fill-background text-background" />
             Jugar al Trivial
           </Link>
         </Button>
@@ -193,7 +193,7 @@ async function UserOrders() {
 
   if (!orders || orders.length === 0) {
     return (
-      <div className="bg-white/40 rounded-[2.5rem] p-lg text-center border border-dashed border-slate-300">
+      <div className="card-background rounded-[2.5rem] p-lg text-center border border-dashed border-cardDark">
         <ShoppingBag className="h-12 w-12 text-muted-foreground mx-auto mb-md opacity-20" />
         <p className="text-xl font-bold text-muted-foreground">Aún no has realizado ninguna compra</p>
         <Button asChild variant="secondary">
@@ -205,13 +205,13 @@ async function UserOrders() {
 
 
   return (
-    <div className="hero-container">
+    <div className="space-y-8">
       {orders.map((order) => (
         <div
           key={order.id}
-          className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm overflow-hidden transition-all hover:shadow-md"
+          className="card-background rounded-[2.5rem] overflow-hidden transition-all hover:shadow-md"
         >
-          <div className="p-lg border-b border-slate-100 bg-slate-50/50 flex flex-wrap items-center justify-between gap-4">
+          <div className="p-lg border-b border-cardDark/30 bg-cardDark/20 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-6">
               <div className="space-y-1">
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Pedido ID</p>
@@ -227,7 +227,7 @@ async function UserOrders() {
               {order.promo_code && (
                 <div className="space-y-1">
                   <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Cupón</p>
-                  <Badge variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20 border-none px-sm py-0">
+                  <Badge variant="secondary" className="bg-cardDark text-foreground hover:bg-cardDark/80 border-none px-sm py-0">
                     <Tag className="h-3 w-3 mr-xs" />
                     {order.promo_code}
                   </Badge>

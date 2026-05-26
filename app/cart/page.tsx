@@ -64,12 +64,12 @@ export default function CartPage() {
 
   if (cart.length === 0) {
     return (
-      <div className="container mx-auto px-md py-xl text-center">
-        <div className="bg-primary/10 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-lg animate-pulse">
-          <ShoppingBag className="h-12 w-12 text-primary" />
+      <div className="hero-container text-center">
+        <div className="bg-cardDark w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-lg animate-pulse">
+          <ShoppingBag className="h-12 w-12 text-foreground" />
         </div>
         <h1 className="text-4xl font-black mb-md tracking-tight">Tu carrito está vacío</h1>
-        <p className="text-lg text-muted-foreground mb-lg leading-relaxed">
+        <p className="text-lg mb-lg leading-relaxed">
           Parece que aún no has añadido ningún libro a tu colección. ¡Explora nuestro catálogo y descubre tu próxima aventura literaria!
         </p>
         <Link href="/books">
@@ -82,7 +82,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="container mx-auto px-md py-lg lg:py-xl">
+    <div className="hero-container">
       <div className="max-w-6xl mx-auto">
         <header className="flex items-end gap-4 mb-lg">
           <h1 className="text-5xl font-black tracking-tighter">Tu Carrito</h1>
@@ -94,7 +94,7 @@ export default function CartPage() {
             {cart.map((item) => (
               <div
                 key={item.id}
-                className="group flex flex-col sm:flex-row gap-6 p-lg rounded-3xl card-background transition-all duration-300 hover:shadow-xl hover:bg-white/60"
+                className="group flex flex-col sm:flex-row gap-6 p-lg rounded-3xl card-background transition-all duration-300 hover:shadow-xl hover:bg-card/80"
               >
                 <div className="w-full sm:w-32 h-48 flex-shrink-0 overflow-hidden rounded-2xl  shadow-inner">
                   {item.cover_url ? (
@@ -124,7 +124,7 @@ export default function CartPage() {
                   </div>
 
                   <div className="flex items-end justify-between gap-4">
-                    <div className="flex justify-center items-center gap-4 p-sm bg-background/80 backdrop-blur-sm rounded-full border border-slate-200 shadow-sm">
+                    <div className="flex justify-center items-center gap-4 p-sm bg-cardDark/40 backdrop-blur-sm rounded-full border border-cardDark shadow-sm">
                       <Button
                         variant="ghost"
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
@@ -165,9 +165,9 @@ export default function CartPage() {
 
           <div className="lg:col-span-1">
             <div className="sticky top-24 overflow-hidden rounded-[2.5rem] card-background p-xs">
-              <div className=" rounded-[2.2rem] p-lg">
+              <div className="rounded-[2.2rem] p-lg">
                 <h2 className="text-2xl font-bold mb-lg flex items-center gap-2">
-                  <ShoppingBag className="h-6 w-6 text-primary" />
+                  <ShoppingBag className="h-6 w-6 text-foreground" />
                   Resumen
                 </h2>
 
@@ -192,7 +192,7 @@ export default function CartPage() {
 
                   <div className="flex justify-between text-lg">
                     <span className="text-muted-foreground">Envío</span>
-                    <span className="text-primary font-bold bg-primary/10 px-sm py-0.5 rounded-full text-sm">Gratis</span>
+                    <span className="text-foreground font-bold bg-cardDark px-sm py-0.5 rounded-full text-sm">Gratis</span>
                   </div>
 
                   <div className="flex justify-between text-lg">
@@ -221,14 +221,14 @@ export default function CartPage() {
                         </Button>
                       </div>
                     ) : (
-                      <div className="bg-green-50 border border-green-200 rounded-2xl p-sm flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-green-700 text-sm font-bold">
+                      <div className="bg-cardDark/40 border border-cardDark rounded-2xl p-sm flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-foreground text-sm font-bold">
                           <CheckCircle2 className="h-4 w-4" />
                           Código aplicado
                         </div>
                         <Button
                           variant="ghost"
-                          className="h-8 text-xs hover:bg-green-100"
+                          className="h-8 text-xs hover:bg-cardDark"
                           onClick={removePromo}
                         >
                           Cambiar
@@ -242,7 +242,7 @@ export default function CartPage() {
                   <div className="flex justify-between items-baseline pt-sm">
                     <span className="text-xl font-bold">Total</span>
                     <div className="text-right">
-                      <span className="text-4xl font-black text-primary">
+                      <span className="text-4xl font-black text-foreground">
                         €{totalPrice.toFixed(2)}
                       </span>
                     </div>
@@ -260,11 +260,11 @@ export default function CartPage() {
 
                 <div className="mt-lg flex flex-col gap-4">
                   <div className="flex items-center gap-3 text-sm text-muted-foreground font-medium">
-                    <div className="h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+                    <div className="h-2 w-2 rounded-full bg-foreground shadow-sm" />
                     Garantía de satisfacción de 30 días
                   </div>
                   <div className="flex items-center gap-3 text-sm text-muted-foreground font-medium">
-                    <div className="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
+                    <div className="h-2 w-2 rounded-full bg-foreground shadow-sm" />
                     Envío seguro y rastreado
                   </div>
                 </div>

@@ -19,6 +19,7 @@ export default {
 				sm: 'calc(var(--radius) - 4px)',
 				md: 'calc(var(--radius) - 2px)',
 				lg: 'var(--radius)',
+				xl: 'calc(var(--radius) * 2)',
 			},
 			margin: {
 				xs: 'calc(var(--spacing) / 2)',
@@ -26,6 +27,9 @@ export default {
 				md: 'calc(var(--spacing) * 2)',
 				lg: 'calc(var(--spacing) * 4)',
 				xl: 'calc(var(--spacing) * 8)',
+				xxl: 'calc(var(--spacing) * 12)',
+				xxxl: 'calc(var(--spacing) * 16)',
+				'4xl': 'calc(var(--spacing) * 24)',
 			},
 			padding: {
 				xs: 'calc(var(--spacing) / 2)',

@@ -19,8 +19,6 @@ export default async function Home({
 
   const { data: { user } } = await supabase.auth.getUser();
 
-
-
   const { data: events } = await supabase
     .from("events")
     .select("*")
@@ -33,9 +31,9 @@ export default async function Home({
   return (
     <div className="hero-container">
 
-      <div className="ml-xl my-lg">
+      <div className="ml-l my-4xl">
         <h1 className="text-[120px] font-serif leading-[100px] mb-lg">
-          Tu próxima gran aventura comienza aquí.
+          Tu próxima gran aventura<br />comienza aquí.
         </h1>
         <p className="">
           Descubre nuevos títulos y desafía tus conocimientos literarios en nuestra comunidad de lectores. Todo en un solo lugar.
@@ -58,7 +56,7 @@ export default async function Home({
         <div className="flex flex-col justify-between gap-4 mb-lg mt-[100px]">
           <div className="flex justify-between">
             <div className="">
-              <h2 className="text-2xl">RECOMENDACIONES DEL LIBRERO</h2>
+              <h2 className="text-xl">RECOMENDACIONES DEL LIBRERO</h2>
               <p className="mb-[16px]">
                 Joyas literarias seleccionadas cuidadosamente por nuestro equipo para transformar tu forma de leer.
               </p>

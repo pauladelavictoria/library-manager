@@ -70,7 +70,7 @@ export default async function BooksPage({
         <h1 className="text-6xl font-serif mb-md">
           Explora nuestro catálogo
         </h1>
-        <p className="text-lg text-slate-600 max-w-2xl">
+        <p className="text-lg max-w-2xl">
           Encuentra tu próxima gran lectura entre nuestros más de {count || 0} títulos disponibles. Las mejores historias a un clic de distancia.
         </p>
       </div>
@@ -91,9 +91,9 @@ export default async function BooksPage({
                         name="category"
                         value={c}
                         defaultChecked={category === c}
-                        className="form-radio text-primary focus:ring-primary h-4 w-4 border-slate-300 bg-slate-50"
+                        className="form-radio text-foreground focus:ring-foreground h-4 w-4 border-cardDark bg-background accent-foreground"
                       />
-                      <span className="text-sm font-medium text-slate-700 group-hover:text-primary transition-colors">{c}</span>
+                      <span className="text-sm font-medium group-hover:text-foreground transition-colors">{c}</span>
                     </label>
                   ))}
                 </div>
@@ -111,7 +111,7 @@ export default async function BooksPage({
           <main className="flex-1">
             <div className="flex flex-col sm:flex-row items-center justify-between mb-lg gap-4">
               <p className="text-sm">
-                Mostrando <span className="font-medium text-slate-900">{books?.length || 0}</span> resultados de {count || 0}
+                Mostrando <span className="font-medium">{books?.length || 0}</span> resultados de {count || 0}
               </p>
 
               <BookSort currentSort={sortBy} />
@@ -124,9 +124,9 @@ export default async function BooksPage({
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-xl text-center bg-white rounded-2xl border border-slate-100 border-dashed">
-                <div className="h-16 w-16  rounded-full flex items-center justify-center mb-md">
-                  <Search className="h-8 w-8 text-slate-400" />
+              <div className="flex flex-col items-center justify-center py-xl text-center bg-card rounded-2xl border border-cardDark border-dashed">
+                <div className="h-16 w-16 rounded-full flex items-center justify-center mb-md">
+                  <Search className="h-8 w-8 text-foreground/40" />
                 </div>
                 <h3 className="text-xl font-bold mb-sm">No se encontraron libros</h3>
                 <p className=" mb-lg max-w-sm">

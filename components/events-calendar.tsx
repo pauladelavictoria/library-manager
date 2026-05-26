@@ -116,7 +116,7 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-lg">
         <div>
 
-          <h2 className="text-2xl">CALENDARIO DE EVENTOS</h2>
+          <h2 className="text-xl font-serif">CALENDARIO DE EVENTOS</h2>
           <p className="">
             Únete a nuestra comunidad. Presentaciones, firmas de libros y talleres exclusivos para amantes de la lectura.
           </p>
@@ -134,7 +134,7 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
           const isBooked = bookedEventIds.has(event.id);
 
           return (
-            <Card key={event.id} className="rounded-[2rem] overflow-hidden min-w-[320px]">
+            <Card key={event.id} className="rounded-[2rem] overflow-hidden card-background border-cardDark">
               <CardContent className="p-0">
                 <div>
                   <div className="flex justify-between items-center">
@@ -172,12 +172,12 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
                   <Button
                     onClick={() => handleBooking(event)}
                     disabled={isLoading || isBooked}
-                    className={cn("p-sm w-full rounded-xl font-bold transition-all duration-300 flex items-center justify-center", isBooked ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" : isLoading ? " " : "bg-slate-900 text-white hover:bg-primary hover:text-white")}
+                    className={cn("p-sm w-full rounded-full font-bold transition-all duration-300 flex items-center justify-center", isBooked ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" : isLoading ? " " : "bg-slate-900 text-white hover:bg-primary hover:text-white")}
                   >
                     {isLoading ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : isBooked ? (
-                      <span className="flex items-center gap-2">
+                      <span className="flex items-center gap-2" >
                         <CheckCircle2 className="h-4 w-4" />
                         Ya Reservado
                       </span>

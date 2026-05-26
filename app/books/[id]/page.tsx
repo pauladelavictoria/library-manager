@@ -54,7 +54,7 @@ export default async function BookDetailPage({
         <div className="mb-lg">
           <div className="flex flex-wrap gap-3 mb-lg">
             {book.categories?.map(cat => (
-              <span key={cat} className="px-md py-xs.5 rounded-full bg-white text-xs font-black uppercase tracking-widest border border-primary/20">
+              <span key={cat} className="px-md py-xs.5 rounded-full bg-cardDark text-xs font-black uppercase tracking-widest border border-cardDark">
                 {cat}
               </span>
             ))}

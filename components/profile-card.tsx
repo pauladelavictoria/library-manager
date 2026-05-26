@@ -39,10 +39,10 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
   };
 
   return (
-    <Card className="rounded-[2.5rem] border-slate-200/60 shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
-      <CardHeader className="bg-gradient-to-br from-primary/10 to-transparent pb-lg">
-        <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center mb-md border-4 border-white shadow-lg">
-          <span className="text-2xl font-black text-primary">
+    <Card className="rounded-[2.5rem] border-cardDark/60 shadow-xl overflow-hidden card-background">
+      <CardHeader className="bg-cardDark/30 pb-lg">
+        <div className="w-20 h-20 rounded-full bg-cardDark flex items-center justify-center mb-md border-4 border-background shadow-lg">
+          <span className="text-2xl font-black text-foreground">
             {formData.full_name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
           </span>
         </div>
@@ -54,7 +54,7 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
                 id="full_name"
                 value={formData.full_name}
                 onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                className="rounded-xl border-slate-200"
+                className="rounded-xl border-cardDark"
               />
             </div>
           </div>
@@ -72,7 +72,7 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
             <Input
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="rounded-xl border-slate-200 mt-sm"
+              className="rounded-xl border-cardDark mt-sm"
               placeholder="Tu número de teléfono"
             />
           ) : (
@@ -89,7 +89,7 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
           </div>
         )}
 
-        <Separator className="bg-slate-200/60" />
+        <Separator className="bg-cardDark" />
         
         <div className="flex gap-3">
           {isEditing ? (
@@ -119,7 +119,7 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
           ) : (
             <Button 
               variant="outline" 
-              className="w-full rounded-2xl py-lg font-bold hover:bg-primary/5 hover:text-primary border-slate-200 transition-all"
+              className="w-full rounded-2xl py-lg font-bold hover:bg-cardDark hover:text-foreground border-cardDark transition-all"
               onClick={() => setIsEditing(true)}
             >
               Editar Perfil

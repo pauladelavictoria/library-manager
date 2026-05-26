@@ -4,11 +4,11 @@ import { AlertCircle, ChevronLeft, Home } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background px-md mx-auto">
-      <div className="w-full max-w-3xl py-lg text-center">
+    <div className="hero-container flex items-center justify-center min-h-[70vh] px-md mx-auto">
+      <div className="w-full max-w-3xl py-lg text-center bg-card rounded-[2.5rem] p-xl border border-cardDark shadow-sm">
         <div className="mb-lg">
-          <AlertCircle className="mx-auto h-16 w-16 text-destructive" />
-          <h1 className="mt-lg text-3xl font-bold tracking-tight text-foreground">
+          <AlertCircle className="mx-auto h-16 w-16 text-foreground" />
+          <h1 className="mt-lg text-4xl font-serif tracking-tight text-foreground">
             Página no encontrada
           </h1>
           <p className="mt-md text-base text-muted-foreground">
