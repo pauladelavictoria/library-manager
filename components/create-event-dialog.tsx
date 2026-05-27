@@ -116,7 +116,6 @@ export function CreateEventDialog() {
       <DialogContent className="sm:max-w-[500px] rounded-[2rem] border-slate-200 p-0 overflow-hidden">
         <DialogHeader className="p-lg pb-md">
           <DialogTitle className="text-2xl font-black flex items-center gap-2">
-            <Plus className="h-6 w-6 text-primary" />
             Programar Evento
           </DialogTitle>
           <DialogDescription className="font-medium ">
@@ -126,18 +125,18 @@ export function CreateEventDialog() {
         <form onSubmit={handleSubmit} className="p-lg pt-0 space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Título del Evento</Label>
+              <Label className="text-xs font-black uppercase tracking-widest">Título del Evento</Label>
               <div className="relative">
-                <Type className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="title" placeholder="Ej: Firma de libros de..." className="pl-lg h-12 rounded-xl bg-slate-50 border-none font-bold" required />
+                <Type className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
+                <Input name="title" required />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Tipo</Label>
+                <Label className="text-xs font-black uppercase tracking-widest">Tipo</Label>
                 <Select name="type" defaultValue="generic">
-                  <SelectTrigger className="h-12 rounded-xl bg-slate-50 border-none font-bold">
+                  <SelectTrigger >
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl">
@@ -150,39 +149,38 @@ export function CreateEventDialog() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Fecha y Hora</Label>
-                <Input name="event_date" type="datetime-local" className="h-12 rounded-xl bg-slate-50 border-none font-bold" required />
+                <Label className="text-xs font-black uppercase tracking-widest ">Fecha y Hora</Label>
+                <Input name="event_date" type="datetime-local" required />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Ubicación</Label>
+              <Label className="text-xs font-black uppercase tracking-widest">Ubicación</Label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="location" placeholder="Ej: Sala Principal" className="pl-lg h-12 rounded-xl bg-slate-50 border-none font-bold" />
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
+                <Input name="location" required />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Descripción</Label>
+              <Label className="text-xs font-black uppercase tracking-widest ">Descripción</Label>
               <div className="relative">
-                <FileText className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+                <FileText className="absolute left-3 top-3 h-4 w-4 " />
                 <textarea
                   name="description"
                   rows={3}
-                  className="w-full pl-lg p-sm rounded-xl bg-slate-50 border-none font-medium text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                  placeholder="Describe de qué trata el evento..."
+                  className="w-full pl-lg p-sm rounded-xl bg-background border border-black/50 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
             </div>
           </div>
 
           <div className="flex gap-3">
-            <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
-              Cancelar
-            </Button>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading} variant="primary">
               {isLoading ? <Loader2 className="mr-sm h-4 w-4 animate-spin" /> : "Crear Evento"}
+            </Button>
+            <Button type="button" variant="secondary" onClick={() => setOpen(false)}>
+              Cancelar
             </Button>
           </div>
         </form>

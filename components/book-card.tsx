@@ -25,7 +25,7 @@ export function BookCard({ book }: BookCardProps) {
             loading="lazy"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-slate-400">Sin portada</div>
+          <div className="w-full h-full flex items-center justify-center">Sin portada</div>
         )}
       </Link>
 

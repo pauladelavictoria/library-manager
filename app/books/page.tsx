@@ -78,7 +78,7 @@ export default async function BooksPage({
       <div className="my-lg">
         <div className="flex flex-col lg:flex-row gap-8">
 
-          <aside className="shrink-0 space-y-8 bg-cardDark rounded-2xl h-fit">
+          <aside className="shrink-0 space-y-8 card-background rounded-2xl h-fit">
             <form className="space-y-6 p-lg rounded-2xl" action="/books" method="GET">
               {promo && <input type="hidden" name="promo" value={promo} />}
               <div>

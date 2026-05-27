@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import {
   ShoppingCart,
   X,
-  ArrowRight,
   CheckCircle2,
   AlertCircle,
   Info,
@@ -55,8 +54,8 @@ export default function GlobalNotification() {
   };
 
   return (
-    <div className={cn("fixed bottom-6 right-6 z-[100] w-full transition-all duration-500 ease-out", isLarge ? "max-w-2xl" : "max-w-sm", isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-12 opacity-0 scale-95 pointer-events-none")}>
-      <div className={cn("relative overflow-hidden rounded-[2.5rem] bg-white/90 border backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] ",
+    <div className={cn(" fixed bottom-6 right-6 z-[100] w-full transition-all duration-500 ease-out", isLarge ? "max-w-2xl" : "max-w-sm", isVisible ? "translate-y-0 opacity-100 scale-100" : "translate-y-12 opacity-0 scale-95 pointer-events-none")}>
+      <div className={cn("relative overflow-hidden rounded-[2.5rem] card-background",
         isLarge ? "p-lg" : "p-lg",
         bgColors[type] || bgColors.info
       )}>

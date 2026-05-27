@@ -80,7 +80,7 @@ export function CreatePromoDialog() {
               </p>
             </div>
             <div className="bg-slate-50 p-md rounded-2xl border border-dashed border-slate-200">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-xs">CÓDIGO ACTIVO</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-xs">CÓDIGO ACTIVO</p>
               <p className="text-3xl font-black text-primary tracking-widest">{createdCode}</p>
             </div>
             <Button
@@ -118,11 +118,11 @@ export function CreatePromoDialog() {
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6 py-md">
           <div className="space-y-2">
-            <Label htmlFor="code" className="text-xs font-black uppercase tracking-widest text-slate-400">
+            <Label htmlFor="code" className="text-xs font-black uppercase tracking-widest">
               Código del Cupón
             </Label>
             <div className="relative">
-              <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
               <Input
                 id="code"
                 name="code"
@@ -134,11 +134,11 @@ export function CreatePromoDialog() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="discount" className="text-xs font-black uppercase tracking-widest text-slate-400">
+              <Label htmlFor="discount" className="text-xs font-black uppercase tracking-widest">
                 % Descuento
               </Label>
               <div className="relative">
-                <Percent className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Percent className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
                 <Input
                   id="discount"
                   name="discount"
@@ -152,11 +152,11 @@ export function CreatePromoDialog() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="expiry" className="text-xs font-black uppercase tracking-widest text-slate-400">
+              <Label htmlFor="expiry" className="text-xs font-black uppercase tracking-widest">
                 Expira el
               </Label>
               <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
                 <Input
                   id="expiry"
                   name="expiry"

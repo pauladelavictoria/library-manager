@@ -9,7 +9,7 @@ import { ProfileCard } from "@/components/profile-card";
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-background pb-xl">
+    <div className="hero-container">
       <div className="container mx-auto px-md py-lg">
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-lg">
           <div>
@@ -112,7 +112,7 @@ async function TriviaStats() {
 
   return (
     <Card className="rounded-[2.5rem] border-none shadow-xl overflow-hidden bg-foreground text-background">
-      <CardContent className="p-lg space-y-6">
+      <CardContent className="pt-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-background/20 rounded-xl flex items-center justify-center">
@@ -129,7 +129,7 @@ async function TriviaStats() {
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 mb-sm">
           <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-background/50 px-xs">
             <span>Progreso Premio</span>
             <span>{Math.round(progress)}%</span>
@@ -143,7 +143,7 @@ async function TriviaStats() {
         </div>
 
         {rewardReached ? (
-          <div className="p-md rounded-3xl bg-background/10 border border-background/20 animate-in zoom-in duration-500">
+          <div className="p-md rounded-3xl bg-background/10 border border-background/20 animate-in zoom-in duration-500 mb-sm">
             <div className="flex items-center gap-3 mb-sm">
               <div className="w-8 h-8 bg-background rounded-full flex items-center justify-center">
                 <Gift className="h-4 w-4 text-foreground" />
@@ -159,13 +159,13 @@ async function TriviaStats() {
             </div>
           </div>
         ) : (
-          <div className="flex items-start gap-3 p-md rounded-3xl bg-background/10 border border-background/10 text-xs text-background/60 font-medium leading-relaxed">
+          <div className="flex items-start gap-3 p-md rounded-3xl bg-background/10 border border-background/10 text-xs text-background/60 font-medium leading-relaxed mb-sm">
             <HelpCircle className="h-4 w-4 text-background flex-shrink-0 mt-0.5" />
             <p>Consigue 100 puntos para desbloquear un cupón de 3€. Obtienes 10 puntos por cada partida perfecta (10/10).</p>
           </div>
         )}
 
-        <Button asChild >
+        <Button asChild variant="secondary">
           <Link href="/trivial">
             <Star className="mr-sm h-4 w-4 fill-background text-background" />
             Jugar al Trivial
@@ -226,8 +226,8 @@ async function UserOrders() {
               </div>
               {order.promo_code && (
                 <div className="space-y-1">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Cupón</p>
-                  <Badge variant="secondary" className="bg-cardDark text-foreground hover:bg-cardDark/80 border-none px-sm py-0">
+                  <p className="text-[10px] font-black uppercase tracking-widest">Cupón</p>
+                  <Badge variant="secondary">
                     <Tag className="h-3 w-3 mr-xs" />
                     {order.promo_code}
                   </Badge>
@@ -268,7 +268,7 @@ async function UserOrders() {
                         <p className="text-xs text-muted-foreground font-medium mb-sm">Cant: {item.quantity}</p>
                         <Button asChild variant="ghost" >
                           <Link href={`/books/${item.book_id}`}>
-                            <BookOpen className="h-3 w-3" />
+                            <BookOpen className="h-3 w-3 mr-xs" />
                             Detalles
                           </Link>
                         </Button>

@@ -42,6 +42,7 @@ export default function Hero() {
 
           {navItems.map((item) => (
             <Link
+              className="relative"
               key={item.href}
               href={item.href}
             >
@@ -49,7 +50,7 @@ export default function Hero() {
                 {item.name}
                 {
                   item.href === "/cart" && isMounted && totalItems > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px]">
+                    <span className="absolute bg-black text-white -top-2 -right-4 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px]">
                       {totalItems}
                     </span>
                   )

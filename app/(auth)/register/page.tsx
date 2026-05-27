@@ -18,8 +18,8 @@ export default function SignupPage() {
         </p>
         <RegisterForm />
       </div>
-      <p className="px-lg text-center text-sm text-muted-foreground">
-        Al continuar, aceptas nuestros términos de servicio y política de privacidad.
+      <p className="text-center text-sm mt-lg">
+        Al continuar, aceptas nuestros <a href="/terms">términos de servicio</a> y <a href="/privacy">política de privacidad</a>.
       </p>
     </div>
   );

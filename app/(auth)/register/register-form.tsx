@@ -7,7 +7,6 @@ import { z } from "zod";
 import { signup } from "../actions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Icons } from "@/components/ui/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -96,9 +95,12 @@ export default function RegisterForm() {
   }
   return (
     <div className="w-full max-w-md mx-auto space-y-6">
-      <div className="grid gap-6">
-
-        <Separator />
+      <div className="grid gap-6 ">
+        <Button variant="primary" type="button" disabled={isPending} onClick={handleGoogleSignIn}>
+          <Icons.google className="h-4 w-4" />
+          <p className="ml-sm"> Google</p>
+        </Button>
+        <span className="w-full h-[1px] bg-black" />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-4">
@@ -173,7 +175,7 @@ export default function RegisterForm() {
               />
             </div>
 
-            <Button variant="ghost" type="submit" disabled={isPending}>
+            <Button variant="primary" type="submit" disabled={isPending}>
               {isPending ? (
                 <div className="flex items-center justify-center gap-1">
                   <Icons.spinner className="mr-sm h-4 w-4 animate-spin" />
@@ -186,15 +188,17 @@ export default function RegisterForm() {
           </form>
 
         </Form>
+        <span className="w-full h-[1px] bg-black" />
       </div>
-      <div className="text-center flex justify-between gap-6">
-        <Button variant="primary" type="button" disabled={isPending} onClick={handleGoogleSignIn}>
-          <Icons.google className="h-4 w-4" />
-          <p className="ml-sm"> Google</p>
-        </Button>
+
+
+      <div className="flex gap-2 items-center justify-between w-full">
+        <p className="text-sm w-full">
+          ¿Ya tienes cuenta?
+        </p>
         <Link href="/login" className="w-full">
-          <Button variant="primary">
-            Ya tengo cuenta
+          <Button variant="ghost">
+            Entrar
           </Button>
         </Link>
       </div>

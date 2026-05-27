@@ -134,7 +134,7 @@ export function EventsCalendar({ events, userId }: EventsCalendarProps) {
           const isBooked = bookedEventIds.has(event.id);
 
           return (
-            <Card key={event.id} className="rounded-[2rem] overflow-hidden card-background border-cardDark">
+            <Card key={event.id} className="rounded-[2rem] overflow-hidden card-background">
               <CardContent className="p-0">
                 <div>
                   <div className="flex justify-between items-center">

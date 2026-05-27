@@ -7,7 +7,7 @@ import { NotificationProvider } from "@/lib/notification-context";
 import GlobalNotification from "@/components/global-notification";
 import { CookieConsent } from "@/components/global/cookie-consent";
 import { Footer } from "@/components/footer";
-import Hero from "@/components/global/hero";
+import Hero from "@/components/global/header";
 
 const cormorantGaramond = Cormorant_Garamond({
   variable: "--font-cormorantGaramond",

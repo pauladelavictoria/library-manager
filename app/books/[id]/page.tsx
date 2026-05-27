@@ -54,7 +54,7 @@ export default async function BookDetailPage({
         <div className="mb-lg">
           <div className="flex flex-wrap gap-3 mb-lg">
             {book.categories?.map(cat => (
-              <span key={cat} className="px-md py-xs.5 rounded-full bg-cardDark text-xs font-black uppercase tracking-widest border border-cardDark">
+              <span key={cat} className="px-md py-xs.5 rounded-full uppercase card-background">
                 {cat}
               </span>
             ))}
@@ -62,7 +62,7 @@ export default async function BookDetailPage({
           <div className="flex justify-between items-center">
 
             <div>
-              <h1 className="text-5xl font-serif">
+              <h1 className="text-5xl font-serif max-w-3xl">
                 {book.title}
               </h1>
               <p className="text-3lg font-light">
@@ -82,7 +82,7 @@ export default async function BookDetailPage({
                   className="object-cover transition-transform duration-1000 group-hover:scale-105"
                 />
               ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 gap-4">
+                <div className="w-full h-full flex flex-col items-center justify-center gap-4">
                   <p className="font-bold">Sin portada disponible</p>
                 </div>
               )}

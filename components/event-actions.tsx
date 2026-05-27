@@ -115,14 +115,14 @@ export function EventActions({ event }: { event: Event }) {
                   <Label className="text-xs font-black uppercase tracking-widest">Título</Label>
                   <div className="relative">
                     <Type className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                    <Input name="title" defaultValue={event.title} className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                    <Input name="title" required />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label className="text-xs font-black uppercase tracking-widest">Tipo</Label>
                     <Select name="type" defaultValue={event.type}>
-                      <SelectTrigger className="h-11 rounded-xl bg-slate-50 border-none font-bold">
+                      <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="rounded-xl">
@@ -136,21 +136,21 @@ export function EventActions({ event }: { event: Event }) {
                   </div>
                   <div className="space-y-2">
                     <Label className="text-xs font-black uppercase tracking-widest">Fecha</Label>
-                    <Input name="event_date" type="datetime-local" defaultValue={new Date(event.event_date).toISOString().slice(0, 16)} className="h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                    <Input name="event_date" type="datetime-local" required />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label className="text-xs font-black uppercase tracking-widest">Ubicación</Label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                    <Input name="location" defaultValue={event.location} className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" />
+                    <Input name="location" />
                   </div>
                 </div>
                 <DialogFooter className="pt-md gap-2">
-                  <Button type="button" variant="ghost" onClick={() => setIsEditing(false)}>Cancelar</Button>
-                  <Button type="submit" disabled={isLoading}>
+                  <Button type="submit" disabled={isLoading} variant="primary">
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Guardar"}
                   </Button>
+                  <Button type="button" variant="secondary" onClick={() => setIsEditing(false)}>Cancelar</Button>
                 </DialogFooter>
               </form>
             </div>
@@ -186,10 +186,10 @@ export function EventActions({ event }: { event: Event }) {
                 </DialogDescription>
               </div>
               <div className="flex flex-col gap-3">
-                <Button onClick={handleDelete} disabled={isLoading}>
+                <Button onClick={handleDelete} disabled={isLoading} variant="primary">
                   {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sí, borrar evento"}
                 </Button>
-                <Button variant="ghost" onClick={() => setShowDeleteConfirm(false)}>Volver atrás</Button>
+                <Button variant="secondary" onClick={() => setShowDeleteConfirm(false)}>Volver atrás</Button>
               </div>
             </div>
           )}

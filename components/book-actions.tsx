@@ -67,7 +67,7 @@ export function BookActions({ book }: BookActionsProps) {
     <div className="flex items-center justify-end gap-2">
       <Button
         variant="ghost"
-        className="h-8 w-8 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+        className="h-8 w-8 rounded-lg hover:text-blue-600 hover:bg-blue-50 transition-colors"
         onClick={() => setIsEditing(true)}
       >
         <Edit2 className="h-4 w-4" />
@@ -75,7 +75,7 @@ export function BookActions({ book }: BookActionsProps) {
 
       <Button
         variant="ghost"
-        className="h-8 w-8 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+        className="h-8 w-8 rounded-lg hover:text-red-600 hover:bg-red-50 transition-colors"
         onClick={() => setShowDeleteConfirm(true)}
       >
         <Trash2 className="h-4 w-4" />
@@ -105,40 +105,40 @@ export function BookActions({ book }: BookActionsProps) {
               </DialogHeader>
               <form onSubmit={handleUpdate} className="space-y-4">
                 <div className="space-y-2">
-                  <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Título</Label>
+                  <Label className="text-xs font-black uppercase tracking-widest">Título</Label>
                   <div className="relative">
-                    <Book className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                    <Input name="title" defaultValue={book.title} className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                    <Book className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
+                    <Input name="title" required />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Autor</Label>
+                  <Label className="text-xs font-black uppercase tracking-widest">Autor</Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                    <Input name="author" defaultValue={book.authors?.join(",")} className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
+                    <Input name="author" required />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Stock Actual</Label>
+                    <Label className="text-xs font-black uppercase tracking-widest">Stock Actual</Label>
                     <div className="relative">
-                      <Database className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                      <Input name="stock" type="number" defaultValue={book.stock_quantity} className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                      <Database className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
+                      <Input name="stock" type="number" required />
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Precio</Label>
+                    <Label className="text-xs font-black uppercase tracking-widest">Precio</Label>
                     <div className="relative">
-                      <Euro className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                      <Input name="price" type="number" step="0.01" defaultValue={book.selling_price || 0} className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                      <Euro className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
+                      <Input name="price" type="number" step="0.01" required />
                     </div>
                   </div>
                 </div>
                 <DialogFooter className="pt-md gap-2">
-                  <Button type="button" variant="ghost" onClick={() => setIsEditing(false)}>Cancelar</Button>
-                  <Button type="submit" disabled={isLoading}>
+                  <Button type="submit" disabled={isLoading} variant="primary">
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Guardar Cambios"}
                   </Button>
+                  <Button type="button" variant="secondary" onClick={() => setIsEditing(false)}>Cancelar</Button>
                 </DialogFooter>
               </form>
             </div>
@@ -174,10 +174,10 @@ export function BookActions({ book }: BookActionsProps) {
                 </DialogDescription>
               </div>
               <div className="flex flex-col gap-3">
-                <Button onClick={handleDelete} disabled={isLoading}>
+                <Button onClick={handleDelete} disabled={isLoading} variant="primary">
                   {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sí, borrar libro"}
                 </Button>
-                <Button variant="ghost" onClick={() => setShowDeleteConfirm(false)}>Cancelar</Button>
+                <Button variant="secondary" onClick={() => setShowDeleteConfirm(false)}>Cancelar</Button>
               </div>
             </div>
           )}

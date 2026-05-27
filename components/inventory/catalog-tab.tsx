@@ -137,14 +137,14 @@ export function CatalogTab({
                       {isLowStock ? (
                         <Badge
                           variant="destructive"
-                          className="rounded-lg px-sm.5 py-xs font-black text-[10px] tracking-wider animate-pulse shadow-sm"
+                          className="rounded-lg p-xs font-black text-[10px] tracking-wider animate-pulse shadow-sm"
                         >
                           CRÍTICO
                         </Badge>
                       ) : (
                         <Badge
                           variant="outline"
-                          className="rounded-lg px-sm.5 py-xs font-bold text-[10px] tracking-wider text-emerald-600 border-emerald-500/20 bg-emerald-500/10"
+                          className="rounded-lg p-xs font-bold text-[10px] tracking-wider text-emerald-600 border-emerald-500/20 bg-emerald-500/10"
                         >
                           SALUDABLE
                         </Badge>

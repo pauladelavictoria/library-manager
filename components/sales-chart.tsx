@@ -65,7 +65,7 @@ export function SalesChart({ data }: SalesChartProps) {
             </div>
 
             <div className="text-right hidden sm:block">
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-xs">Total Periodo</p>
+              <p className="text-[10px] font-black uppercase tracking-widest leading-none mb-xs">Total Periodo</p>
               <p className="text-xl font-black text-primary leading-none">€{totalSales.toFixed(2)}</p>
             </div>
           </div>
@@ -106,7 +106,7 @@ export function SalesChart({ data }: SalesChartProps) {
                 }}
                 itemStyle={{ color: 'hsl(var(--primary))', fontWeight: 800 }}
                 labelStyle={{ fontWeight: 800, marginBottom: '4px' }}
-                formatter={(value: number | string) => [`€${Number(value).toFixed(2)}`, 'Ventas']}
+                formatter={(value: any) => [`€${Number(value || 0).toFixed(2)}`, 'Ventas']}
               />
               <Area
                 type="monotone"

@@ -83,7 +83,6 @@ export function CreateBookDialog() {
       <DialogContent className="sm:max-w-[550px] rounded-[2.5rem] border-slate-200 p-0 overflow-hidden">
         <DialogHeader className="p-lg pb-md">
           <DialogTitle className="text-2xl font-black flex items-center gap-2">
-            <Plus className="h-6 w-6 text-primary" />
             Nuevo Título
           </DialogTitle>
           <DialogDescription className="font-medium ">Completa los datos para registrar un nuevo libro en el inventario.</DialogDescription>
@@ -91,61 +90,61 @@ export function CreateBookDialog() {
         <form onSubmit={handleSubmit} className="p-lg pt-0 space-y-6">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2 col-span-2">
-              <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Título del Libro</Label>
+              <Label className="text-xs font-black uppercase tracking-widest">Título del Libro</Label>
               <div className="relative">
-                <Book className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="title" placeholder="Ej: Cien años de soledad" className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                <Book className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
+                <Input name="title" required />
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Autor</Label>
+              <Label className="text-xs font-black uppercase tracking-widest">Autor</Label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="author" placeholder="Nombre completo" className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
+                <Input name="author" required />
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest text-slate-400">ISBN</Label>
+              <Label className="text-xs font-black uppercase tracking-widest">ISBN</Label>
               <div className="relative">
-                <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="isbn" placeholder="978-..." className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
+                <Input name="isbn" required />
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Categoría</Label>
-              <Input name="category" placeholder="Ej: Novela" className="h-11 rounded-xl bg-slate-50 border-none font-bold" />
+              <Label className="text-xs font-black uppercase tracking-widest">Categoría</Label>
+              <Input name="category" />
             </div>
             <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Editorial</Label>
-              <Input name="publisher" placeholder="Ej: Alfaguara" className="h-11 rounded-xl bg-slate-50 border-none font-bold" />
+              <Label className="text-xs font-black uppercase tracking-widest">Editorial</Label>
+              <Input name="publisher" />
             </div>
             <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Stock Inicial</Label>
+              <Label className="text-xs font-black uppercase tracking-widest">Stock Inicial</Label>
               <div className="relative">
-                <Database className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="stock" type="number" min="0" defaultValue="1" className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                <Database className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
+                <Input name="stock" type="number" min="0" required />
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Precio de Venta</Label>
+              <Label className="text-xs font-black uppercase tracking-widest">Precio de Venta</Label>
               <div className="relative">
-                <Euro className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="price" type="number" step="0.01" min="0" placeholder="0.00" className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" required />
+                <Euro className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
+                <Input name="price" type="number" step="0.01" min="0" required />
               </div>
             </div>
             <div className="space-y-2 col-span-2">
-              <Label className="text-xs font-black uppercase tracking-widest text-slate-400">URL de Portada</Label>
+              <Label className="text-xs font-black uppercase tracking-widest">URL de Portada</Label>
               <div className="relative">
-                <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input name="cover_url" placeholder="https://..." className="pl-lg h-11 rounded-xl bg-slate-50 border-none font-bold" />
+                <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
+                <Input name="cover_url" />
               </div>
             </div>
           </div>
           <DialogFooter className="pt-md">
-            <Button type="button" variant="ghost" onClick={() => setOpen(false)}>Cancelar</Button>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading} variant="primary">
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Registrar Libro"}
             </Button>
+            <Button type="button" variant="secondary" onClick={() => setOpen(false)}>Cancelar</Button>
           </DialogFooter>
         </form>
       </DialogContent>

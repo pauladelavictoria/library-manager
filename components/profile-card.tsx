@@ -79,7 +79,7 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
             <p className="font-bold">{formData.phone || "No proporcionado"}</p>
           )}
         </div>
-        
+
         {!isEditing && (
           <div className="space-y-1">
             <p className="text-xs font-black uppercase tracking-wider text-muted-foreground">Miembro desde</p>
@@ -90,12 +90,12 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
         )}
 
         <Separator className="bg-cardDark" />
-        
+
         <div className="flex gap-3">
           {isEditing ? (
             <>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="secondary"
                 className="flex-1 rounded-2xl py-lg font-bold"
                 onClick={() => {
                   setIsEditing(false);
@@ -108,7 +108,7 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
               >
                 Cancelar
               </Button>
-              <Button 
+              <Button
                 className="flex-1 rounded-2xl py-lg font-bold shadow-lg shadow-primary/20"
                 onClick={handleSave}
                 disabled={isPending}
@@ -117,9 +117,9 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
               </Button>
             </>
           ) : (
-            <Button 
-              variant="outline" 
-              className="w-full rounded-2xl py-lg font-bold hover:bg-cardDark hover:text-foreground border-cardDark transition-all"
+            <Button
+              variant="primary"
+              className="w-full rounded-2xl font-bold hover:bg-cardDark hover:text-foreground border-cardDark transition-all"
               onClick={() => setIsEditing(true)}
             >
               Editar Perfil

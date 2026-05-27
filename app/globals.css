@@ -47,14 +47,10 @@ body {
 
 @layer utilities {
   .hero-container {
-    @apply p-xl bg-hero-pattern w-full bg-no-repeat;
+    @apply p-xl bg-hero-pattern w-full bg-no-repeat h-full min-h-screen;
   }
 
   .card-background {
     @apply bg-card/60 backdrop-blur-md border border-cardDark/50 shadow-sm;
-  }
-
-  .pg-background {
-    @apply bg-cardDark/40;
   }
 }

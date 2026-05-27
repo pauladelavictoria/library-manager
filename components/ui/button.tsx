@@ -10,10 +10,10 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-black  w-3xs h-12 text-white rounded-full px-md text-base text-background flex justify-center items-center",
+          "bg-black w-3xs h-12 text-white rounded-full px-md text-base text-background flex justify-center items-center",
         secondary:
-          "bg-blackTransparent  w-3xs h-12 text-black rounded-full px-md text-base ",
-        ghost: "hover:underline underline-offset-[80%]",
+          "bg-blackTransparent  w-3xs h-12 text-black rounded-full px-md text-base flex justify-center items-center",
+        ghost: "hover:underline underline-offset-[80%] flex justify-center items-center",
         icon: "rounded-full border-1 border-black h-10 w-10 shadow-md shadow-primary/20 hover:scale-105 transition-transform"
       },
     },

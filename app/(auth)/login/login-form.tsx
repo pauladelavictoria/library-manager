@@ -76,7 +76,7 @@ export default function LoginForm() {
         return;
       }
 
-      queryClient.invalidateQueries({ queryKey: ["user"] }); //invalidate the user
+      queryClient.invalidateQueries({ queryKey: ["user"] });
       router.push(redirectTo);
       notify({ type: 'success', title: '¡Bienvenido!', message: 'Has iniciado sesión correctamente.' });
     });
@@ -84,6 +84,15 @@ export default function LoginForm() {
 
   return (
     <div className="grid gap-6">
+      <Button variant="primary" disabled={isPending} onClick={handleGoogleSignIn}>
+        {isPending ? (
+          <Icons.spinner className="mr-sm h-4 w-4 animate-spin" />
+        ) : (
+          <Icons.google className="mr-sm h-4 w-4" />
+        )}
+        Google
+      </Button>
+      <span className="w-full h-[1px] bg-black" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
@@ -122,14 +131,14 @@ export default function LoginForm() {
               )}
             />
           </div>
-          <Button type="submit" variant="ghost" disabled={isPending}>
+          <Button type="submit" variant="primary" disabled={isPending}>
             {isPending ? (
               <div className="flex items-center justify-center gap-1">
                 <Icons.spinner className="mr-sm h-4 w-4 animate-spin" />
-                <span>Verificando...</span>
+                <span>Confirmando...</span>
               </div>
             ) : (
-              "Verificar Ahora"
+              "Confirmar"
             )}
           </Button>
         </form>
@@ -141,17 +150,11 @@ export default function LoginForm() {
 
       </div>
       <div className="flex gap-2 items-center justify-center">
-        <Button variant="primary">
-          <Link href="/register">Registrarse</Link>
-        </Button>
-
-        <Button variant="primary" disabled={isPending} onClick={handleGoogleSignIn}>
-          {isPending ? (
-            <Icons.spinner className="mr-sm h-4 w-4 animate-spin" />
-          ) : (
-            <Icons.google className="mr-sm h-4 w-4" />
-          )}
-          Google
+        <p className="text-sm">
+          ¿Todavía no tienes cuenta?
+        </p>
+        <Button variant="ghost">
+          <Link href="/register">Regístrate</Link>
         </Button>
       </div>
     </div>

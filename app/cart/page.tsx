@@ -64,14 +64,15 @@ export default function CartPage() {
 
   if (cart.length === 0) {
     return (
-      <div className="hero-container text-center">
-        <div className="bg-cardDark w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-lg animate-pulse">
+      <div className="hero-container flex flex-col justify-center items-center">
+        <div className="bg-cardDark w-24 h-24 rounded-full flex items-center justify-center mb-xl">
           <ShoppingBag className="h-12 w-12 text-foreground" />
         </div>
         <h1 className="text-4xl font-black mb-md tracking-tight">Tu carrito está vacío</h1>
-        <p className="text-lg mb-lg leading-relaxed">
+        <p className="text-lg mb-xxxl leading-relaxed">
           Parece que aún no has añadido ningún libro a tu colección. ¡Explora nuestro catálogo y descubre tu próxima aventura literaria!
         </p>
+
         <Link href="/books">
           <Button variant="primary">
             Explorar Catálogo
@@ -104,7 +105,7 @@ export default function CartPage() {
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-xs text-slate-400">Sin portada</div>
+                    <div className="w-full h-full flex items-center justify-center text-xs">Sin portada</div>
                   )}
                 </div>
 
