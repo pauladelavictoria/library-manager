@@ -43,6 +43,25 @@ export async function login(formData: { email: string; password: string }) {
   return { user: data.user, session: data.session };
 }
 
+export async function forgotPassword(email: string) {
+  const { headers } = await import("next/headers");
+  const headerList = await headers();
+  const host = headerList.get("host") ?? "localhost:3000";
+  const protocol = host.startsWith("localhost") ? "http" : "https";
+  const origin = `${protocol}://${host}`;
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${origin}/auth/callback?next=/reset-password`,
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  return {};
+}
+
 export async function logOut() {
   const supabase = await createClient();
   const { error } = await supabase.auth.signOut();
