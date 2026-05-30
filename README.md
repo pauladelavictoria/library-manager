@@ -1,6 +1,6 @@
-# 📚 Librería éter: Full-Stack E-Commerce & Management Platform
+# 📚 Full-Stack E-Commerce & Management Platform
 
-A full-stack e-commerce and management platform built to deliver a highly interactive, gamified library experience. Developed with Next.js 15 (App Router), React 19, and strict TypeScript, the application features a robust headless UI architecture powered by Radix UI and Tailwind CSS. Data fetching and mutations are optimized using TanStack React Query and Server Actions, all backed by a real-time Supabase PostgreSQL database.
+A full-stack e-commerce and management platform built to deliver a highly interactive, gamified library experience. Developed with **Next.js 15 (App Router)**, **React 19**, and strict **TypeScript**, the application features a robust headless UI architecture powered by **Radix UI** and **Tailwind CSS**. Data fetching and mutations are optimized using **TanStack React Query** and **Server Actions**, all backed by a real-time **Supabase PostgreSQL** database.
 
 ## 🚀 Technical Highlights & Architecture
 
@@ -11,7 +11,7 @@ A full-stack e-commerce and management platform built to deliver a highly intera
 *   **Component Architecture**: Implemented a custom, accessible design system utilizing **Radix UI** primitives, orchestrated with `class-variance-authority` (cva), `clsx`, and `tailwind-merge` for predictable and dynamic component styling (inspired by shadcn/ui patterns).
 
 ### Advanced Data Fetching & State Management
-*   **Server-Side Rendering (SSR) & Static Site Generation (SSG)**: Optimized page loads and SEO using Next.js Server Components.
+*   **Server-Side Rendering (SSR)**: Optimized page loads and SEO using Next.js Server Components.
 *   **Data Mutations**: Secure form submissions and API calls using **Next.js Server Actions**, reducing client-side JavaScript.
 *   **Client State & Caching**: Efficient data fetching, caching, and optimistic UI updates powered by **TanStack React Query**.
 *   **Backend as a Service (BaaS)**: Fully integrated with **Supabase** (PostgreSQL) for database management and authentication (`@supabase/ssr`).
@@ -19,7 +19,7 @@ A full-stack e-commerce and management platform built to deliver a highly intera
 ### Form Handling & Validation
 *   **Type-Safe Forms**: End-to-end type safety for user inputs using **React Hook Form** coupled with **Zod** schema validation (`@hookform/resolvers`). This ensures robust client-side and server-side validation with minimal re-renders.
 
-### Data Visualization & Modern UI
+### Data Visualization & UI
 *   **Interactive Dashboards**: Built comprehensive analytics dashboards for inventory and sales tracking.
 *   **Charting Libraries**: Utilized **Recharts** for standard responsive charts and integrated **D3.js** (`d3-hierarchy`) for complex, custom data visualizations like packed bubble charts.
 *   **Fluid Animations**: Enhanced User Experience with subtle micro-interactions and smooth transitions using `tailwindcss-animate`.
@@ -57,7 +57,3 @@ To run this project locally and explore the codebase:
     ```bash
     pnpm dev
     ```
-
----
-
-*This project was built to demonstrate proficiency in modern frontend development, UI/UX implementation, and full-stack integration.*

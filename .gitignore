@@ -42,3 +42,7 @@ next-env.d.ts
 
 # spec
 project_specifications.md
+
+# claude
+.claude/
+GEMINI.md
