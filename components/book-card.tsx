@@ -4,12 +4,16 @@ import Link from "next/link";
 import { Book } from "@/lib/types";
 import AddToCartButton from "./global/add-to-cart-button";
 import { toTitleCase } from "@/lib/utils";
+import PriceTag from "@/components/ui/price-tag";
+import { useCart } from "@/lib/cart-context";
+import { Tag } from "lucide-react";
 
 interface BookCardProps {
   book: Book;
 }
 
 export function BookCard({ book }: BookCardProps) {
+  const { appliedPromo } = useCart();
   const authorName = book.authors && book.authors.length > 0 ? book.authors[0] : "Autor desconocido";
   const originalPrice = book.selling_price || 0;
 
@@ -38,10 +42,19 @@ export function BookCard({ book }: BookCardProps) {
         </Link>
         <p className="label-mono mt-1 mb-3">{authorName}</p>
 
+        {appliedPromo && (
+          <div className="flex items-center gap-1.5 text-emerald-600 mb-3 bg-emerald-500/10 w-fit px-2 py-0.5 rounded-sm border border-emerald-500/20">
+            <Tag className="w-3 h-3" />
+            <span className="label-mono text-[10px] uppercase">{appliedPromo.code}</span>
+          </div>
+        )}
+
         <div className="border-soft-t pt-3 mt-auto flex items-center justify-between">
-          <span className="price-mono">
-            {originalPrice > 0 ? `${originalPrice.toFixed(2)} €` : ""}
-          </span>
+          {originalPrice > 0 ? (
+            <PriceTag price={originalPrice} size="md" />
+          ) : (
+            <span />
+          )}
           <AddToCartButton book={book} />
         </div>
       </div>

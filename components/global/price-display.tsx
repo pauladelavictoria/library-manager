@@ -17,7 +17,6 @@ export default function PriceDisplay({ book }: PriceDisplayProps) {
 
   return (
     <div className="flex flex-col gap-0">
-      {/* Price row */}
       <div className="p-6">
         <p className="label-mono mb-2">
           {appliedPromo ? "Precio con descuento" : "Precio"}
@@ -25,7 +24,6 @@ export default function PriceDisplay({ book }: PriceDisplayProps) {
         <PriceTag price={originalPrice} size="xl" />
       </div>
 
-      {/* Stock row */}
       <div className="p-6 border-soft-t flex items-center gap-3">
         <span
           className={cn(
@@ -41,12 +39,10 @@ export default function PriceDisplay({ book }: PriceDisplayProps) {
         </div>
       </div>
 
-      {/* CTA row */}
       <div className="p-6 border-soft-t">
         <AddToCartButton book={book} variant="primary" text />
       </div>
 
-      {/* Promo row */}
       {appliedPromo && (
         <div className="p-4 border-soft-t flex items-center gap-2 bg-card">
           <Tag className="h-3 w-3 text-foreground/50" />

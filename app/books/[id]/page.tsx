@@ -37,13 +37,11 @@ export default async function BookDetailPage({
   return (
     <main className="page-container py-12">
 
-      {/* Breadcrumb */}
       <Link href="/books" className="inline-flex items-center gap-2 label-mono hover:opacity-60 transition-opacity mb-8 group">
         <ArrowLeft className="h-3 w-3 transition-transform group-hover:-translate-x-1" />
         Catalogo
       </Link>
 
-      {/* Title block */}
       <div className="section-header separator mb-0">
         <div className="flex flex-wrap items-baseline gap-4">
           <h1 className="display-lg">{toTitleCase(book.title)}</h1>
@@ -58,11 +56,9 @@ export default async function BookDetailPage({
         )}
       </div>
 
-      {/* 3-column grid — single outer border, cells use one-sided separators */}
       <div className="border-soft overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-12">
 
-          {/* Cover */}
           <div className="md:col-span-3 md:border-r border-foreground/15 overflow-hidden border-b border-foreground/15 md:border-b-0">
             {book.cover_url ? (
               <img src={book.cover_url} alt={toTitleCase(book.title)} className="w-full object-cover" />
@@ -73,7 +69,6 @@ export default async function BookDetailPage({
             )}
           </div>
 
-          {/* Synopsis */}
           <div className="md:col-span-5 md:border-r border-foreground/15 p-8 flex flex-col gap-4 border-b border-foreground/15 md:border-b-0">
             <h2 className="label-sans border-ink-b pb-2">Sinopsis</h2>
             <SynopsisToggle description={book.description} />
@@ -85,7 +80,6 @@ export default async function BookDetailPage({
             )}
           </div>
 
-          {/* Price + conditions */}
           <div className="md:col-span-4 flex flex-col">
             <PriceDisplay book={book} />
             <PaymentConditions />
