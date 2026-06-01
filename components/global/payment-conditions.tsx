@@ -1,40 +1,23 @@
-import { RotateCcw, ShieldCheck, Truck } from "lucide-react"
+import { RotateCcw, ShieldCheck, Truck } from "lucide-react";
 
+const items = [
+  { icon: Truck, title: "Envio gratis", body: "En pedidos superiores a 30€" },
+  { icon: ShieldCheck, title: "Pago seguro", body: "Encriptacion SSL avanzada" },
+  { icon: RotateCcw, title: "Devoluciones", body: "Plazo extendido de 30 dias" },
+];
 
-const PaymentConditions = () => {
-    return (
+const PaymentConditions = () => (
+  <div>
+    {items.map(({ icon: Icon, title, body }) => (
+      <div key={title} className="flex items-start gap-4 p-6 border-soft-t">
+        <Icon className="h-4 w-4 mt-0.5 text-foreground/40 shrink-0" />
         <div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 rounded-2xl p-lg mt-xl w-fit card-background">
-                <div className="flex flex-col gap-3 group">
-                    <div className="bg-primary/10 w-12 h-12 rounded-2xl flex items-center justify-center">
-                        <Truck className="h-6 w-6" />
-                    </div>
-                    <div>
-                        <p className="font-black text-sm uppercase tracking-wider">Envío Gratis</p>
-                        <p className="text-xs text-muted-foreground font-medium mt-xs">En pedidos superiores a 30€</p>
-                    </div>
-                </div>
-                <div className="flex flex-col gap-3 group">
-                    <div className="bg-primary/10 w-12 h-12 rounded-2xl flex items-center justify-center">
-                        <ShieldCheck className="h-6 w-6" />
-                    </div>
-                    <div>
-                        <p className="font-black text-sm uppercase tracking-wider">Pago Seguro</p>
-                        <p className="text-xs text-muted-foreground font-medium mt-xs">Encriptación SSL avanzada</p>
-                    </div>
-                </div>
-                <div className="flex flex-col gap-3 group">
-                    <div className="bg-primary/10 w-12 h-12 rounded-2xl flex items-center justify-center">
-                        <RotateCcw className="h-6 w-6" />
-                    </div>
-                    <div>
-                        <p className="font-black text-sm uppercase tracking-wider">Devoluciones</p>
-                        <p className="text-xs text-muted-foreground font-medium mt-xs">Plazo extendido de 30 días</p>
-                    </div>
-                </div>
-            </div>
+          <p className="label-sans mb-1">{title}</p>
+          <p className="label-mono">{body}</p>
         </div>
-    )
-}
+      </div>
+    ))}
+  </div>
+);
 
-export default PaymentConditions
+export default PaymentConditions;

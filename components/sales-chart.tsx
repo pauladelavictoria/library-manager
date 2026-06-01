@@ -9,10 +9,10 @@ import {
   Area,
   AreaChart,
 } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { TrendingUp, CalendarDays } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface SalesData {
   date: string;
@@ -27,7 +27,6 @@ export function SalesChart({ data }: SalesChartProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentPeriod = searchParams.get("period") || "week";
-
   const totalSales = data.reduce((sum, item) => sum + item.amount, 0);
 
   const handlePeriodChange = (period: string) => {
@@ -36,91 +35,84 @@ export function SalesChart({ data }: SalesChartProps) {
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
+  const inkColor = "hsl(var(--foreground))";
+  const mutedColor = "hsl(var(--muted-foreground))";
+  const bgColor = "hsl(var(--background))";
+
   return (
-    <Card className="rounded-[2rem] border-slate-200 shadow-xl bg-white/50 backdrop-blur-sm overflow-hidden h-full">
-      <CardHeader>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <CardTitle className="text-xl font-bold flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-emerald-500" />
-              Tendencia de Ventas
-            </CardTitle>
-            <CardDescription className="font-medium">Ventas de {currentPeriod === "week" ? "la última semana" : "los últimos 30 días"}.</CardDescription>
-          </div>
+    <div className="h-full flex flex-col">
+      {/* Header */}
+      <div className="flex items-center gap-3 px-6 py-4 border-b border-foreground/15">
+        <TrendingUp className="h-3.5 w-3.5 text-foreground/30 shrink-0" />
+        <span className="label-sans">Tendencia de ventas</span>
+      </div>
 
-          <div className="flex items-center gap-4">
-            <div className="flex p-xs  rounded-xl">
-              <button
-                onClick={() => handlePeriodChange("week")}
-                className={cn("px-sm py-xs.5 rounded-lg text-xs font-bold transition-all", currentPeriod === "week" ? "bg-white shadow-sm text-primary" : " hover:text-slate-700 ")}
-              >
-                Semana
-              </button>
-              <button
-                onClick={() => handlePeriodChange("month")}
-                className={cn("px-sm py-xs.5 rounded-lg text-xs font-bold transition-all", currentPeriod === "month" ? "bg-white shadow-sm text-primary" : " hover:text-slate-700 ")}
-              >
-                Mes
-              </button>
-            </div>
-
-            <div className="text-right hidden sm:block">
-              <p className="text-[10px] font-black uppercase tracking-widest leading-none mb-xs">Total Periodo</p>
-              <p className="text-xl font-black text-primary leading-none">€{totalSales.toFixed(2)}</p>
-            </div>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="pt-sm pb-lg">
-        <div className="h-[240px] w-full">
+      {/* Chart */}
+      <div className="p-6 flex-1 min-h-0">
+        <div className="h-full w-full min-h-[180px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data}>
               <defs>
                 <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                  <stop offset="5%" stopColor={inkColor} stopOpacity={0.12} />
+                  <stop offset="95%" stopColor={inkColor} stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
+              <CartesianGrid strokeDasharray="2 4" vertical={false} stroke="hsl(var(--foreground) / 0.08)" />
               <XAxis
                 dataKey="date"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }}
+                tick={{ fill: mutedColor, fontSize: 10, fontFamily: "var(--font-space-mono)" }}
                 dy={10}
                 interval={currentPeriod === "month" ? 5 : 0}
               />
               <YAxis
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 700 }}
+                tick={{ fill: mutedColor, fontSize: 10, fontFamily: "var(--font-space-mono)" }}
                 tickFormatter={(value) => `€${value}`}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                  borderRadius: '1rem',
-                  border: 'none',
-                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                  backdropFilter: 'blur(8px)'
+                  backgroundColor: bgColor,
+                  border: `2px solid ${inkColor}`,
+                  borderRadius: 0,
+                  boxShadow: "none",
+                  fontFamily: "var(--font-space-mono)",
+                  fontSize: 11,
                 }}
-                itemStyle={{ color: 'hsl(var(--primary))', fontWeight: 800 }}
-                labelStyle={{ fontWeight: 800, marginBottom: '4px' }}
-                formatter={(value: any) => [`€${Number(value || 0).toFixed(2)}`, 'Ventas']}
+                itemStyle={{ color: inkColor, fontWeight: 700 }}
+                labelStyle={{ fontWeight: 700, marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.1em" }}
+                formatter={(value) => [`€${Number(value || 0).toFixed(2)}`, "Ventas"]}
               />
               <Area
                 type="monotone"
                 dataKey="amount"
-                stroke="hsl(var(--primary))"
-                strokeWidth={3}
+                stroke={inkColor}
+                strokeWidth={2}
                 fillOpacity={1}
                 fill="url(#colorSales)"
-                animationDuration={1000}
+                animationDuration={800}
               />
             </AreaChart>
           </ResponsiveContainer>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+
+      {/* Footer — selector + total */}
+      <div className="flex items-center justify-between gap-4 px-6 py-4 border-t border-foreground/15">
+        <Tabs value={currentPeriod} onValueChange={handlePeriodChange}>
+          <TabsList className="rounded-none bg-card border-soft h-auto p-0 gap-0">
+            <TabsTrigger value="week" className="rounded-none px-3 py-2 label-sans text-[10px] data-[state=active]:bg-foreground data-[state=active]:text-background">Semana</TabsTrigger>
+            <TabsTrigger value="month" className="rounded-none px-3 py-2 label-sans text-[10px] data-[state=active]:bg-foreground data-[state=active]:text-background">Mes</TabsTrigger>
+          </TabsList>
+        </Tabs>
+        <div className="text-right">
+          <p className="label-mono">Total periodo</p>
+          <p className="price-mono">€{totalSales.toFixed(2)}</p>
+        </div>
+      </div>
+    </div>
   );
 }

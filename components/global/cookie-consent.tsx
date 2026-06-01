@@ -29,49 +29,37 @@ export function CookieConsent() {
 
   return (
     <div className="fixed bottom-6 left-6 right-6 md:left-auto md:max-w-md z-[100] animate-in fade-in slide-in-from-bottom-10 duration-700 ease-out">
-      <div className="relative overflow-hidden rounded-[2.5rem] border border-white/20 bg-white/70 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-lg md:p-lg">
-
-        <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative flex flex-col gap-6">
+      <div className="border-ink bg-background p-lg">
+        <div className="flex flex-col gap-6">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-sm rounded-2xl bg-primary/10 text-primary">
-                <Cookie className="h-6 w-6" />
-              </div>
-              <h3 className="text-xl font-black tracking-tight">Preferencias de Cookies</h3>
+              <Cookie className="h-5 w-5" />
+              <h3 className="display-md">Cookies</h3>
             </div>
             <button
               onClick={() => setIsVisible(false)}
-              className="p-sm rounded-full hover: transition-colors"
+              className="btn-ghost py-0"
             >
-              <X className="h-4 w-4 " />
+              <X className="h-4 w-4" />
             </button>
           </div>
 
-          <p className="text-sm font-medium text-slate-600">
-            Utilizamos cookies para mejorar tu experiencia, analizar el tráfico y recordar tus preferencias. Al aceptar, nos ayudas a ofrecerte un servicio más personalizado y eficiente.
+          <p className="body-sans text-foreground/60">
+            Utilizamos cookies para mejorar tu experiencia y recordar tus preferencias.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-8">
-            <Button
-              variant="primary"
-              onClick={handleAccept}
-            >
-              Aceptar Todo
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button variant="primary" onClick={handleAccept}>
+              Aceptar
             </Button>
-            <Button
-              variant="ghost"
-              onClick={handleDecline}
-            >
-              Solo Necesarias
+            <Button variant="ghost" onClick={handleDecline}>
+              Solo necesarias
             </Button>
           </div>
 
-          <div className="flex items-center gap-2 text-[10px] font-bold  uppercase tracking-widest pt-sm">
+          <div className="flex items-center gap-2 label-mono">
             <ShieldCheck className="h-3 w-3" />
-            <span>Navegación Segura y Privada</span>
+            Navegacion segura y privada
           </div>
         </div>
       </div>

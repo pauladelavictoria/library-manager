@@ -1,13 +1,13 @@
 import { AlertTriangle, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+import { cn, toTitleCase } from "@/lib/utils";
 import { InventoryFilters } from "@/components/inventory-filters";
 import { CreateBookDialog } from "@/components/create-book-dialog";
 import { BookActions } from "@/components/book-actions";
 import { RecommendationToggle } from "@/components/recommendation-toggle";
+import { Dashboard } from "@/components/inventory/dashboard";
 import type { Book } from "@/lib/types";
 
 interface CatalogTabProps {
@@ -17,10 +17,7 @@ interface CatalogTabProps {
   totalItems: number;
   totalPages: number;
   recommendedCount: number;
-  filterOptions: {
-    authors: string[];
-    categories: string[];
-  };
+  filterOptions: { authors: string[]; categories: string[] };
   params: {
     q?: string;
     author?: string;
@@ -29,6 +26,8 @@ interface CatalogTabProps {
     sort?: "sales" | "stock" | "category" | "title";
     page?: string;
   };
+  salesChartData: { date: string; amount: number }[];
+  sortedBestSellers: Book[];
 }
 
 export function CatalogTab({
@@ -40,213 +39,161 @@ export function CatalogTab({
   recommendedCount,
   filterOptions,
   params,
+  salesChartData,
+  sortedBestSellers,
 }: CatalogTabProps) {
   const buildPageUrl = (pageNumber: number) => {
-    const searchParamsObj: Record<string, string> = {};
-    Object.entries(params).forEach(([key, val]) => {
-      if (val !== undefined && typeof val === "string") {
-        searchParamsObj[key] = val;
-      }
-    });
-    searchParamsObj.page = pageNumber.toString();
-    return `?${new URLSearchParams(searchParamsObj).toString()}`;
+    const p: Record<string, string> = {};
+    Object.entries(params).forEach(([k, v]) => { if (v !== undefined && typeof v === "string") p[k] = v; });
+    p.page = pageNumber.toString();
+    return `?${new URLSearchParams(p).toString()}`;
   };
 
   return (
-    <main className="w-full">
-      <Card className="rounded-[2rem] border-slate-200 shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
-        <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-lg bg-back px-lg py-lg">
-          <div>
-            <CardTitle className="text-3xl font-black">Catálogo de Inventario</CardTitle>
-            <CardDescription className="font-medium">
-              Gestión total de los libros y existencias de la librería.
-            </CardDescription>
+    <main className="w-full space-y-0">
+      {/* Charts */}
+      <Dashboard salesChartData={salesChartData} sortedBestSellers={sortedBestSellers} />
+
+      <div className="card-flat overflow-hidden">
+        {/* Row 1: title + add button */}
+        <div className="flex items-center justify-between gap-4 px-6 py-4">
+          <div className="flex items-baseline gap-3">
+            <h2 className="label-sans">Catálogo</h2>
+            <span className="label-mono">{totalItems} titulos · {recommendedCount} recomendados</span>
           </div>
           <CreateBookDialog />
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="p-lg pt-0 border-b border-slate-100">
-            <InventoryFilters
-              authors={filterOptions.authors}
-              categories={filterOptions.categories}
-            />
-          </div>
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-transparent border-slate-100">
-                <TableHead className="pl-lg font-bold uppercase text-[10px] tracking-widest py-lg">
-                  Libro
-                </TableHead>
-                <TableHead className="font-bold uppercase text-[10px] tracking-widest">
-                  Estado
-                </TableHead>
-                <TableHead className="font-bold uppercase text-[10px] tracking-widest text-center">
-                  Reco
-                </TableHead>
-                <TableHead className="font-bold uppercase text-[10px] tracking-widest text-center">
-                  Ventas
-                </TableHead>
-                <TableHead className="font-bold uppercase text-[10px] tracking-widest">
-                  Stock
-                </TableHead>
-                <TableHead className="font-bold uppercase text-[10px] tracking-widest">
-                  Precio
-                </TableHead>
-                <TableHead className="pr-lg text-right font-bold uppercase text-[10px] tracking-widest">
-                  Acciones
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {paginatedBooks.map((book) => {
-                const isLowStock = (book.stock_quantity || 0) < 5;
-                return (
-                  <TableRow
-                    key={book.id}
-                    className={cn(
-                      "group transition-colors border-slate-50 ",
-                      isLowStock ? "bg-red-50/50 hover:bg-red-100/50 " : "hover:bg-slate-50 "
-                    )}
-                  >
-                    <TableCell className="pl-lg py-lg">
-                      <div className="flex items-center gap-4">
-                        <Link href={`/books/${book.id}`}>
-                          <div className="w-12 h-16 cursor-pointer rounded-lg overflow-hidden shrink-0 shadow-sm border border-slate-100">
-                            {book.cover_url ? (
-                              <img
-                                src={book.cover_url}
-                                alt={book.title}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <div className="w-full h-full  flex items-center justify-center text-[8px]">
-                                No img
-                              </div>
-                            )}
-                          </div>
-                        </Link>
-                        <div className="min-w-0">
-                          <p className="font-bold text-base line-clamp-1 group-hover:text-primary transition-colors">
-                            {book.title}
-                          </p>
-                          <p className="text-sm truncate max-w-[200px]">{book.isbn}</p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {isLowStock ? (
-                        <Badge
-                          variant="destructive"
-                          className="rounded-lg p-xs font-black text-[10px] tracking-wider animate-pulse shadow-sm"
-                        >
-                          CRÍTICO
-                        </Badge>
-                      ) : (
-                        <Badge
-                          variant="outline"
-                          className="rounded-lg p-xs font-bold text-[10px] tracking-wider text-emerald-600 border-emerald-500/20 bg-emerald-500/10"
-                        >
-                          SALUDABLE
-                        </Badge>
-                      )}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <RecommendationToggle
-                        bookId={book.id}
-                        isRecommended={!!book.is_recommended}
-                        currentCount={recommendedCount}
-                      />
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <div className="inline-flex flex-col items-center">
-                        <span className="text-xl font-black text-slate-900">
-                          {book.sold_count}
-                        </span>
-                        <span className="text-[10px] font-bold uppercase tracking-tighter">
-                          unidades
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={cn(
-                            "font-black text-xl",
-                            isLowStock ? "text-red-600" : "text-slate-700 "
-                          )}
-                        >
-                          {book.stock_quantity}
-                        </span>
-                        {isLowStock && <AlertTriangle className="h-4 w-4 text-red-500" />}
-                      </div>
-                    </TableCell>
-                    <TableCell className="font-bold text-base text-slate-600">
-                      €{book.selling_price || "0.00"}
-                    </TableCell>
-                    <TableCell className="pr-lg text-right">
-                      <BookActions book={book} />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+        </div>
 
-          <div className="p-lg border-t border-cardDark flex items-center justify-between">
-            <p className="text-sm font-medium">
-              Mostrando{" "}
-              <span className="font-bold">
-                {(currentPage - 1) * itemsPerPage + 1}
-              </span>{" "}
-              a{" "}
-              <span className="font-bold">
-                {Math.min(currentPage * itemsPerPage, totalItems)}
-              </span>{" "}
-              de <span className="font-bold">{totalItems}</span> libros
-            </p>
-            <div className="flex items-center gap-2">
-              <Link
-                href={buildPageUrl(currentPage - 1)}
-                className={cn(
-                  "p-sm rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-sm",
-                  currentPage === 1 && "pointer-events-none opacity-50"
-                )}
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </Link>
-              <div className="flex items-center gap-1">
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  const pageNum = i + 1;
-                  return (
-                    <Link
-                      key={pageNum}
-                      href={buildPageUrl(pageNum)}
-                      className={cn(
-                        "w-10 h-10 flex items-center justify-center rounded-xl font-bold text-sm transition-all",
-                        currentPage === pageNum
-                          ? "bg-primary shadow-lg shadow-primary/30"
-                          : "hover:bg-slate-200 "
-                      )}
-                    >
-                      {pageNum}
-                    </Link>
-                  );
-                })}
-                {totalPages > 5 && <span className="px-sm">...</span>}
-              </div>
-              <Link
-                href={buildPageUrl(currentPage + 1)}
-                className={cn(
-                  "p-sm rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors shadow-sm",
-                  currentPage === totalPages && "pointer-events-none opacity-50"
-                )}
-              >
-                <ChevronRight className="h-5 w-5" />
-              </Link>
-            </div>
+        {/* Row 2: filters */}
+        <div className="px-6 py-3 border-soft-t bg-card">
+          <InventoryFilters authors={filterOptions.authors} categories={filterOptions.categories} />
+        </div>
+
+        {/* Table */}
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent bg-card">
+              <TableHead className="pl-6 label-mono py-3">Libro</TableHead>
+              <TableHead className="label-mono">Estado</TableHead>
+              <TableHead className="label-mono text-center">Reco</TableHead>
+              <TableHead className="label-mono text-right">Ventas</TableHead>
+              <TableHead className="label-mono text-right">Stock</TableHead>
+              <TableHead className="label-mono text-right">Precio</TableHead>
+              <TableHead className="pr-6 text-right label-mono">Acciones</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {paginatedBooks.map((book) => {
+              const isLowStock = (book.stock_quantity || 0) < 5;
+              return (
+                <TableRow
+                  key={book.id}
+                  className={cn(
+                    "group transition-colors",
+                    isLowStock ? "bg-destructive/5 hover:bg-destructive/10" : "hover:bg-card"
+                  )}
+                >
+                  <TableCell className="pl-6 py-4">
+                    <div className="flex items-center gap-4">
+                      <Link href={`/books/${book.id}`}>
+                        <div className="w-10 h-14 overflow-hidden shrink-0 border-soft">
+                          {book.cover_url ? (
+                            <img src={book.cover_url} alt={toTitleCase(book.title)} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full bg-card flex items-center justify-center label-mono text-[8px]">-</div>
+                          )}
+                        </div>
+                      </Link>
+                      <div className="min-w-0">
+                        <p className="font-serif font-bold text-base line-clamp-1">{toTitleCase(book.title)}</p>
+                        <p className="label-mono mt-0.5">{book.isbn}</p>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {isLowStock ? (
+                      <Badge variant="destructive" className="label-mono animate-pulse">CRITICO</Badge>
+                    ) : (
+                      <Badge variant="outline" className="label-mono text-foreground/50">OK</Badge>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <RecommendationToggle bookId={book.id} isRecommended={!!book.is_recommended} currentCount={recommendedCount} />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <span className="price-mono">{book.sold_count}</span>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex items-center justify-end gap-1.5">
+                      {isLowStock && <AlertTriangle className="h-3 w-3 text-destructive" />}
+                      <span className={cn("price-mono", isLowStock ? "text-destructive" : "")}>
+                        {book.stock_quantity}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <span className="price-mono">€{Number(book.selling_price || 0).toFixed(2)}</span>
+                  </TableCell>
+                  <TableCell className="pr-6 text-right">
+                    <BookActions book={book} />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+
+        {/* Pagination */}
+        <div className="p-6 border-soft-t flex items-center justify-between">
+          <p className="label-mono">
+            {(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, totalItems)} de {totalItems}
+          </p>
+          <div className="flex items-center gap-1">
+            {/* Prev */}
+            <Link
+              href={buildPageUrl(currentPage - 1)}
+              className={cn(
+                "w-8 h-8 flex items-center justify-center border border-foreground/20 hover:bg-card transition-colors focus:outline-none",
+                currentPage === 1 && "pointer-events-none opacity-25"
+              )}
+            >
+              <ChevronLeft className="h-3.5 w-3.5" />
+            </Link>
+
+            {/* Page numbers */}
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              const pageNum = i + 1;
+              return (
+                <Link
+                  key={pageNum}
+                  href={buildPageUrl(pageNum)}
+                  className={cn(
+                    "w-8 h-8 flex items-center justify-center label-mono transition-colors focus:outline-none",
+                    currentPage === pageNum
+                      ? "bg-foreground border border-foreground"
+                      : "border border-foreground/20 hover:bg-card"
+                  )}
+                  style={currentPage === pageNum ? { color: "hsl(var(--background))" } : undefined}
+                >
+                  {pageNum}
+                </Link>
+              );
+            })}
+            {totalPages > 5 && <span className="label-mono px-2 text-foreground/40">...</span>}
+
+            {/* Next */}
+            <Link
+              href={buildPageUrl(currentPage + 1)}
+              className={cn(
+                "w-8 h-8 flex items-center justify-center border border-foreground/20 hover:bg-card transition-colors focus:outline-none",
+                currentPage === totalPages && "pointer-events-none opacity-25"
+              )}
+            >
+              <ChevronRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </main>
   );
 }

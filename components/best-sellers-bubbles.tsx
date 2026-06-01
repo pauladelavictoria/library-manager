@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { pack, hierarchy } from "d3-hierarchy";
 import { Card } from "@/components/ui/card";
 import type { Book } from "@/lib/types";
+import { toTitleCase } from "@/lib/utils";
 
 interface BestSellersBubblesProps {
   data: Book[];
@@ -110,7 +111,7 @@ export function BestSellersBubbles({ data, groupBy = "category" }: BestSellersBu
   };
 
   return (
-    <div className="relative w-full h-[350px]">
+    <div className="relative w-full h-full min-h-[280px]">
       <svg 
         viewBox={`0 0 ${width} ${height}`} 
         className="w-full h-full overflow-visible"
@@ -139,7 +140,7 @@ export function BestSellersBubbles({ data, groupBy = "category" }: BestSellersBu
                   className="fill-white font-bold pointer-events-none drop-shadow-sm"
                   style={{ fontSize: Math.max(10, Math.min(r / 3.5, 14)) }}
                 >
-                  {item.title.length > 15 ? item.title.substring(0, 12) + "..." : item.title}
+                  {item.title.length > 15 ? toTitleCase(item.title).substring(0, 12) + "..." : toTitleCase(item.title)}
                 </text>
               )}
             </g>
@@ -152,7 +153,7 @@ export function BestSellersBubbles({ data, groupBy = "category" }: BestSellersBu
           className="absolute pointer-events-none z-50 transform -translate-x-1/2 -translate-y-full pb-3"
           style={{ left: tooltip.x, top: tooltip.y }}
         >
-          <Card className="p-3 border-slate-200 shadow-xl bg-white/95 backdrop-blur-md rounded-xl border whitespace-nowrap">
+          <Card className="p-3 border-slate-200 shadow-xl bg-card rounded-xl border whitespace-nowrap">
             <p className="font-black text-sm mb-1">{tooltip.data.title}</p>
             <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">
               {tooltip.data.sold_count} unidades vendidas

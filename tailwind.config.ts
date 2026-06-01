@@ -39,12 +39,10 @@ export default {
 				xl: 'calc(var(--spacing) * 8)',
 			},
 			fontFamily: {
-				sans: ['var(--font-inter)', 'sans-serif'],
-				serif: ['var(--font-cormorantGaramond)', 'serif'],
+				sans: ['var(--font-space-grotesk)', 'sans-serif'],
+				serif: ['var(--font-playfair)', 'serif'],
+				mono: ['var(--font-space-mono)', 'monospace'],
 			},
-			backgroundImage: {
-				'hero-pattern': "url('/images/background.jpg')",
-			}
 		}
 	},
 

@@ -2,15 +2,13 @@
 
 import { useState } from "react";
 import { Trash2, Edit2, Loader2, AlertTriangle, CheckCircle2, Book, User, Database, Euro } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { deleteBook, updateBook } from "@/app/actions/books";
+import { toTitleCase } from "@/lib/utils";
 import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -24,7 +22,6 @@ interface BookActionsProps {
 export function BookActions({ book }: BookActionsProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
-
   const [isEditing, setIsEditing] = useState(false);
   const [showEditSuccess, setShowEditSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,15 +42,13 @@ export function BookActions({ book }: BookActionsProps) {
   async function handleUpdate(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
-
     const formData = new FormData(event.currentTarget);
     const result = await updateBook(book.id, {
-      title: formData.get("title") as string,
-      author: formData.get("author") as string,
+      title:          formData.get("title") as string,
+      author:         formData.get("author") as string,
       stock_quantity: parseInt(formData.get("stock") as string),
-      selling_price: parseFloat(formData.get("price") as string),
+      selling_price:  parseFloat(formData.get("price") as string),
     });
-
     if (result.success) {
       setShowEditSuccess(true);
       toast.success("Libro actualizado");
@@ -64,122 +59,122 @@ export function BookActions({ book }: BookActionsProps) {
   }
 
   return (
-    <div className="flex items-center justify-end gap-2">
-      <Button
-        variant="ghost"
-        className="h-8 w-8 rounded-lg hover:text-blue-600 hover:bg-blue-50 transition-colors"
+    <div className="flex items-center justify-end gap-1">
+      {/* Edit */}
+      <button
+        className="w-8 h-8 flex items-center justify-center text-foreground/30 hover:text-foreground transition-colors"
         onClick={() => setIsEditing(true)}
+        aria-label="Editar"
       >
-        <Edit2 className="h-4 w-4" />
-      </Button>
+        <Edit2 className="h-3.5 w-3.5" />
+      </button>
 
-      <Button
-        variant="ghost"
-        className="h-8 w-8 rounded-lg hover:text-red-600 hover:bg-red-50 transition-colors"
+      {/* Delete */}
+      <button
+        className="w-8 h-8 flex items-center justify-center text-foreground/30 hover:text-destructive transition-colors"
         onClick={() => setShowDeleteConfirm(true)}
+        aria-label="Eliminar"
       >
-        <Trash2 className="h-4 w-4" />
-      </Button>
+        <Trash2 className="h-3.5 w-3.5" />
+      </button>
 
-      <Dialog open={isEditing} onOpenChange={(val) => {
-        setIsEditing(val);
-        if (!val) setTimeout(() => setShowEditSuccess(false), 300);
-      }}>
-        <DialogContent className="sm:max-w-[500px] rounded-[2.5rem] border-none shadow-2xl overflow-hidden p-0">
+      {/* ── Edit dialog ── */}
+      <Dialog open={isEditing} onOpenChange={(v) => { setIsEditing(v); if (!v) setTimeout(() => setShowEditSuccess(false), 300); }}>
+        <DialogContent className="max-w-[560px] p-0 rounded-none border-2 border-foreground shadow-none">
           {showEditSuccess ? (
-            <div className="p-lg text-center space-y-6 bg-white/90 backdrop-blur-xl">
-              <div className="relative mx-auto w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
-                <CheckCircle2 className="h-10 w-10 text-emerald-500" />
-              </div>
-              <div className="space-y-1">
-                <DialogTitle className="text-xl font-black">Libro Actualizado</DialogTitle>
-                <DialogDescription className="text-sm font-medium text-balance">Los cambios en el catálogo se han guardado correctamente.</DialogDescription>
-              </div>
-              <Button onClick={() => setIsEditing(false)}>Cerrar</Button>
+            <div className="p-10 flex flex-col items-center gap-4 text-center">
+              <CheckCircle2 className="h-8 w-8 text-foreground/40" />
+              <DialogTitle className="display-md">Cambios guardados</DialogTitle>
+              <p className="label-mono">El catalogo se ha actualizado.</p>
+              <button className="btn-primary mt-2" onClick={() => setIsEditing(false)}>Cerrar</button>
             </div>
           ) : (
-            <div className="p-lg space-y-6">
-              <DialogHeader>
-                <DialogTitle className="text-2xl font-black">Editar Libro</DialogTitle>
-                <DialogDescription className="font-medium ">Ajusta los detalles de este título en el inventario.</DialogDescription>
-              </DialogHeader>
-              <form onSubmit={handleUpdate} className="space-y-4">
-                <div className="space-y-2">
-                  <Label className="text-xs font-black uppercase tracking-widest">Título</Label>
-                  <div className="relative">
-                    <Book className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                    <Input name="title" required />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-xs font-black uppercase tracking-widest">Autor</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                    <Input name="author" required />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-xs font-black uppercase tracking-widest">Stock Actual</Label>
-                    <div className="relative">
-                      <Database className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                      <Input name="stock" type="number" required />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="text-xs font-black uppercase tracking-widest">Precio</Label>
-                    <div className="relative">
-                      <Euro className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                      <Input name="price" type="number" step="0.01" required />
-                    </div>
-                  </div>
-                </div>
-                <DialogFooter className="pt-md gap-2">
-                  <Button type="submit" disabled={isLoading} variant="primary">
-                    {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Guardar Cambios"}
-                  </Button>
-                  <Button type="button" variant="secondary" onClick={() => setIsEditing(false)}>Cancelar</Button>
+            <>
+              <div className="px-8 pt-8 pb-5 border-b border-foreground/15">
+                <DialogTitle className="display-md mb-1">Editar libro</DialogTitle>
+                <p className="label-mono">{toTitleCase(book.title)}</p>
+              </div>
+              <form onSubmit={handleUpdate} className="px-8 py-6 space-y-5">
+                {[
+                  { name: "title",  label: "Titulo",  icon: Book,     type: "text",   defaultValue: book.title,                     colSpan: 2 },
+                  { name: "author", label: "Autor",   icon: User,     type: "text",   defaultValue: book.authors?.[0] ?? "",        colSpan: 2 },
+                  { name: "stock",  label: "Stock",   icon: Database, type: "number", defaultValue: String(book.stock_quantity ?? 0), colSpan: 1 },
+                  { name: "price",  label: "Precio",  icon: Euro,     type: "number", defaultValue: String(book.selling_price ?? 0),  colSpan: 1, step: "0.01" },
+                ].reduce<React.ReactNode[]>((acc, field, i, arr) => {
+                  if (field.colSpan === 2) {
+                    acc.push(
+                      <div key={field.name} className="space-y-1.5">
+                        <Label className="label-mono" htmlFor={field.name}>{field.label}</Label>
+                        <div className="relative">
+                          <field.icon className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground/30 pointer-events-none" />
+                          <Input id={field.name} name={field.name} type={field.type} defaultValue={field.defaultValue} required className="pl-9" />
+                        </div>
+                      </div>
+                    );
+                  } else if (i > 0 && arr[i - 1]?.colSpan === 1) {
+                    // already rendered as pair
+                  } else {
+                    const next = arr[i + 1];
+                    acc.push(
+                      <div key={field.name} className="grid grid-cols-2 gap-4">
+                        {[field, next].map(f => f && (
+                          <div key={f.name} className="space-y-1.5">
+                            <Label className="label-mono" htmlFor={f.name}>{f.label}</Label>
+                            <div className="relative">
+                              <f.icon className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground/30 pointer-events-none" />
+                              <Input id={f.name} name={f.name} type={f.type} defaultValue={f.defaultValue} required className="pl-9" {...(f.step ? { step: f.step } : {})} />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  }
+                  return acc;
+                }, [])}
+
+                <DialogFooter className="mt-8 flex gap-3">
+                  <button type="button" className="btn-outline" onClick={() => setIsEditing(false)}>Cancelar</button>
+                  <button type="submit" className="btn-primary" disabled={isLoading}>
+                    {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Guardar cambios"}
+                  </button>
                 </DialogFooter>
               </form>
-            </div>
+            </>
           )}
         </DialogContent>
       </Dialog>
 
-      <Dialog open={showDeleteConfirm} onOpenChange={(val) => {
-        setShowDeleteConfirm(val);
-        if (!val) setTimeout(() => setShowDeleteSuccess(false), 300);
-      }}>
-        <DialogContent className="sm:max-w-[400px] rounded-[2.5rem] border-none shadow-2xl overflow-hidden p-0">
+      {/* ── Delete dialog ── */}
+      <Dialog open={showDeleteConfirm} onOpenChange={(v) => { setShowDeleteConfirm(v); if (!v) setTimeout(() => setShowDeleteSuccess(false), 300); }}>
+        <DialogContent className="max-w-[440px] p-0 rounded-none border-2 border-foreground shadow-none">
           {showDeleteSuccess ? (
-            <div className="p-lg text-center space-y-6 bg-white/90 backdrop-blur-xl">
-              <div className="relative mx-auto w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
-                <Trash2 className="h-10 w-10 text-red-500" />
-              </div>
-              <div className="space-y-1">
-                <DialogTitle className="text-xl font-black tracking-tight">Eliminado</DialogTitle>
-                <DialogDescription className="text-sm font-medium text-balance">El título ha sido borrado del catálogo permanentemente.</DialogDescription>
-              </div>
-              <Button onClick={() => setShowDeleteConfirm(false)}>Cerrar</Button>
+            <div className="p-10 flex flex-col items-center gap-4 text-center">
+              <CheckCircle2 className="h-8 w-8 text-foreground/40" />
+              <DialogTitle className="display-md">Eliminado</DialogTitle>
+              <p className="label-mono">El titulo ha sido borrado del catalogo.</p>
+              <button className="btn-primary mt-2" onClick={() => setShowDeleteConfirm(false)}>Cerrar</button>
             </div>
           ) : (
-            <div className="p-lg text-center space-y-6">
-              <div className="mx-auto w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center">
-                <AlertTriangle className="h-10 w-10 text-red-500" />
+            <>
+              <div className="px-8 pt-8 pb-5 border-b border-foreground/15">
+                <DialogTitle className="display-md mb-1">Eliminar libro</DialogTitle>
+                <p className="label-mono">{toTitleCase(book.title)}</p>
               </div>
-              <div className="space-y-2">
-                <DialogTitle className="text-2xl font-black text-slate-900">¿Estás seguro?</DialogTitle>
-                <DialogDescription className="text-sm font-medium leading-relaxed">
-                  Estás a punto de borrar <span className="font-bold text-slate-900">{book.title}</span>. Esta acción no se puede deshacer.
-                </DialogDescription>
+              <div className="px-8 py-6 space-y-6">
+                <div className="flex items-start gap-3 border-soft p-4">
+                  <AlertTriangle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
+                  <p className="body-sans text-foreground/70">
+                    Esta accion no se puede deshacer. El libro sera borrado permanentemente del catalogo.
+                  </p>
+                </div>
+                <div className="flex gap-3">
+                  <button onClick={handleDelete} disabled={isLoading} className="btn-primary" style={{ borderColor: "hsl(var(--destructive))", backgroundColor: "hsl(var(--destructive))" }}>
+                    {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Borrar libro"}
+                  </button>
+                  <button className="btn-outline" onClick={() => setShowDeleteConfirm(false)}>Cancelar</button>
+                </div>
               </div>
-              <div className="flex flex-col gap-3">
-                <Button onClick={handleDelete} disabled={isLoading} variant="primary">
-                  {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sí, borrar libro"}
-                </Button>
-                <Button variant="secondary" onClick={() => setShowDeleteConfirm(false)}>Cancelar</Button>
-              </div>
-            </div>
+            </>
           )}
         </DialogContent>
       </Dialog>

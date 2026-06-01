@@ -6,9 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
-  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -20,175 +18,120 @@ import { toast } from "sonner";
 export function CreatePromoDialog() {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   const [showSuccess, setShowSuccess] = useState(false);
   const [createdCode, setCreatedCode] = useState("");
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
-
-    const formData = new FormData(event.currentTarget);
-    const code = formData.get("code") as string;
-    const discount = parseFloat(formData.get("discount") as string);
-    const expiry = formData.get("expiry") as string;
+    const formData  = new FormData(event.currentTarget);
+    const code      = formData.get("code") as string;
+    const discount  = parseFloat(formData.get("discount") as string);
+    const expiry    = formData.get("expiry") as string;
     const isOneTime = formData.get("is_one_time") === "on";
 
     if (!code || isNaN(discount) || !expiry) {
-      toast.error("Por favor, rellena todos los campos");
+      toast.error("Rellena todos los campos");
       setIsLoading(false);
       return;
     }
 
-    const result = await createPromoCode({
-      code,
-      discount_amount: discount,
-      expiry_date: expiry,
-      is_one_time: isOneTime,
-    });
+    const result = await createPromoCode({ code, discount_amount: discount, expiry_date: expiry, is_one_time: isOneTime });
 
     if (result.success) {
       setCreatedCode(code.toUpperCase());
       setShowSuccess(true);
-      toast.success("¡Cupón creado con éxito!");
+      toast.success("Cupon creado");
     } else {
-      toast.error("Error al crear el cupón", {
-        description: result.error,
-      });
+      toast.error("Error al crear el cupon", { description: result.error });
     }
-
     setIsLoading(false);
   }
 
-  if (showSuccess) {
-    return (
-      <Dialog open={open} onOpenChange={(val) => {
-        setOpen(val);
-        if (!val) setTimeout(() => setShowSuccess(false), 300);
-      }}>
-        <DialogContent className="sm:max-w-[400px] border-none bg-white/80 backdrop-blur-xl p-0 overflow-hidden rounded-[2.5rem] shadow-2xl">
-          <div className="p-lg text-center space-y-6">
-            <DialogTitle className="sr-only">Cupón creado con éxito</DialogTitle>
-            <div className="relative mx-auto w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
-              <div className="absolute inset-0 bg-emerald-500/20 rounded-full animate-ping opacity-25" />
-              <CheckCircle2 className="h-12 w-12 text-emerald-500" />
+  const handleOpenChange = (val: boolean) => {
+    setOpen(val);
+    if (!val) setTimeout(() => setShowSuccess(false), 300);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogTrigger asChild>
+        <Button variant="primary">
+          <Plus className="mr-2 h-3.5 w-3.5" />
+          Nuevo cupon
+        </Button>
+      </DialogTrigger>
+
+      <DialogContent className="max-w-[580px] p-0 rounded-none border-2 border-foreground shadow-none">
+        {showSuccess ? (
+          <div className="p-10 flex flex-col items-center gap-4 text-center">
+            <CheckCircle2 className="h-8 w-8 text-foreground/40" />
+            <DialogTitle className="display-md">Cupon activado</DialogTitle>
+            <div className="border-ink px-8 py-4 w-full">
+              <p className="label-mono mb-2">Codigo activo</p>
+              <p className="font-mono font-black text-3xl tracking-widest">{createdCode}</p>
             </div>
-            <div className="space-y-2">
-              <h3 className="text-2xl font-black tracking-tight">¡Todo listo!</h3>
-              <p className=" font-medium">
-                El cupón ha sido activado correctamente.
-              </p>
-            </div>
-            <div className="bg-slate-50 p-md rounded-2xl border border-dashed border-slate-200">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-xs">CÓDIGO ACTIVO</p>
-              <p className="text-3xl font-black text-primary tracking-widest">{createdCode}</p>
-            </div>
-            <Button
-              onClick={() => {
-                setOpen(false);
-                setTimeout(() => setShowSuccess(false), 300);
-              }}
-              className="w-full h-14 rounded-2xl bg-slate-900 hover:bg-slate-800 font-bold text-lg shadow-xl"
-            >
+            <Button variant="primary" onClick={() => setOpen(false)}>
               Cerrar
             </Button>
           </div>
-        </DialogContent>
-      </Dialog>
-    );
-  }
+        ) : (
+          <>
+            <div className="px-10 pt-10 pb-6 border-b border-foreground/15">
+              <DialogTitle className="display-md mb-1">Codigo promocional</DialogTitle>
+              <p className="label-mono">Nuevo cupon de descuento</p>
+            </div>
 
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button >
-          <Plus className="mr-sm h-4 w-4" />
-          Nuevo Cupón
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] rounded-[2rem] border-slate-200">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-black flex items-center gap-2">
-            <Tag className="h-6 w-6 text-primary" />
-            Crear Código Promocional
-          </DialogTitle>
-          <DialogDescription className="font-medium ">
-            Define un nuevo cupón de descuento para tus clientes.
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-6 py-md">
-          <div className="space-y-2">
-            <Label htmlFor="code" className="text-xs font-black uppercase tracking-widest">
-              Código del Cupón
-            </Label>
-            <div className="relative">
-              <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-              <Input
-                id="code"
-                name="code"
-                placeholder="EJ: VERANO25"
-                className="pl-lg rounded-xl border-slate-200 uppercase font-bold"
-                required
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="discount" className="text-xs font-black uppercase tracking-widest">
-                % Descuento
-              </Label>
-              <div className="relative">
-                <Percent className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                <Input
-                  id="discount"
-                  name="discount"
-                  type="number"
-                  min="1"
-                  max="100"
-                  placeholder="10"
-                  className="pl-lg rounded-xl border-slate-200 font-bold"
-                  required
-                />
+            <form onSubmit={handleSubmit} className="px-10 py-8 space-y-6">
+              <div className="space-y-1.5">
+                <Label className="label-mono" htmlFor="code">Codigo del cupon</Label>
+                <div className="relative">
+                  <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground/30 pointer-events-none" />
+                  <Input id="code" name="code" placeholder="EJ: VERANO25" className="pl-9 uppercase font-mono" required />
+                </div>
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="expiry" className="text-xs font-black uppercase tracking-widest">
-                Expira el
-              </Label>
-              <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                <Input
-                  id="expiry"
-                  name="expiry"
-                  type="date"
-                  className="pl-lg rounded-xl border-slate-200 font-bold"
-                  required
-                />
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="label-mono" htmlFor="discount">% Descuento</Label>
+                  <div className="relative">
+                    <Percent className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground/30 pointer-events-none" />
+                    <Input id="discount" name="discount" type="number" min="1" max="100" placeholder="10" className="pl-9" required />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="label-mono" htmlFor="expiry">Expira el</Label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground/30 pointer-events-none" />
+                    <Input id="expiry" name="expiry" type="date" className="pl-9" required />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="flex items-center space-x-3 p-md rounded-2xl bg-slate-50 border border-slate-100">
-            <input
-              type="checkbox"
-              id="is_one_time"
-              name="is_one_time"
-              className="h-5 w-5 rounded-md border-slate-300 text-primary focus:ring-primary cursor-pointer"
-            />
-            <div className="space-y-0.5">
-              <Label htmlFor="is_one_time" className="text-sm font-bold cursor-pointer">Cupón de un solo uso</Label>
-              <p className="text-[10px]  font-medium">El código se desactivará tras la primera compra.</p>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              type="submit"
-              className="w-full rounded-xl py-lg font-black text-lg bg-primary hover:scale-[1.02] transition-all"
-              disabled={isLoading}
-            >
-              {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Activar Cupón"}
-            </Button>
-          </DialogFooter>
-        </form>
+
+              <div className="flex items-center gap-3 border-soft p-4">
+                <input
+                  type="checkbox"
+                  id="is_one_time"
+                  name="is_one_time"
+                  className="h-4 w-4 accent-foreground cursor-pointer"
+                />
+                <div>
+                  <Label htmlFor="is_one_time" className="label-sans cursor-pointer">Cupon de un solo uso</Label>
+                  <p className="label-mono mt-0.5">Se desactiva tras la primera compra.</p>
+                </div>
+              </div>
+
+              <DialogFooter className="mt-8 flex gap-3">
+                <Button type="button" variant="secondary" onClick={() => setOpen(false)}>
+                  Cancelar
+                </Button>
+                <Button type="submit" variant="primary" disabled={isLoading}>
+                  {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Activar cupon"}
+                </Button>
+              </DialogFooter>
+            </form>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );

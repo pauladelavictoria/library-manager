@@ -1,9 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNotification } from "@/lib/notification-context";
@@ -29,104 +26,90 @@ export function ProfileCard({ profile: initialProfile, user }: ProfileCardProps)
     setIsPending(true);
     const result = await updateProfile(formData);
     setIsPending(false);
-
     if (result.success) {
-      notify({ type: 'success', title: 'Perfil actualizado', message: 'Tus datos se han guardado correctamente.' });
+      notify({ type: "success", title: "Perfil actualizado", message: "Tus datos se han guardado." });
       setIsEditing(false);
     } else {
-      notify({ type: 'error', title: 'Error', message: result.error || 'No se pudo actualizar el perfil.' });
+      notify({ type: "error", title: "Error", message: result.error || "No se pudo actualizar el perfil." });
     }
   };
 
+  const initial = formData.full_name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || "?";
+
   return (
-    <Card className="rounded-[2.5rem] border-cardDark/60 shadow-xl overflow-hidden card-background">
-      <CardHeader className="bg-cardDark/30 pb-lg">
-        <div className="w-20 h-20 rounded-full bg-cardDark flex items-center justify-center mb-md border-4 border-background shadow-lg">
-          <span className="text-2xl font-black text-foreground">
-            {formData.full_name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
-          </span>
+    <div>
+      {/* Avatar + name */}
+      <div className="p-6 border-b border-foreground/15 flex items-center gap-4">
+        <div className="w-14 h-14 border-ink flex items-center justify-center shrink-0">
+          <span className="font-serif font-black text-2xl">{initial}</span>
         </div>
-        {isEditing ? (
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="full_name" className="text-xs font-black uppercase tracking-wider">Nombre Completo</Label>
+        <div className="min-w-0">
+          {isEditing ? (
+            <div className="space-y-1.5">
+              <Label className="label-mono" htmlFor="full_name">Nombre</Label>
               <Input
                 id="full_name"
                 value={formData.full_name}
                 onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                className="rounded-xl border-cardDark"
               />
             </div>
-          </div>
-        ) : (
-          <>
-            <CardTitle className="text-2xl font-black">{formData.full_name || "Usuario"}</CardTitle>
-            <CardDescription className="font-medium">{user.email}</CardDescription>
-          </>
-        )}
-      </CardHeader>
-      <CardContent className="pt-lg space-y-6">
-        <div className="space-y-1">
-          <p className="text-xs font-black uppercase tracking-wider text-muted-foreground">Teléfono</p>
+          ) : (
+            <>
+              <p className="display-md">{formData.full_name || "Usuario"}</p>
+              <p className="label-mono mt-0.5">{user.email}</p>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Fields */}
+      <div className="divide-y divide-foreground/10">
+        <div className="px-6 py-4">
+          <p className="label-mono mb-1.5">Telefono</p>
           {isEditing ? (
             <Input
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="rounded-xl border-cardDark mt-sm"
-              placeholder="Tu número de teléfono"
+              placeholder="Tu numero de telefono"
             />
           ) : (
-            <p className="font-bold">{formData.phone || "No proporcionado"}</p>
+            <p className="body-sans">{formData.phone || "No proporcionado"}</p>
           )}
         </div>
 
         {!isEditing && (
-          <div className="space-y-1">
-            <p className="text-xs font-black uppercase tracking-wider text-muted-foreground">Miembro desde</p>
-            <p className="font-bold">
-              {initialProfile?.created_at ? new Date(initialProfile.created_at).toLocaleDateString() : "Recientemente"}
+          <div className="px-6 py-4">
+            <p className="label-mono mb-1.5">Miembro desde</p>
+            <p className="body-sans">
+              {initialProfile?.created_at
+                ? new Date(initialProfile.created_at).toLocaleDateString("es-ES")
+                : "Recientemente"}
             </p>
           </div>
         )}
+      </div>
 
-        <Separator className="bg-cardDark" />
-
-        <div className="flex gap-3">
-          {isEditing ? (
-            <>
-              <Button
-                variant="secondary"
-                className="flex-1 rounded-2xl py-lg font-bold"
-                onClick={() => {
-                  setIsEditing(false);
-                  setFormData({
-                    full_name: initialProfile?.full_name || "",
-                    phone: initialProfile?.phone || "",
-                  });
-                }}
-                disabled={isPending}
-              >
-                Cancelar
-              </Button>
-              <Button
-                className="flex-1 rounded-2xl py-lg font-bold shadow-lg shadow-primary/20"
-                onClick={handleSave}
-                disabled={isPending}
-              >
-                {isPending ? "Guardando..." : "Guardar"}
-              </Button>
-            </>
-          ) : (
-            <Button
-              variant="primary"
-              className="w-full rounded-2xl font-bold hover:bg-cardDark hover:text-foreground border-cardDark transition-all"
-              onClick={() => setIsEditing(true)}
+      {/* Actions */}
+      <div className="px-6 py-4 border-t border-foreground/15 flex gap-3">
+        {isEditing ? (
+          <>
+            <button
+              className="btn-outline flex-1"
+              onClick={() => { setIsEditing(false); setFormData({ full_name: initialProfile?.full_name || "", phone: initialProfile?.phone || "" }); }}
+              disabled={isPending}
             >
-              Editar Perfil
-            </Button>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+              Cancelar
+            </button>
+            <button className="btn-primary flex-1" onClick={handleSave} disabled={isPending}>
+              {isPending ? "Guardando..." : "Guardar"}
+            </button>
+          </>
+        ) : (
+          <button className="btn-outline w-full" onClick={() => setIsEditing(true)}>
+            Editar perfil
+          </button>
+        )}
+      </div>
+    </div>
   );
 }

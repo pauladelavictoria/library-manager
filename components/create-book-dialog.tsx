@@ -6,9 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
-  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -16,6 +14,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createBook } from "@/app/actions/books";
 import { toast } from "sonner";
+
+const fields = [
+  { name: "title",     label: "Título del libro",  icon: Book,       type: "text",   colSpan: 2, required: true },
+  { name: "author",    label: "Autor",              icon: User,       type: "text",   colSpan: 1, required: true },
+  { name: "isbn",      label: "ISBN",               icon: Hash,       type: "text",   colSpan: 1, required: true },
+  { name: "category",  label: "Categoría",          icon: null,       type: "text",   colSpan: 1, required: false },
+  { name: "publisher", label: "Editorial",          icon: null,       type: "text",   colSpan: 1, required: false },
+  { name: "stock",     label: "Stock inicial",      icon: Database,   type: "number", colSpan: 1, required: true, min: "0" },
+  { name: "price",     label: "Precio de venta",    icon: Euro,       type: "number", colSpan: 1, required: true, min: "0", step: "0.01" },
+  { name: "cover_url", label: "URL de portada",     icon: ImageIcon,  type: "text",   colSpan: 2, required: false },
+];
 
 export function CreateBookDialog() {
   const [open, setOpen] = useState(false);
@@ -25,128 +34,92 @@ export function CreateBookDialog() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
-
     const formData = new FormData(event.currentTarget);
-    const data = {
-      title: formData.get("title") as string,
-      author: formData.get("author") as string,
-      isbn: formData.get("isbn") as string,
+    const result = await createBook({
+      title:          formData.get("title") as string,
+      author:         formData.get("author") as string,
+      isbn:           formData.get("isbn") as string,
       stock_quantity: parseInt(formData.get("stock") as string),
-      selling_price: parseFloat(formData.get("price") as string),
-      category: formData.get("category") as string,
-      publisher: formData.get("publisher") as string,
-      cover_url: formData.get("cover_url") as string,
-    };
-
-    const result = await createBook(data);
-
+      selling_price:  parseFloat(formData.get("price") as string),
+      category:       formData.get("category") as string,
+      publisher:      formData.get("publisher") as string,
+      cover_url:      formData.get("cover_url") as string,
+    });
     if (result.success) {
       setShowSuccess(true);
-      toast.success("¡Libro añadido al catálogo!");
+      toast.success("Libro añadido al catálogo");
     } else {
       toast.error("Error al añadir el libro", { description: result.error });
     }
     setIsLoading(false);
   }
 
-  if (showSuccess) {
-    return (
-      <Dialog open={open} onOpenChange={(val) => {
-        setOpen(val);
-        if (!val) setTimeout(() => setShowSuccess(false), 300);
-      }}>
-        <DialogContent className="sm:max-w-[400px] border-none bg-white/80 backdrop-blur-xl p-0 overflow-hidden rounded-[2.5rem] shadow-2xl">
-          <div className="p-lg text-center space-y-6">
-            <div className="relative mx-auto w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
-              <div className="absolute inset-0 bg-emerald-500/20 rounded-full animate-ping opacity-25" />
-              <CheckCircle2 className="h-12 w-12 text-emerald-500" />
-            </div>
-            <div className="space-y-2">
-              <DialogTitle className="text-2xl font-black tracking-tight">¡Catálogo Actualizado!</DialogTitle>
-              <DialogDescription className="font-medium">El nuevo título ya está disponible para la venta.</DialogDescription>
-            </div>
-            <Button onClick={() => setOpen(false)}>Cerrar</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-    );
-  }
+  const handleOpenChange = (val: boolean) => {
+    setOpen(val);
+    if (!val) setTimeout(() => setShowSuccess(false), 300);
+  };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button variant="primary">
-          <Plus className="mr-sm h-4 w-4" />
-          Añadir Libro
+          <Plus className="mr-2 h-3.5 w-3.5" />
+          Añadir libro
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[550px] rounded-[2.5rem] border-slate-200 p-0 overflow-hidden">
-        <DialogHeader className="p-lg pb-md">
-          <DialogTitle className="text-2xl font-black flex items-center gap-2">
-            Nuevo Título
-          </DialogTitle>
-          <DialogDescription className="font-medium ">Completa los datos para registrar un nuevo libro en el inventario.</DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="p-lg pt-0 space-y-6">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2 col-span-2">
-              <Label className="text-xs font-black uppercase tracking-widest">Título del Libro</Label>
-              <div className="relative">
-                <Book className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                <Input name="title" required />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest">Autor</Label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                <Input name="author" required />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest">ISBN</Label>
-              <div className="relative">
-                <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                <Input name="isbn" required />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest">Categoría</Label>
-              <Input name="category" />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest">Editorial</Label>
-              <Input name="publisher" />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest">Stock Inicial</Label>
-              <div className="relative">
-                <Database className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                <Input name="stock" type="number" min="0" required />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest">Precio de Venta</Label>
-              <div className="relative">
-                <Euro className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                <Input name="price" type="number" step="0.01" min="0" required />
-              </div>
-            </div>
-            <div className="space-y-2 col-span-2">
-              <Label className="text-xs font-black uppercase tracking-widest">URL de Portada</Label>
-              <div className="relative">
-                <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                <Input name="cover_url" />
-              </div>
-            </div>
-          </div>
-          <DialogFooter className="pt-md">
-            <Button type="submit" disabled={isLoading} variant="primary">
-              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Registrar Libro"}
+
+      <DialogContent className="max-w-[680px] p-0 rounded-none border-2 border-foreground shadow-none">
+        {showSuccess ? (
+          <div className="p-10 flex flex-col items-center gap-4 text-center">
+            <CheckCircle2 className="h-8 w-8 text-foreground/40" />
+            <DialogTitle className="display-md">Catalogo actualizado</DialogTitle>
+            <p className="label-mono">El nuevo titulo ya está disponible.</p>
+            <Button variant="primary" onClick={() => setOpen(false)} className="mt-2">
+              Cerrar
             </Button>
-            <Button type="button" variant="secondary" onClick={() => setOpen(false)}>Cancelar</Button>
-          </DialogFooter>
-        </form>
+          </div>
+        ) : (
+          <>
+            {/* Header */}
+            <div className="px-10 pt-10 pb-6 border-b border-foreground/15">
+              <DialogTitle className="display-md mb-1">Nuevo titulo</DialogTitle>
+              <p className="label-mono">Registrar libro en inventario</p>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="px-10 py-8">
+              <div className="grid grid-cols-2 gap-x-5 gap-y-6">
+                {fields.map(({ name, label, icon: Icon, type, colSpan, required, ...rest }) => (
+                  <div key={name} className={`space-y-1.5 ${colSpan === 2 ? "col-span-2" : ""}`}>
+                    <Label className="label-mono" htmlFor={name}>{label}</Label>
+                    <div className="relative">
+                      {Icon && (
+                        <Icon className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground/30 pointer-events-none" />
+                      )}
+                      <Input
+                        id={name}
+                        name={name}
+                        type={type}
+                        required={required}
+                        className={Icon ? "pl-9" : ""}
+                        {...rest}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <DialogFooter className="mt-8 flex gap-3">
+                <Button type="button" variant="secondary" onClick={() => setOpen(false)}>
+                  Cancelar
+                </Button>
+                <Button type="submit" variant="primary" disabled={isLoading}>
+                  {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Registrar libro"}
+                </Button>
+              </DialogFooter>
+            </form>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );

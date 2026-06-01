@@ -1,6 +1,5 @@
 import { Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { CreatePromoDialog } from "@/components/create-promo-dialog";
@@ -19,156 +18,87 @@ interface PromoTabProps {
   activePromosCount: number;
 }
 
-export function PromoTab({
-  promoPerformance,
-  totalDiscountGiven,
-  activePromosCount,
-}: PromoTabProps) {
+export function PromoTab({ promoPerformance, totalDiscountGiven, activePromosCount }: PromoTabProps) {
   return (
-    <div className="mb-lg">
-      <div className="flex items-center justify-between mb-lg">
-        <div className="flex items-center gap-2">
-          <div className="h-8 w-1 bg-primary rounded-full" />
-          <h2 className="text-2xl font-bold tracking-tight">Rendimiento de Promociones</h2>
-        </div>
-        <div className="flex gap-3">
-          <CreatePromoDialog />
-        </div>
+    <div>
+      <div className="section-header mb-8">
+        <h2 className="display-md">Rendimiento de promociones</h2>
+        <CreatePromoDialog />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-lg">
-        <Card className="rounded-3xl border-slate-200 shadow-lg bg-emerald-500/5 border-emerald-500/10">
-          <CardHeader className="pb-sm">
-            <CardDescription className="font-bold uppercase tracking-widest text-[10px]">
-              Ahorro Total Clientes
-            </CardDescription>
-            <CardTitle className="text-3xl font-black text-emerald-600">
-              €{totalDiscountGiven.toFixed(2)}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-        <Card className="rounded-3xl border-slate-200 shadow-lg">
-          <CardHeader className="pb-sm">
-            <CardDescription className="font-bold uppercase tracking-widest text-[10px]">
-              Cupones Activos
-            </CardDescription>
-            <CardTitle className="text-3xl font-black">{activePromosCount}</CardTitle>
-          </CardHeader>
-        </Card>
-        <Card className="rounded-3xl border-slate-200 shadow-lg">
-          <CardHeader className="pb-sm">
-            <CardDescription className="font-bold uppercase tracking-widest text-[10px]">
-              Pedidos con Cupón
-            </CardDescription>
-            <CardTitle className="text-3xl font-black">
-              {promoPerformance.reduce((sum, p) => sum + (p.usage_count || 0), 0)}
-            </CardTitle>
-          </CardHeader>
-        </Card>
-        <Card className="rounded-3xl border-slate-200 shadow-lg">
-          <CardHeader className="pb-sm">
-            <CardDescription className="font-bold uppercase tracking-widest text-[10px]">
-              Ingresos vía Promo
-            </CardDescription>
-            <CardTitle className="text-3xl font-black text-primary">
-              €{promoPerformance.reduce((sum, p) => sum + (p.total_revenue || 0), 0).toFixed(2)}
-            </CardTitle>
-          </CardHeader>
-        </Card>
+      {/* Stat cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-0 border-soft overflow-hidden mb-8">
+        {[
+          { label: "Ahorro total clientes", value: `€${totalDiscountGiven.toFixed(2)}` },
+          { label: "Cupones activos", value: String(activePromosCount) },
+          { label: "Pedidos con cupon", value: String(promoPerformance.reduce((s, p) => s + (p.usage_count || 0), 0)) },
+          { label: "Ingresos via promo", value: `€${promoPerformance.reduce((s, p) => s + (p.total_revenue || 0), 0).toFixed(2)}` },
+        ].map((stat, i) => (
+          <div key={i} className={cn("p-6", i < 3 && "border-r border-foreground/15")}>
+            <p className="label-mono mb-2">{stat.label}</p>
+            <p className="price-mono text-2xl">{stat.value}</p>
+          </div>
+        ))}
       </div>
 
-      <Card className="rounded-[2rem] border-slate-200 shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
+      {/* Table */}
+      <div className="card-flat overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="hover:bg-transparent border-slate-100">
-              <TableHead className="pl-xl font-bold uppercase text-[10px] tracking-widest py-lg">
-                Código
-              </TableHead>
-              <TableHead className="font-bold uppercase text-[10px] tracking-widest">
-                Descuento
-              </TableHead>
-              <TableHead className="font-bold uppercase text-[10px] tracking-widest">
-                Usos
-              </TableHead>
-              <TableHead className="font-bold uppercase text-[10px] tracking-widest">
-                Total Descontado
-              </TableHead>
-              <TableHead className="font-bold uppercase text-[10px] tracking-widest">
-                Ingresos (Neto)
-              </TableHead>
-              <TableHead className="pr-xl text-right font-bold uppercase text-[10px] tracking-widest">
-                Acciones
-              </TableHead>
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="pl-6 label-mono py-4">Codigo</TableHead>
+              <TableHead className="label-mono">Descuento</TableHead>
+              <TableHead className="label-mono">Usos</TableHead>
+              <TableHead className="label-mono">Total descontado</TableHead>
+              <TableHead className="label-mono">Ingresos neto</TableHead>
+              <TableHead className="pr-6 text-right label-mono">Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {promoPerformance.map((promo) => (
-              <TableRow
-                key={promo.code}
-                className="group border-slate-100 hover:bg-slate-50/50 transition-colors"
-              >
-                <TableCell className="pl-lg py-md">
+              <TableRow key={promo.code} className="group hover:bg-card transition-colors">
+                <TableCell className="pl-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="p-sm rounded-lg bg-primary/10 text-primary">
-                      <Tag className="h-4 w-4" />
-                    </div>
+                    <Tag className="h-3.5 w-3.5 text-foreground/40" />
                     <div>
-                      <p className="font-black tracking-tight">{promo.code}</p>
-                      <div className="flex items-center gap-1.5">
-                        <div
+                      <p className="font-mono font-bold">{promo.code}</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span
                           className={cn(
-                            "h-1.5 w-1.5 rounded-full",
-                            promo.isActive ? "bg-emerald-500" : "bg-slate-300"
+                            "inline-block w-1.5 h-1.5 rounded-full",
+                            promo.isActive ? "bg-foreground" : "bg-foreground/20"
                           )}
                         />
-                        <p className="text-[10px] font-bold uppercase tracking-tighter">
-                          {promo.isActive
-                            ? "Activo"
-                            : promo.is_one_time && promo.usage_count > 0
-                              ? "Usado"
-                              : "Inactivo"}
+                        <p className="label-mono">
+                          {promo.isActive ? "Activo" : promo.is_one_time && promo.usage_count > 0 ? "Usado" : "Inactivo"}
                         </p>
                         {promo.is_one_time && (
-                          <Badge
-                            variant="secondary"
-                            className="text-[8px] h-3.5 px-xs rounded bg-amber-100 text-amber-700 border-none font-black uppercase"
-                          >
-                            Único
-                          </Badge>
+                          <Badge variant="secondary" className="label-mono h-3.5 px-1">Unico</Badge>
                         )}
                       </div>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge
-                    variant="outline"
-                    className="rounded-md font-black border-primary/20 text-primary bg-primary/5"
-                  >
-                    -{promo.discount_amount}%
-                  </Badge>
+                  <Badge variant="outline" className="label-mono">-{promo.discount_amount}%</Badge>
                 </TableCell>
                 <TableCell>
-                  <p className="font-bold text-slate-600">{promo.usage_count}</p>
+                  <span className="price-mono text-sm">{promo.usage_count}</span>
                 </TableCell>
                 <TableCell>
-                  <p className="font-bold text-red-600">
-                    -€{(promo.total_discount || 0).toFixed(2)}
-                  </p>
+                  <span className="price-mono text-sm text-destructive">-€{(promo.total_discount || 0).toFixed(2)}</span>
                 </TableCell>
-                <TableCell className="text-center">
-                  <p className="font-black text-lg tracking-tight">
-                    €{(promo.total_revenue || 0).toFixed(2)}
-                  </p>
+                <TableCell>
+                  <span className="price-mono">€{(promo.total_revenue || 0).toFixed(2)}</span>
                 </TableCell>
-                <TableCell className="pl-xl">
+                <TableCell className="pr-6 text-right">
                   <PromoActions promo={promo} />
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      </Card>
+      </div>
     </div>
   );
 }

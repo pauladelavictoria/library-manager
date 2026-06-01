@@ -1,20 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Calendar,
-  MapPin,
-  Type,
-  FileText,
-  Plus,
-  Loader2,
-} from "lucide-react";
+import { Calendar, MapPin, Type, FileText, Plus, Loader2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
+  DialogFooter,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -38,152 +30,128 @@ export function CreateEventDialog() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
-
     const formData = new FormData(event.currentTarget);
-    const title = formData.get("title") as string;
-    const description = formData.get("description") as string;
-    const location = formData.get("location") as string;
+    const title      = formData.get("title") as string;
     const event_date = formData.get("event_date") as string;
-    const type = formData.get("type") as string;
+    const type       = formData.get("type") as string;
 
     if (!title || !event_date || !type) {
-      toast.error("Por favor, rellena los campos obligatorios");
+      toast.error("Rellena los campos obligatorios");
       setIsLoading(false);
       return;
     }
 
     const result = await createEvent({
       title,
-      description,
-      location,
+      description: formData.get("description") as string,
+      location:    formData.get("location") as string,
       event_date,
       type,
     });
 
     if (result.success) {
       setShowSuccess(true);
-      toast.success("¡Evento programado!");
+      toast.success("Evento programado");
     } else {
-      toast.error("Error al crear el evento", {
-        description: result.error,
-      });
+      toast.error("Error al crear el evento", { description: result.error });
     }
-
     setIsLoading(false);
   }
 
-  if (showSuccess) {
-    return (
-      <Dialog open={open} onOpenChange={(val) => {
-        setOpen(val);
-        if (!val) setTimeout(() => setShowSuccess(false), 300);
-      }}>
-        <DialogContent className="sm:max-w-[400px] border-none bg-white/80 backdrop-blur-xl p-0 overflow-hidden rounded-[2.5rem] shadow-2xl">
-          <div className="p-lg text-center space-y-6">
-            <div className="relative mx-auto w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
-              <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping opacity-25" />
-              <Calendar className="h-12 w-12 text-primary" />
-            </div>
-            <div className="space-y-2">
-              <DialogTitle className="text-2xl font-black tracking-tight">¡Evento Programado!</DialogTitle>
-              <DialogDescription className="font-medium">
-                Ya está disponible en la agenda cultural de la librería.
-              </DialogDescription>
-            </div>
-            <Button
-              onClick={() => {
-                setOpen(false);
-                setTimeout(() => setShowSuccess(false), 300);
-              }}
-              className="w-full h-14 rounded-2xl bg-slate-900 hover:bg-slate-800 font-bold text-lg shadow-xl"
-            >
+  const handleOpenChange = (val: boolean) => {
+    setOpen(val);
+    if (!val) setTimeout(() => setShowSuccess(false), 300);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogTrigger asChild>
+        <Button variant="primary">
+          <Plus className="mr-2 h-3.5 w-3.5" />
+          Nuevo evento
+        </Button>
+      </DialogTrigger>
+
+      <DialogContent className="max-w-[620px] p-0 rounded-none border-2 border-foreground shadow-none">
+        {showSuccess ? (
+          <div className="p-10 flex flex-col items-center gap-4 text-center">
+            <CheckCircle2 className="h-8 w-8 text-foreground/40" />
+            <DialogTitle className="display-md">Evento programado</DialogTitle>
+            <p className="label-mono">Ya está disponible en la agenda cultural.</p>
+            <Button variant="primary" onClick={() => setOpen(false)} className="mt-2">
               Cerrar
             </Button>
           </div>
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="primary">
-          <Calendar className="mr-sm h-4 w-4" />
-          Nuevo Evento
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] rounded-[2rem] border-slate-200 p-0 overflow-hidden">
-        <DialogHeader className="p-lg pb-md">
-          <DialogTitle className="text-2xl font-black flex items-center gap-2">
-            Programar Evento
-          </DialogTitle>
-          <DialogDescription className="font-medium ">
-            Añade una nueva actividad a la agenda de la librería.
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit} className="p-lg pt-0 space-y-6">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest">Título del Evento</Label>
-              <div className="relative">
-                <Type className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                <Input name="title" required />
-              </div>
+        ) : (
+          <>
+            <div className="px-10 pt-10 pb-6 border-b border-foreground/15">
+              <DialogTitle className="display-md mb-1">Programar evento</DialogTitle>
+              <p className="label-mono">Nueva actividad en la agenda</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label className="text-xs font-black uppercase tracking-widest">Tipo</Label>
-                <Select name="type" defaultValue="generic">
-                  <SelectTrigger >
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    <SelectItem value="presentation">Presentación</SelectItem>
-                    <SelectItem value="club">Club de Lectura</SelectItem>
-                    <SelectItem value="workshop">Taller</SelectItem>
-                    <SelectItem value="signing">Firma</SelectItem>
-                    <SelectItem value="generic">Genérico</SelectItem>
-                  </SelectContent>
-                </Select>
+            <form onSubmit={handleSubmit} className="px-10 py-8 space-y-6">
+              <div className="space-y-1.5">
+                <Label className="label-mono" htmlFor="title">Título del evento</Label>
+                <div className="relative">
+                  <Type className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground/30 pointer-events-none" />
+                  <Input id="title" name="title" required className="pl-9" />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label className="text-xs font-black uppercase tracking-widest ">Fecha y Hora</Label>
-                <Input name="event_date" type="datetime-local" required />
-              </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest">Ubicación</Label>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
-                <Input name="location" required />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="label-mono" htmlFor="type">Tipo</Label>
+                  <Select name="type" defaultValue="generic">
+                    <SelectTrigger className="rounded-none border-foreground/30">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-none border-foreground">
+                      <SelectItem value="presentation">Presentación</SelectItem>
+                      <SelectItem value="club">Club de lectura</SelectItem>
+                      <SelectItem value="workshop">Taller</SelectItem>
+                      <SelectItem value="signing">Firma</SelectItem>
+                      <SelectItem value="generic">Genérico</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="label-mono" htmlFor="event_date">Fecha y hora</Label>
+                  <Input id="event_date" name="event_date" type="datetime-local" required />
+                </div>
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest ">Descripción</Label>
-              <div className="relative">
-                <FileText className="absolute left-3 top-3 h-4 w-4 " />
-                <textarea
-                  name="description"
-                  rows={3}
-                  className="w-full pl-lg p-sm rounded-xl bg-background border border-black/50 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
+              <div className="space-y-1.5">
+                <Label className="label-mono" htmlFor="location">Ubicación</Label>
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground/30 pointer-events-none" />
+                  <Input id="location" name="location" required className="pl-9" />
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div className="flex gap-3">
-            <Button type="submit" disabled={isLoading} variant="primary">
-              {isLoading ? <Loader2 className="mr-sm h-4 w-4 animate-spin" /> : "Crear Evento"}
-            </Button>
-            <Button type="button" variant="secondary" onClick={() => setOpen(false)}>
-              Cancelar
-            </Button>
-          </div>
-        </form>
+              <div className="space-y-1.5">
+                <Label className="label-mono" htmlFor="description">Descripción</Label>
+                <div className="relative">
+                  <FileText className="absolute left-3 top-3 h-3.5 w-3.5 text-foreground/30 pointer-events-none" />
+                  <textarea
+                    id="description"
+                    name="description"
+                    rows={3}
+                    className="w-full pl-9 pr-3 py-2 bg-background border border-foreground/30 body-sans focus:outline-none focus:border-foreground resize-none"
+                  />
+                </div>
+              </div>
+
+              <DialogFooter className="mt-8 flex gap-3">
+                <Button type="button" variant="secondary" onClick={() => setOpen(false)}>
+                  Cancelar
+                </Button>
+                <Button type="submit" variant="primary" disabled={isLoading}>
+                  {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : "Crear evento"}
+                </Button>
+              </DialogFooter>
+            </form>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );

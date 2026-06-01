@@ -4,11 +4,6 @@ import { useCart } from "@/lib/cart-context";
 import { Book } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Tag } from "lucide-react";
-
-interface PriceDisplayProps {
-  book: Book;
-}
-
 import PriceTag from "@/components/ui/price-tag";
 import AddToCartButton from "./add-to-cart-button";
 
@@ -21,38 +16,42 @@ export default function PriceDisplay({ book }: PriceDisplayProps) {
   const originalPrice = book.selling_price || 0;
 
   return (
-    <div className="flex flex-col gap-4 bg-transparent border-cardDark rounded-2xl w-fit">
-      <div className="flex items-center gap-10 p-lg">
-        <div>
-          <p className="text-[10px]">
-            {appliedPromo ? "Precio con Descuento" : "Precio"}
-          </p>
-          <PriceTag price={originalPrice} size="xl" />
-          <div className="mt-lg">
-            <AddToCartButton book={book} variant="primary" text />
-          </div>
-        </div>
-        <div className="h-16 w-px bg-slate-200" />
-        <div>
-          <p className="text-[10px]">Disponibilidad</p>
-          <div className="flex items-center gap-2">
-            <div className={cn("h-3 w-3 rounded-full animate-pulse shadow-[0_0_10px_rgba(var(--color),0.5)]",
-              book.stock_quantity > 0 ? "bg-green-500 [--color:34,197,94]" : "bg-destructive [--color:239,68,68]"
-            )} />
-            <p className={cn("text-xl font-black tracking-tight", book.stock_quantity > 0 ? "text-green-500/80" : "text-destructive/80")}>
-              {book.stock_quantity > 0 ? "Disponible" : "Agotado"}
-            </p>
-          </div>
-          <p className="text-xs text-muted-foreground mt-xs font-medium">{book.stock_quantity} unidades restantes</p>
-        </div>
-
+    <div className="flex flex-col gap-0">
+      {/* Price row */}
+      <div className="p-6">
+        <p className="label-mono mb-2">
+          {appliedPromo ? "Precio con descuento" : "Precio"}
+        </p>
+        <PriceTag price={originalPrice} size="xl" />
       </div>
 
+      {/* Stock row */}
+      <div className="p-6 border-soft-t flex items-center gap-3">
+        <span
+          className={cn(
+            "w-2 h-2 rounded-full flex-shrink-0",
+            book.stock_quantity > 0 ? "bg-foreground" : "bg-destructive"
+          )}
+        />
+        <div>
+          <p className={cn("label-sans", book.stock_quantity > 0 ? "" : "text-destructive")}>
+            {book.stock_quantity > 0 ? "Disponible" : "Agotado"}
+          </p>
+          <p className="label-mono mt-0.5">{book.stock_quantity} unidades</p>
+        </div>
+      </div>
+
+      {/* CTA row */}
+      <div className="p-6 border-soft-t">
+        <AddToCartButton book={book} variant="primary" text />
+      </div>
+
+      {/* Promo row */}
       {appliedPromo && (
-        <div className="flex items-center gap-2 px-md py-sm bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 rounded-2xl animate-in fade-in slide-in-from-top-2">
-          <Tag className="h-4 w-4" />
-          <span className="text-sm font-bold uppercase tracking-wider">
-            Código {appliedPromo.code} aplicado (-{appliedPromo.discount_amount}%)
+        <div className="p-4 border-soft-t flex items-center gap-2 bg-card">
+          <Tag className="h-3 w-3 text-foreground/50" />
+          <span className="label-mono">
+            Codigo {appliedPromo.code} aplicado (-{appliedPromo.discount_amount}%)
           </span>
         </div>
       )}
