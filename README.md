@@ -57,3 +57,7 @@ To run this project locally and explore the codebase:
     ```bash
     pnpm dev
     ```
+    
+
+   correo: pauladelavictoria+3@gmail.com
+   contraseña: admin.eteR1
