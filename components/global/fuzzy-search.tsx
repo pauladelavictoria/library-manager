@@ -18,7 +18,7 @@ export default function FuzzySearch() {
 
   /* Load book list once */
   useEffect(() => {
-    supabase.from("books").select("id, title, cover_url, selling_price, authors").limit(500)
+    supabase.from("books").select("id, title, cover_url, selling_price, authors")
       .then(({ data }) => { if (data) setAllBooks(data as Book[]); });
   }, []);
 
@@ -93,7 +93,7 @@ export default function FuzzySearch() {
             <p className="label-mono mb-5" style={{ color: "rgba(245,240,232,0.55)" }}>
               {query
                 ? `${results.length} resultado${results.length !== 1 ? "s" : ""}`
-                : `${allBooks.length} titulos disponibles`}
+                : `${allBooks.length} títulos disponibles`}
             </p>
             <div style={{ borderBottom: "2px solid rgba(245,240,232,0.15)" }}>
               <input
@@ -101,7 +101,7 @@ export default function FuzzySearch() {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Titulo, autor..."
+                placeholder="Título, autor..."
                 className="search-input w-full bg-transparent border-none outline-none pb-5 font-serif font-black italic"
                 style={{
                   fontSize: "clamp(40px,7vw,110px)",
