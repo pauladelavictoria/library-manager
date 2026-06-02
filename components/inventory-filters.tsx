@@ -12,9 +12,9 @@ interface InventoryFiltersProps {
 }
 
 const SORT_OPTIONS = [
-  { value: "title",  label: "Titulo (A-Z)" },
-  { value: "sales",  label: "Mas vendidos" },
-  { value: "stock",  label: "Reponer primero" },
+  { value: "title", label: "Titulo (A-Z)" },
+  { value: "sales", label: "Mas vendidos" },
+  { value: "stock", label: "Reponer primero" },
 ];
 
 export function InventoryFilters({ authors, categories }: InventoryFiltersProps) {
@@ -26,7 +26,11 @@ export function InventoryFilters({ authors, categories }: InventoryFiltersProps)
   const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
-      value ? params.set(name, value) : params.delete(name);
+      if (value) {
+        params.set(name, value)
+      } else {
+        params.delete(name);
+      }
       return params.toString();
     },
     [searchParams]
@@ -40,7 +44,11 @@ export function InventoryFilters({ authors, categories }: InventoryFiltersProps)
 
   const handleFilterChange = (name: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    value && value !== "all" ? params.set(name, value) : params.delete(name);
+    if (value && value !== "all") {
+      params.set(name, value)
+    } else {
+      params.delete(name);
+    }
     params.delete("page");
     router.push(`?${params.toString()}`, { scroll: false });
   };

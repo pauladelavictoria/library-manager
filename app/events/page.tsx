@@ -7,12 +7,12 @@ export const metadata = {
   description: "Agenda cultural — presentaciones, talleres, firmas y club de lectura.",
 };
 
-export const TYPE_LABELS: Record<string, string> = {
+const TYPE_LABELS: Record<string, string> = {
   presentation: "Presentacion",
-  workshop:     "Taller",
-  club:         "Club de lectura",
-  signing:      "Firma",
-  generic:      "Evento",
+  workshop: "Taller",
+  club: "Club de lectura",
+  signing: "Firma",
+  generic: "Evento",
 };
 
 function groupByMonth(events: Event[]): { key: string; label: string; events: Event[] }[] {
@@ -43,12 +43,11 @@ export default async function EventosPage() {
   const events = (rawEvents || []) as Event[];
   const now = new Date();
   const upcoming = events.filter(e => new Date(e.event_date) >= now);
-  const nextEvent = upcoming[upcoming.length - 1] ?? null; // earliest upcoming
+  const nextEvent = upcoming[upcoming.length - 1] ?? null;
   const groups = groupByMonth(events);
 
   return (
     <main>
-      {/* Dark header block */}
       <section
         style={{
           backgroundColor: "#0F0F0D",
@@ -80,7 +79,6 @@ export default async function EventosPage() {
         </div>
       </section>
 
-      {/* Featured next event */}
       {nextEvent && (
         <EventosList
           groups={groups}

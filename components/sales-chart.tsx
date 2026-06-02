@@ -11,7 +11,6 @@ import {
 } from "recharts";
 import { TrendingUp } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface SalesData {

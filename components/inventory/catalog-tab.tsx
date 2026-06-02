@@ -118,7 +118,7 @@ export function CatalogTab({
                     )}
                   </TableCell>
                   <TableCell className="text-center">
-                    <RecommendationToggle bookId={book.id} isRecommended={!!book.is_recommended} currentCount={recommendedCount} />
+                    <RecommendationToggle bookId={book.id} isRecommended={!!book.is_recommended} />
                   </TableCell>
                   <TableCell className="text-right">
                     <span className="price-mono">{book.sold_count}</span>

@@ -2,7 +2,7 @@
 
 import { createClient } from "@/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { Profile } from "./types";
 
@@ -37,12 +37,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .select("*")
         .eq("id", user.id)
         .single();
-      
+
       if (error) {
         console.error("Error fetching profile:", error);
         return null;
       }
-      
+
       setProfile(data as Profile);
       return data as Profile;
     },
@@ -50,10 +50,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   });
 
   return (
-    <AuthContext.Provider value={{ 
-      user: user ?? null, 
+    <AuthContext.Provider value={{
+      user: user ?? null,
       profile: profile,
-      loading: isLoading || isProfileLoading 
+      loading: isLoading || isProfileLoading
     }}>
       {children}
     </AuthContext.Provider>

@@ -8,17 +8,16 @@ import { cn } from "@/lib/utils";
 interface RecommendationToggleProps {
   bookId: string;
   isRecommended: boolean;
-  currentCount: number;
 }
 
-export function RecommendationToggle({ bookId, isRecommended: initialIsRecommended, currentCount }: RecommendationToggleProps) {
+export function RecommendationToggle({ bookId, isRecommended: initialIsRecommended }: RecommendationToggleProps) {
   const [isRecommended, setIsRecommended] = useState(initialIsRecommended);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleToggle = async () => {
     setIsLoading(true);
     const result = await toggleRecommendation(bookId);
-    
+
     if (result.success) {
       setIsRecommended(!isRecommended);
       toast.success(isRecommended ? "Recomendación eliminada" : "Libro recomendado");
@@ -32,7 +31,7 @@ export function RecommendationToggle({ bookId, isRecommended: initialIsRecommend
     <button
       onClick={handleToggle}
       disabled={isLoading}
-      className={cn( "p-sm rounded-full transition-all duration-300", isRecommended ? "text-yellow-500 bg-yellow-50 " : "text-slate-300 hover:text-yellow-500 hover:bg-yellow-50 " )}
+      className={cn("p-sm rounded-full transition-all duration-300", isRecommended ? "text-yellow-500 bg-yellow-50 " : "text-slate-300 hover:text-yellow-500 hover:bg-yellow-50 ")}
       title={isRecommended ? "Quitar de recomendados" : "Marcar como recomendado (Máx 3)"}
     >
       {isLoading ? (

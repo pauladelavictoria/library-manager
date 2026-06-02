@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, MapPin, Type, FileText, Plus, Loader2, CheckCircle2 } from "lucide-react";
+import { MapPin, Type, FileText, Plus, Loader2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -31,9 +31,9 @@ export function CreateEventDialog() {
     event.preventDefault();
     setIsLoading(true);
     const formData = new FormData(event.currentTarget);
-    const title      = formData.get("title") as string;
+    const title = formData.get("title") as string;
     const event_date = formData.get("event_date") as string;
-    const type       = formData.get("type") as string;
+    const type = formData.get("type") as string;
 
     if (!title || !event_date || !type) {
       toast.error("Rellena los campos obligatorios");
@@ -44,7 +44,7 @@ export function CreateEventDialog() {
     const result = await createEvent({
       title,
       description: formData.get("description") as string,
-      location:    formData.get("location") as string,
+      location: formData.get("location") as string,
       event_date,
       type,
     });
