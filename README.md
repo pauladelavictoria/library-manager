@@ -62,5 +62,5 @@ To run this project locally and explore the codebase:
 
 To access the administrator dashboard, you can use the following test credentials:
 
-- **Email:** `pauladelavictoria+3@gmail.com`
+- **Email:** `pauladelavictoria+10@gmail.com`
 - **Password:** `admin.eteR1`
